@@ -1172,7 +1172,7 @@ test('WCAG, layout, image, console, and interaction contract', {
                   || left.top >= right.bottom
                 )
                 const mark = [...frame.querySelectorAll(
-                  '.slide-frame__ucas-wordmark, .slide-frame__ict-mark',
+                  '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup',
                 )].find(visible)
                 if (!mark) return []
                 const markRect = rect(mark)
@@ -1299,7 +1299,7 @@ test('WCAG, layout, image, console, and interaction contract', {
                     && rect.height > 0
                 }
                 const mark = [...frame.querySelectorAll(
-                  '.slide-frame__ucas-wordmark, .slide-frame__ict-mark',
+                  '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup',
                 )].find(visible)
                 if (!mark) return 0
                 const markRect = mark.getBoundingClientRect()

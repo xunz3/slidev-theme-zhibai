@@ -18,6 +18,11 @@
   --presentation-heading-weight: 600;
   --presentation-heading-letter-spacing: -0.026em;
   --presentation-heading-line-height: 1.08;
+  --presentation-slide-title-size: 2.12rem;
+  --presentation-local-title-size: 1.3rem;
+  --presentation-local-title-weight: 700;
+  --presentation-local-title-letter-spacing: -0.012em;
+  --presentation-local-title-line-height: 1.2;
   --presentation-list-spacing: 0.28em;
   --presentation-table-size: 0.94em;
   --presentation-chrome-size: 0.72rem;

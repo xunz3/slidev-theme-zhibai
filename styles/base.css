@@ -24,11 +24,24 @@
 .slidev-layout h4 {
   margin: 0 0 0.55em;
   color: var(--presentation-text);
+  text-wrap: balance;
+}
+
+/* Slide titles keep the editorial display face without reading like section dividers. */
+.slidev-layout h1 {
   font-family: var(--presentation-font-display, var(--presentation-font-serif));
+  font-size: calc(var(--presentation-slide-title-size) * var(--presentation-heading-scale));
   font-weight: var(--presentation-heading-weight);
   letter-spacing: var(--presentation-heading-letter-spacing);
   line-height: var(--presentation-heading-line-height);
-  text-wrap: balance;
+}
+
+/* In-slide headings are compact navigation cues, so they use the sans hierarchy. */
+.slidev-layout :is(h2, h3, h4) {
+  font-family: var(--presentation-font-sans);
+  font-weight: var(--presentation-local-title-weight);
+  letter-spacing: var(--presentation-local-title-letter-spacing);
+  line-height: var(--presentation-local-title-line-height);
 }
 
 .slidev-layout :is(p, li, figcaption) {
@@ -64,20 +77,16 @@
   max-width: none;
 }
 
-.slidev-layout h1 {
-  font-size: calc(2.42rem * var(--presentation-heading-scale));
-}
-
 .slidev-layout h2 {
-  font-size: calc(1.68rem * var(--presentation-heading-scale));
+  font-size: calc(var(--presentation-local-title-size) * var(--presentation-heading-scale));
 }
 
 .slidev-layout h3 {
-  font-size: calc(1.38rem * var(--presentation-heading-scale));
+  font-size: calc(var(--presentation-local-title-size) * 0.84 * var(--presentation-heading-scale));
 }
 
 .slidev-layout h4 {
-  font-size: calc(1.05rem * var(--presentation-heading-scale));
+  font-size: calc(var(--presentation-local-title-size) * 0.72 * var(--presentation-heading-scale));
 }
 
 .slidev-layout p,

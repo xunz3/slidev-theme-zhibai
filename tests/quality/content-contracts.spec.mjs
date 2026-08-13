@@ -2863,7 +2863,7 @@ test('US6 closing, generated media, chrome, safe zones, and bilingual text conve
             }
             const mark = [
               ...frame.querySelectorAll(
-                '.slide-frame__ucas-wordmark, .slide-frame__ict-mark',
+                '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup',
               ),
             ].find(visible)
             const content = frame.querySelector('.slide-frame__content')
@@ -2888,20 +2888,8 @@ test('US6 closing, generated media, chrome, safe zones, and bilingual text conve
               ),
             }
           })
-          if (preset === 'default') {
-            assert.equal(safeZone.mark, null)
-            assert.equal(safeZone.reserve, 0)
-          } else {
-            assert.ok(safeZone.mark, JSON.stringify(safeZone))
-            assert.ok(safeZone.reserve > 0, JSON.stringify(safeZone))
-            assert.ok(
-              safeZone.contentPaddingTop >= safeZone.reserve - 1,
-              JSON.stringify(safeZone),
-            )
-            assert.ok(safeZone.probes.every(
-              probe => !intersects(safeZone.mark, probe.rect),
-            ), JSON.stringify(safeZone, null, 2))
-          }
+          assert.equal(safeZone.mark, null)
+          assert.equal(safeZone.reserve, 0)
 
           await waitForSlide(
             page,

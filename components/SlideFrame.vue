@@ -100,7 +100,6 @@ const footerMiddle = computed(() => {
       <PresetBranding
         :preset="resolved.preset"
         :variant="resolved.variant"
-        attachment="frame"
       />
 
       <header v-if="resolved.showHeader" class="slide-frame__header">
@@ -108,11 +107,6 @@ const footerMiddle = computed(() => {
           <div v-if="headerTitle" class="slide-frame__title">{{ headerTitle }}</div>
           <div v-if="headerSubtitle" class="slide-frame__subtitle">{{ headerSubtitle }}</div>
         </div>
-        <PresetBranding
-          :preset="resolved.preset"
-          :variant="resolved.variant"
-          attachment="header"
-        />
       </header>
 
       <main class="slide-frame__content">

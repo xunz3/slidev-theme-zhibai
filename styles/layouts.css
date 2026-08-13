@@ -204,7 +204,6 @@
   font-size: calc(3.7rem * var(--presentation-heading-scale));
 }
 
-.slidev-layout.intro h1,
 .slidev-layout.section h1 {
   font-size: calc(4.15rem * var(--presentation-heading-scale));
 }
@@ -509,7 +508,6 @@
     font-size: calc(3rem * var(--presentation-heading-scale));
   }
 
-  .slidev-layout.intro h1,
   .slidev-layout.section h1 {
     font-size: calc(3rem * var(--presentation-heading-scale));
   }

@@ -190,6 +190,8 @@ Title rendering follows a fixed rule:
 
 Theme chrome means the non-content frame around each slide. By default it is footer-only: author names are used on the left footer, deck metadata is used in the centered footer, and `themeConfig.presentation.pageNumber` only controls the right footer page number. The header is intentionally opt-in because per-slide `title` and `subtitle` usually duplicate the visible Markdown heading.
 
+Institutional lockups are reserved for cover and section-divider slides. Ordinary content slides leave the top-right corner unbranded in both the UCAS and ICT presets, including when the optional header is enabled.
+
 ## Pre-1.0 migration
 
 This package has not reached 1.0, so it keeps one canonical route for each concept instead of
@@ -213,8 +215,7 @@ The corrected visuals are intentional: images now honor explicit contain/cover g
 generated and component-authored figures share stable states, links use one text-bounded
 underline, callout families keep their semantic markers, Badge markers are opt-in, completed
 tasks are quieter than unfinished tasks, highlights are flat prose washes, Steps and Timeline
-have distinct sequence cues, minimal closings are centered, and branded ordinary slides reserve
-a shallow safe zone.
+have distinct sequence cues, and minimal closings are centered.
 
 ## Public content components
 

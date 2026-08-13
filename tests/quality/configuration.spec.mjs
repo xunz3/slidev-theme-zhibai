@@ -939,12 +939,14 @@ test('pre-1.0 source keeps one canonical implementation path', async () => {
 
   assert.match(
     branding,
-    /preset === 'ict' && \['section', 'statement'\]\.includes\(variant\)/,
+    /preset === 'ict' && variant === 'section'/,
   )
   assert.match(
     branding,
-    /preset === 'ucas' && \['cover', 'section', 'statement', 'center'\]\.includes\(variant\)/,
+    /preset === 'ucas' && \['cover', 'section'\]\.includes\(variant\)/,
   )
+  assert.doesNotMatch(branding, /slide-frame__ict-mark/)
+  assert.doesNotMatch(branding, /slide-frame__ucas-content-brand/)
 
   await assert.rejects(
     readFile(resolve(repositoryRoot, '.npmignore'), 'utf8'),

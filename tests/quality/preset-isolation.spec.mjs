@@ -221,10 +221,10 @@ const assertBrandBoundary = (preset, brandClasses) => {
     assert.equal(ucas.length, 0)
     assert.equal(ict.length, 0)
   } else if (preset === 'ucas') {
-    assert.ok(ucas.length > 0, 'UCAS slide has no UCAS brand DOM')
+    assert.equal(ucas.length, 0, 'UCAS content slide contains top-right brand DOM')
     assert.equal(ict.length, 0, 'UCAS slide contains ICT brand DOM')
   } else {
-    assert.ok(ict.length > 0, 'ICT slide has no ICT brand DOM')
+    assert.equal(ict.length, 0, 'ICT content slide contains top-right brand DOM')
     assert.equal(ucas.length, 0, 'ICT slide contains UCAS brand DOM')
   }
 }
@@ -496,7 +496,7 @@ test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 },
   }
 })
 
-test('US3 local accents preserve UCAS and ICT identity pixels and styles', {
+test('US3 content slides remain unbranded across local accents', {
   timeout: 240_000,
 }, async (t) => {
   const externalContext = readQualityBuildContext()
@@ -531,39 +531,20 @@ test('US3 local accents preserve UCAS and ICT identity pixels and styles', {
 
   const capture = async ({ baseUrl, marker, mode, page, preset, slide }) => {
     await waitForSlide(page, baseUrl, slide, mode, marker)
-    const logoSelector = preset === 'ucas'
-      ? `.slidev-page-${slide} .slide-frame__header-logo--theme-${mode}`
-      : `.slidev-page-${slide} .slide-frame__header-logo--ict`
-    const logo = page.locator(logoSelector)
-    await logo.waitFor({ state: 'visible' })
     return {
-      pixels: await logo.screenshot({ type: 'png' }),
-      state: await page.evaluate(({ caseId, selector }) => {
+      state: await page.evaluate((caseId) => {
         const marked = document.querySelector(`[data-quality-case="${caseId}"]`)
         const canvas = marked?.closest('.slidev-layout')
         const frame = canvas?.querySelector('.slide-frame')
-        const image = document.querySelector(selector)
-        if (
-          !(canvas instanceof HTMLElement)
-          || !(frame instanceof HTMLElement)
-          || !(image instanceof HTMLImageElement)
-        ) {
-          throw new Error(`${caseId}: protected identity target is missing`)
+        if (!(canvas instanceof HTMLElement) || !(frame instanceof HTMLElement)) {
+          throw new Error(`${caseId}: branded frame is missing`)
         }
-        const imageStyle = getComputedStyle(image)
         return {
           frameAccent: frame.style
             .getPropertyValue('--presentation-accent').trim(),
-          image: {
-            filter: imageStyle.filter,
-            height: imageStyle.height,
-            opacity: imageStyle.opacity,
-            src: image.currentSrc,
-            width: imageStyle.width,
-          },
           visibleIdentityCount: [
             ...canvas.querySelectorAll(
-              '.slide-frame__header-logo, .slide-frame__ucas-wordmark, .slide-frame__ict-mark',
+              '[class*="slide-frame__ucas"], [class*="slide-frame__ict"]',
             ),
           ].filter((candidate) => {
             const style = getComputedStyle(candidate)
@@ -576,10 +557,7 @@ test('US3 local accents preserve UCAS and ICT identity pixels and styles', {
           rootAccent: document.documentElement.style
             .getPropertyValue('--presentation-accent').trim(),
         }
-      }, {
-        caseId: marker,
-        selector: logoSelector,
-      }),
+      }, marker),
     }
   }
 
@@ -610,13 +588,8 @@ test('US3 local accents preserve UCAS and ICT identity pixels and styles', {
             assert.equal(fallback.state.frameAccent, deckAccent)
             assert.equal(local.state.rootAccent, '')
             assert.equal(fallback.state.rootAccent, '')
-            assert.equal(local.state.visibleIdentityCount, 1)
-            assert.equal(fallback.state.visibleIdentityCount, 1)
-            assert.deepEqual(local.state.image, fallback.state.image)
-            assert.ok(
-              local.pixels.equals(fallback.pixels),
-              `${preset}/${mode}: protected identity pixels changed`,
-            )
+            assert.equal(local.state.visibleIdentityCount, 0)
+            assert.equal(fallback.state.visibleIdentityCount, 0)
           } finally {
             await page.close()
           }
