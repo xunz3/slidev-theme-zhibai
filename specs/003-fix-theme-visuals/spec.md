@@ -363,7 +363,7 @@ loaded styles, preset branding, package contents, and source invariants.
   distributed theme behavior, and production layout MUST NOT depend on a test-only marker.
 - **FR-028**: Regression coverage MUST include geometric media fixtures, all callout families in
   all presets and supported modes, link forms, author fallback forms, badge tones and marker
-  states, tasks, highlights, Steps, Timeline, closing variants, chrome safe zones, and bilingual
+  states, tasks, highlights, Steps, Timeline, closing variants, section brand regions, and bilingual
   wrapping.
 - **FR-029**: Previously accepted visual snapshots that encode incorrect behavior MUST be
   replaced only after the corrected result passes the corresponding semantic and geometric

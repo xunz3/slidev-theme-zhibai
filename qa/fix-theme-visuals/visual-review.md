@@ -68,3 +68,36 @@ explicitly outside the product requirements rather than skipped release checks.
 ## Approval
 
 Approved after the final review corrections and complete quality revalidation.
+
+## 2026-08-14 Review Follow-up
+
+The follow-up review of the intro, statement, and preset-branding surfaces is resolved.
+
+| Finding | Resolution |
+| --- | --- |
+| Intro slides lost their display-title hierarchy | Restored the 4.15rem intro heading treatment and a 3rem compact treatment, with a browser regression comparing intro and content title scale |
+| Section lockups could collide with enabled header chrome | Made section lockups header-aware and omit them when the header is present; the watermark remains as the sole branded image |
+| Compact section branding inherited desktop placement | Added section-specific compact placement and size rules for the UCAS and ICT lockups |
+| Dark mode changed ceremonial section identity | Kept section fields, lockups, and watermark opacity mode-stable; dark-mode filtering now applies only where cover treatment requires it |
+| Statement slides reserved unused inline-end space | Removed the preset-specific statement padding and obsolete statement watermark rules |
+| UCAS section rendered mutually exclusive light/dark wordmarks | Rendered only the white section wordmark actually used by the ceremonial field |
+| Reviewed visual references predated the visual hierarchy changes | Recaptured and integrity-recorded all 350 DPR-2 scenarios, including 12 new section/header scenarios |
+| Public documentation exposed an unused brand-safe token | Removed the token and aligned README, contracts, plan, research, tasks, quickstart, data model, and specification with the layout-owned section safe region |
+| Brand collision checks could pass without a brand mark | Required the mark for branded presets, sampled multiple visible points, and asserted no mark/content or mark/header intersections |
+| Section branding lacked direct visual coverage | Added canonical and compact, light and dark, default/UCAS/ICT section cases with and without header chrome |
+| Protected-brand assertions only checked empty arrays | Added exact lockup/watermark pixel and computed-style comparisons across local and fallback accents, plus expected image counts and opacity |
+
+The preset-isolation fixture now uses language-neutral code highlighting so concurrent Shiki
+tokenization cannot introduce unrelated pixel variance. The standalone-shell diagnostic also
+records local HTTP failures by URL while ignoring URL-less console noise from optional external
+Slidev resources.
+
+### Follow-up Validation
+
+| Command | Result | Notes |
+| --- | --- | --- |
+| `node tests/quality/preset-isolation.spec.mjs` | Pass | 28/28 checks |
+| `node tests/quality/content-contracts.spec.mjs` | Pass | 15/15 checks |
+| `node tests/quality/accessibility.spec.mjs` | Pass | 403/403 checks |
+| `pnpm run quality:update-visual-baselines` | Pass | 350 reviewed scenarios refreshed in 260,859 ms |
+| `pnpm run quality` | Pass | Complete aggregate gate in 421,129 ms; accessibility, visual, content contracts, builds, preset isolation, and static checks all pass |

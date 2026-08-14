@@ -19,7 +19,7 @@ to one canonical route per concept and preserving configuration precedence and t
 conversion boundary.
 The implementation will consolidate callout and Badge tones in shared semantic tokens, correct
 media and sequence geometry, normalize generated image presentation in the renderer, deduplicate
-author display values, isolate fixture-only CSS, and reserve shared frame safe zones. `Badge`
+author display values, isolate fixture-only CSS, and reserve section brand regions. `Badge`
 gains only additive `tone` and `marker` props, while closing logos use a private unframed
 contained treatment. Existing Node/Playwright quality infrastructure will gain deterministic
 geometry assertions, a targeted compact viewport, delayed-media layout-stability coverage, and
@@ -61,7 +61,7 @@ hangs without treating elapsed build time as a product requirement.
 
 **Scale/Scope**: 15 traceable review findings; 19 callout types in 7 families; 7 Badge tones;
 Figure, generated image, two image/text orientations, and closing-logo media roles; author/link,
-task/highlight, Steps/Timeline, chrome, brand-safe-zone, and bilingual-heading corrections;
+task/highlight, Steps/Timeline, chrome, section-brand, and bilingual-heading corrections;
 3 presets × 2 modes with targeted canonical and compact viewport coverage
 
 ## Constitution Check
@@ -89,7 +89,7 @@ task/highlight, Steps/Timeline, chrome, brand-safe-zone, and bilingual-heading c
   **PASS (pre-design)** — `Badge.tone` and `Badge.marker` default to neutral and off. Canonical
   names, props, markup classes, and reading order remain valid. The explicitly removed pre-1.0
   aliases have direct migration notes. Shared family shapes, single link decoration, distinct
-  author values, static task/Badge semantics, contrast/focus checks, frame safe zones, and
+  author values, static task/Badge semantics, contrast/focus checks, section brand regions, and
   heading-separator normalization apply across all presets.
 - **Stable Projection Behavior**: Identify theme-owned async media/font geometry and any new
   shipped asset over 250 KiB.

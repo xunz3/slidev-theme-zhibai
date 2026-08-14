@@ -255,9 +255,17 @@ test('expanded-content production harness', async (t) => {
         const page = await context.newPage()
         const runtimeErrors = []
         page.on('console', (message) => {
+          const text = message.text()
           if (message.type() === 'error'
-            && message.text() !== 'Wake Lock permission request denied') {
+            && text !== 'Wake Lock permission request denied'
+            && !/^Failed to load resource: the server responded with a status of \d+ \(\)$/.test(text)) {
             runtimeErrors.push(message.text())
+          }
+        })
+        page.on('response', (response) => {
+          const url = new URL(response.url())
+          if (url.hostname === '127.0.0.1' && response.status() >= 400) {
+            runtimeErrors.push(`${response.status()} ${response.url()}`)
           }
         })
         page.on('pageerror', (error) => {
@@ -2639,7 +2647,7 @@ test('US5 tasks stay presentation-only and prose highlights stay code-scoped', {
   }
 })
 
-test('US6 closing, generated media, chrome, safe zones, and bilingual text converge', {
+test('US6 closing, generated media, chrome, section branding, and bilingual text converge', {
   timeout: 240_000,
 }, async () => {
   const buildContext = await createExpandedContentContext()
@@ -2866,30 +2874,123 @@ test('US6 closing, generated media, chrome, safe zones, and bilingual text conve
                 '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup',
               ),
             ].find(visible)
-            const content = frame.querySelector('.slide-frame__content')
+            const watermark = [
+              ...frame.querySelectorAll(
+                '.slide-frame__ucas-watermark, .slide-frame__ict-watermark',
+              ),
+            ].find(visible)
             const probes = [
               ...frame.querySelectorAll(
                 '[data-quality-case="visual-brand-collision"] :is(h1, figure, figcaption, a, button)',
               ),
             ].filter(visible)
             return {
-              contentPaddingTop: Number.parseFloat(
-                getComputedStyle(content).paddingTop,
-              ),
+              backgroundColor: getComputedStyle(frame).backgroundColor,
+              identityImageCount: frame.querySelectorAll(
+                'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
+              ).length,
+              isSection: frame.closest('.slidev-layout')?.classList.contains(
+                'section',
+              ) ?? false,
               mark: mark ? toRect(mark) : null,
               probes: probes.map(element => ({
                 rect: toRect(element),
                 tagName: element.tagName.toLowerCase(),
               })),
-              reserve: Number.parseFloat(
-                getComputedStyle(frame).getPropertyValue(
-                  '--presentation-brand-safe-block-start',
-                ),
-              ),
+              watermark: watermark
+                ? {
+                    filter: getComputedStyle(watermark).filter,
+                    opacity: getComputedStyle(watermark).opacity,
+                    rect: toRect(watermark),
+                  }
+                : null,
             }
           })
-          assert.equal(safeZone.mark, null)
-          assert.equal(safeZone.reserve, 0)
+          assert.equal(safeZone.isSection, true)
+          assert.ok(safeZone.probes.length >= 5, JSON.stringify(safeZone))
+          if (preset === 'default') {
+            assert.equal(safeZone.identityImageCount, 0)
+            assert.equal(safeZone.mark, null)
+            assert.equal(safeZone.watermark, null)
+          } else {
+            assert.equal(
+              safeZone.backgroundColor,
+              preset === 'ucas' ? 'rgb(15, 58, 107)' : 'rgb(10, 34, 51)',
+            )
+            assert.equal(safeZone.identityImageCount, 2)
+            assert.ok(safeZone.mark, JSON.stringify(safeZone))
+            assert.ok(safeZone.watermark, JSON.stringify(safeZone))
+            assert.equal(
+              safeZone.watermark.opacity,
+              preset === 'ucas' ? '0.07' : '0.05',
+            )
+            assert.ok(
+              safeZone.probes.every(
+                probe => !intersects(safeZone.mark, probe.rect),
+              ),
+              JSON.stringify(safeZone, null, 2),
+            )
+          }
+
+          await waitForSlide(
+            page,
+            baseUrl,
+            61,
+            mode,
+            'visual-section-header',
+          )
+          const headerSafeBrand = await page.locator(
+            '.slidev-page-61 .slide-frame',
+          ).evaluate((frame) => {
+            const visible = (element) => {
+              if (!element) return false
+              const style = getComputedStyle(element)
+              const rect = element.getBoundingClientRect()
+              return style.display !== 'none'
+                && style.visibility !== 'hidden'
+                && rect.width > 0
+                && rect.height > 0
+            }
+            const toRect = (element) => {
+              const rect = element.getBoundingClientRect()
+              return {
+                bottom: rect.bottom,
+                left: rect.left,
+                right: rect.right,
+                top: rect.top,
+              }
+            }
+            const header = frame.querySelector('.slide-frame__header')
+            const lockups = [...frame.querySelectorAll(
+              '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup--section',
+            )]
+            const watermarks = [...frame.querySelectorAll(
+              '.slide-frame__ucas-watermark, .slide-frame__ict-watermark',
+            )].filter(visible)
+            return {
+              header: visible(header) ? toRect(header) : null,
+              identityImageCount: frame.querySelectorAll(
+                'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
+              ).length,
+              lockupCount: lockups.length,
+              watermarkRects: watermarks.map(toRect),
+            }
+          })
+          assert.ok(headerSafeBrand.header, JSON.stringify(headerSafeBrand))
+          assert.equal(headerSafeBrand.lockupCount, 0)
+          if (preset === 'default') {
+            assert.equal(headerSafeBrand.identityImageCount, 0)
+            assert.deepEqual(headerSafeBrand.watermarkRects, [])
+          } else {
+            assert.equal(headerSafeBrand.identityImageCount, 1)
+            assert.equal(headerSafeBrand.watermarkRects.length, 1)
+            assert.ok(
+              headerSafeBrand.watermarkRects.every(
+                rect => !intersects(headerSafeBrand.header, rect),
+              ),
+              JSON.stringify(headerSafeBrand),
+            )
+          }
 
           await waitForSlide(
             page,

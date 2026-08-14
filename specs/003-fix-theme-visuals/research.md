@@ -187,24 +187,25 @@ independent counter.
 and a single full-height `<ol>::before` rail were rejected as unnecessary or unreliable at the
 last variable-height item.
 
-## 11. Chrome Accent and Brand Safe Zones
+## 11. Chrome Accent and Section Brand Regions
 
 **Decision**: Introduce a frame-local `--presentation-chrome-accent`, based on the existing 34%
 accent mix, and consume it for header/footer dividers, table-header rules, ordinary list
 markers, and the ICT footer cap. Presets may set the role token but may not hard-code different
-strengths for each consumer. When an ordinary-slide UCAS/ICT mark floats at block start, reserve
-a tokenized short block-start strip in shared frame content; header/cover variants reset or
-replace it.
+strengths for each consumer. Ordinary content slides render no UCAS/ICT mark. Cover branding
+uses cover-owned structure; section dividers reserve inline-end space for their lockup, shrink it
+at the compact viewport, and omit it when a forced header owns the top row.
 
 **Rationale**: Current structural strengths range from a 34% mix to opaque accent and brand
 rules. One local role keeps chrome secondary and prevents simultaneously mounted preset slides
-from contaminating one another. Existing collision protection narrows only the first heading,
-leaving a top-right figure, caption, or control exposed. A shallow top strip separates arbitrary
-content from the mark without wasting horizontal space for the full slide height.
+from contaminating one another. Restricting floating identity to ceremonial pages gives section
+content a measurable lockup boundary without imposing unused padding on every content or
+statement slide. Header-aware rendering also avoids downloading or stacking a lockup that cannot
+safely occupy the top row.
 
 **Alternatives considered**: Repeating percentages in each preset, reusing the stronger callout
-carrier, layout-by-layout exclusions, full-height right padding, and removing ordinary brand
-marks were rejected because they preserve drift, waste space, or weaken preset identity.
+carrier, a shared block-start token for marks that no longer exist, and full-height statement
+padding were rejected because they preserve drift or reserve space without a rendered consumer.
 
 ## 12. Bilingual Heading Separator
 
@@ -397,8 +398,8 @@ abstractions.
 
 **Frame state**: The document root owns only `--slidev-theme-primary` for Slidev UI. Each
 rendered `.slide-frame` owns its resolved presentation accent. Density stays on the canvas/frame
-data attributes that CSS consumes. Brand-safe behavior remains a CSS token; the unconsumed
-`data-presentation-brand-safe-zone` state is removed.
+data attributes that CSS consumes. Cover/section brand spacing remains CSS-owned; no brand-safe
+custom property or `data-presentation-brand-safe-zone` state is retained.
 
 **Generated callouts**: The existing subtree normalizer resolves a supported `data-callout` or
 canonical modifier class through `setup/callouts.ts`, then writes canonical `data-callout` and
@@ -411,9 +412,11 @@ Delete object-fit rules already expressed by `--presentation-media-fit`, and col
 visual default-preset selector twins. Dual canvas/frame token declarations remain because they
 isolate simultaneously mounted slides.
 
-**Brand markup**: Render ICT watermarks only for section/statement and UCAS watermarks only for
-cover/section/statement/center, matching the variants that intentionally display them. Hidden
-image nodes add decode/DOM work and conflict with the content-first visual direction.
+**Brand markup**: Render the ICT section lockup/watermark only on section dividers. Render the
+UCAS rail/watermark on covers and its white wordmark/watermark on section dividers. Omit section
+lockups when a forced header owns the top row, and do not emit alternate theme assets that remain
+hidden on the mode-independent ceremonial field. Hidden image nodes add decode/DOM work and
+conflict with the content-first visual direction.
 
 **Repository policy**: `package.json.files` is the publication allowlist, so `.npmignore` is a
 second policy track and is removed. Test geometry/logo assets have one home under

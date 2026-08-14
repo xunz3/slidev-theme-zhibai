@@ -937,16 +937,17 @@ test('pre-1.0 source keeps one canonical implementation path', async () => {
     /\.obsidian-slidev-callout--(?:note|info|todo|abstract|summary|tip|success|check|warning|caution|attention|danger|error|failure|question|help|faq|quote|cite)/,
   )
 
-  assert.match(
-    branding,
-    /preset === 'ict' && variant === 'section'/,
+  assert.match(branding, /<template v-if="preset === 'ucas'">/)
+  assert.match(branding, /<template v-else-if="preset === 'ict'">/)
+  assert.equal(
+    [...branding.matchAll(/v-else-if="variant === 'section'"/g)].length,
+    2,
   )
-  assert.match(
-    branding,
-    /preset === 'ucas' && \['cover', 'section'\]\.includes\(variant\)/,
-  )
+  assert.equal([...branding.matchAll(/v-if="!showHeader"/g)].length, 2)
+  assert.match(frame, /:show-header="resolved\.showHeader"/)
   assert.doesNotMatch(branding, /slide-frame__ict-mark/)
   assert.doesNotMatch(branding, /slide-frame__ucas-content-brand/)
+  assert.doesNotMatch(branding, /ucasWordmark\s+from|--theme-(?:light|dark)/)
 
   await assert.rejects(
     readFile(resolve(repositoryRoot, '.npmignore'), 'utf8'),

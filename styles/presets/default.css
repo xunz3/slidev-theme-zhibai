@@ -11,7 +11,6 @@
   --presentation-text-muted: #686b64;
   --presentation-border: rgba(32, 34, 31, 0.13);
   --presentation-border-strong: rgba(32, 34, 31, 0.4);
-  --presentation-brand-safe-block-start: 0rem;
   --presentation-shadow: none;
   --presentation-scrollbar-thumb: color-mix(in srgb, var(--presentation-accent) 34%, transparent);
   --presentation-scrollbar-track: transparent;
@@ -70,7 +69,6 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
   --presentation-bg: #171816;
   --presentation-bg-elevated: #20211e;
   --presentation-bg-muted: #262823;
-  --presentation-frame-bg: transparent;
   --presentation-text: #dedfd8;
   --presentation-text-muted: #a9ada3;
   --presentation-border: rgba(241, 241, 236, 0.13);

@@ -49,7 +49,7 @@ Identical content must depend only on the **resolved preset**, including `inline
 
 ::right::
 
-```ts
+```text
 const resolved = localPreset ?? deckPreset
 ```
 
@@ -91,7 +91,7 @@ Identical content must depend only on the **resolved preset**, including `inline
 
 ::right::
 
-```ts
+```text
 const resolved = localPreset ?? deckPreset
 ```
 
@@ -133,7 +133,7 @@ Identical content must depend only on the **resolved preset**, including `inline
 
 ::right::
 
-```ts
+```text
 const resolved = localPreset ?? deckPreset
 ```
 
@@ -175,7 +175,7 @@ Identical content must depend only on the **resolved preset**, including `inline
 
 ::right::
 
-```ts
+```text
 const resolved = localPreset ?? deckPreset
 ```
 

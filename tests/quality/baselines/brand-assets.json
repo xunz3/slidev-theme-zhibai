@@ -33,7 +33,8 @@
     {
       "path": "assets/ICT/emblem-name-bilingual-stacked.svg",
       "displayRoles": [
-        "cover-lockup"
+        "cover-lockup",
+        "section-lockup"
       ],
       "referenceSize": {
         "height": 180,
@@ -102,9 +103,7 @@
     {
       "path": "assets/ICT/emblem.svg",
       "displayRoles": [
-        "header-mark",
-        "slide-mark",
-        "watermark"
+        "section-watermark"
       ],
       "referenceSize": {
         "height": 120,
@@ -242,7 +241,6 @@
     {
       "path": "assets/UCAS/emblem-name-bilingual-hz-white.png",
       "displayRoles": [
-        "dark-wordmark",
         "section-wordmark"
       ],
       "referenceSize": {
@@ -283,8 +281,7 @@
     {
       "path": "assets/UCAS/emblem-name-bilingual-hz.svg",
       "displayRoles": [
-        "header-mark",
-        "slide-wordmark"
+        "package-only-source"
       ],
       "referenceSize": {
         "height": 67,
@@ -640,8 +637,7 @@
     {
       "path": "assets/UCAS/emblem.svg",
       "displayRoles": [
-        "slide-mark",
-        "watermark"
+        "cover-watermark"
       ],
       "referenceSize": {
         "height": 128,

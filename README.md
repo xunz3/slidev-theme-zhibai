@@ -184,6 +184,7 @@ Title rendering follows a fixed rule:
 | Location | Visible title source | Metadata role |
 | --- | --- | --- |
 | `cover` layout | Root or cover-slide `title` / `subtitle` metadata | The first Markdown `#` is hidden when metadata title exists, preventing duplicate cover titles |
+| `intro` layout | Markdown `#` content | Intro titles use the same large display scale as section dividers while retaining normal chrome behavior |
 | Normal content layouts | Markdown content such as `# Slide Title` | Per-slide `title` / `subtitle` is metadata for navigation, TOC extraction, and the optional header |
 | Optional header | Per-slide `title` / `subtitle` metadata only | It never falls back to the deck title, so global deck metadata is not repeated on every slide |
 | Footer center | Per-slide `footer`, then root `footer`, then root `title` | Footer content is deck chrome, not the slide's visible content title |
@@ -372,14 +373,16 @@ edge, or keycap shadow, and the wash follows wrapped line fragments.
 
 Components wrap at the canonical 980 × 552 viewport. Inline labels/keycaps cannot create slide-level horizontal overflow; sequences and author cards stay contained; media reserves bounded space; and the shared frame provides last-resort scrolling for unusually long callouts or figures. For long image-and-text narratives or code, prefer compact density, shorten the content, or split the slide rather than shrinking text below a readable size.
 
-### Structural chrome, brand safe zones, and bilingual headings
+### Structural chrome, section brand spacing, and bilingual headings
 
 Each rendered frame resolves one local `--presentation-chrome-accent`. Header and footer
 dividers, table-header rules, ordinary list markers, sequence rails, and the ICT footer cap
 consume that same secondary role; semantic callout carriers remain independently stronger.
-Default slides reserve no brand strip. Ordinary UCAS and ICT slides reserve a measured shallow
-block-start strip while their wordmark/emblem floats at the top right; cover and header variants
-that place branding separately reset the reserve.
+Ordinary content slides render no institutional mark and therefore reserve no dead brand strip.
+Cover branding occupies dedicated cover structure. UCAS and ICT section dividers reserve
+inline-end space for their lockup, use a smaller lockup at the compact viewport, and omit that
+top-right lockup when an explicitly enabled header owns the row. Their decorative watermark
+stays behind content at the same strength in light and dark mode.
 
 The theme intentionally normalizes rendered bilingual heading text in the DOM. In `h1`–`h4`
 and frame title/subtitle text, canonical `English · 中文` spacing becomes `English · 中文`:
@@ -413,7 +416,6 @@ Advanced users can override theme tokens from custom CSS or a Slidev style entry
 | `--slidev-theme-primary` | Slidev-compatible primary color |
 | `--presentation-accent` | Theme accent used for links, chrome, callouts, and highlights |
 | `--presentation-chrome-accent` | Frame-local secondary color shared by structural chrome consumers |
-| `--presentation-brand-safe-block-start` | Shallow block-start reserve for an ordinary floating preset mark |
 | `--presentation-bg` | Slide background base color |
 | `--presentation-bg-elevated` | Elevated surface color |
 | `--presentation-bg-muted` | Muted code/table background color |
@@ -489,9 +491,9 @@ Use `themeConfig.presentation.preset` to switch visual systems without changing 
 
 When no preset is specified, `default` is selected. It is a paper-inspired but projection-aware system derived from the quiet editorial language of xunz.ink: warm paper and graphite surfaces, muted sage accents, serif display type, a centered title page, booktabs-like tables, flat code, hairline fieldset callouts, and restrained section dividers. The namesake lilas violet appears only as a quiet brand signature on ceremonial pages — the cover rules, the section kicker and hairline, and the statement rule — while content slides stay on the functional sage accent; override `--presentation-lilas` to retune it.
 
-`ucas` is an academic editorial direction based on the official UCAS blue and bundled bilingual identity assets. A narrow cobalt spine anchors the cover; ordinary slides use a quiet blue-white paper canvas, compact wordmark, serif hierarchy, booktabs-like rules with a blue top rule, margin-note callouts, and very faint emblem watermarks. Section and statement pages then step into a flat institutional-blue field with white serif type, the white wordmark, and the emblem watermark — the ceremonial beat of the deck. Institutional identity stays visible without turning scientific content into a branded card system.
+`ucas` is an academic editorial direction based on the official UCAS blue and bundled bilingual identity assets. A narrow cobalt spine anchors the cover; ordinary slides use a quiet blue-white paper canvas, serif hierarchy, booktabs-like rules with a blue top rule, and margin-note callouts without a floating institutional mark. Section and statement pages step into a flat institutional-blue field with white serif type; section dividers add the white wordmark and emblem watermark, while statements keep the field content-first. Institutional identity stays visible without turning scientific content into a branded card system.
 
-`ict` is a precise systems-and-engineering direction based on the bundled bilingual lockup and orbital emblem. Its cool paper canvas combines sans-serif display type, compact mono labels and table headers, square list markers, open technical rules, flat tables and code, bracket-like callouts, and measured emblem geometry. Section and statement pages shift to a flat deep-navy field with white type, a two-tone cyan rule, and the inverted orbital mark and watermark. The result remains visibly technical without relying on heavy fills, rounded panels, or full-slide gradients.
+`ict` is a precise systems-and-engineering direction based on the bundled bilingual lockup and orbital emblem. Its unbranded cool-paper content canvas combines sans-serif display type, compact mono labels and table headers, square list markers, open technical rules, flat tables and code, and bracket-like callouts. Section and statement pages shift to a flat deep-navy field with white type and a two-tone cyan rule; section dividers add the inverted bilingual lockup and orbital watermark. The result remains visibly technical without relying on heavy fills, rounded panels, or full-slide gradients.
 
 For `ucas` and `ict`, `themeConfig.presentation.accent` changes content accents such as links, callouts, and chrome while the official identity colors used by logos and signature layouts remain locked.
 
@@ -517,7 +519,7 @@ This theme provides the following layouts:
 | --- | --- |
 | `default` | Main content slides with optional footer chrome |
 | `cover` | Opening slide, chrome hidden by default |
-| `intro` | Introductory slide with normal chrome behavior |
+| `intro` | Introductory slide with normal chrome behavior and large display-title treatment |
 | `section` | Section divider, chrome hidden by default |
 | `toc` | Table of contents generated from `section` slides |
 | `center` | Centered single-message slide |

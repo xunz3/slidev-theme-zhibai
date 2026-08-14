@@ -1168,7 +1168,9 @@ The centered separator remains with the preceding phrase while the following phr
 </div>
 
 ---
-title: Ordinary brand collision probe
+layout: section
+title: Section brand collision probe
+presentationHeader: false
 presentationDensity: compact
 ---
 
@@ -1176,9 +1178,9 @@ presentationDensity: compact
 
 <div>
 
-# Top-right evidence · 右上证据
+# Section evidence · 章节证据
 
-[Safe-zone link](https://example.com/brand-safe-zone)
+[Section-safe link](https://example.com/brand-safe-zone)
 
 <button type="button" data-brand-safe-control>Review control</button>
 
@@ -1186,9 +1188,59 @@ presentationDensity: compact
 
 <Figure
   src="/author-fixtures/media-landscape.svg"
-  alt="Top-right Figure collision probe"
-  caption="Figure, caption, heading, link, and control remain outside the floating mark."
+  alt="Section lockup collision probe"
+  caption="Figure, caption, heading, link, and control remain outside the section lockup."
 />
+
+</div>
+
+---
+layout: section
+title: Protected section identity
+kicker: false
+presentationHeader: false
+presentationDensity: compact
+accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
+---
+
+<div data-quality-case="us3-section-accent-local">
+
+# Protected institutional identity
+
+Local accents may change content roles, never official section artwork.
+
+</div>
+
+---
+layout: section
+title: Protected section identity
+kicker: false
+presentationHeader: false
+presentationDensity: compact
+---
+
+<div data-quality-case="us3-section-accent-unaccented">
+
+# Protected institutional identity
+
+Local accents may change content roles, never official section artwork.
+
+</div>
+
+---
+layout: section
+title: Header-safe section branding
+subtitle: Optional chrome owns the top row
+presentationChrome: "on"
+presentationHeader: true
+presentationDensity: compact
+---
+
+<div data-quality-case="visual-section-header">
+
+# Section lockups yield to the header
+
+The watermark stays behind content while the top-right lockup is omitted.
 
 </div>
 <!-- FIX-THEME-VISUALS-MATRIX-END -->

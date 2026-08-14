@@ -160,7 +160,7 @@ if (/\.slidev-layout\s+li\s*>\s*input\[type=["']checkbox["']\]/.test(taskLists))
 const frame = sourceAt('components/SlideFrame.vue')
 const presentationConfig = sourceAt('setup/presentation-config.ts')
 if (/data-presentation-brand-safe-zone/.test(frame) || /\bbrandSafeZone\b/.test(presentationConfig)) {
-  errors.push('brand safe-zone DOM state is dead; CSS token ownership is required')
+  errors.push('brand safe-zone DOM state is obsolete; section geometry is CSS-owned')
 }
 
 const maximumShippedAssetBytes = 250 * 1024

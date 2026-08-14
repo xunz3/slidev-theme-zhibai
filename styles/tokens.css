@@ -5,7 +5,6 @@
 
 .slide-frame {
   --presentation-chrome-accent: color-mix(in srgb, var(--presentation-accent) 34%, var(--presentation-border-strong));
-  --presentation-brand-safe-block-start: 0rem;
   --presentation-reading-width: 100%;
   --presentation-block-width: 84ch;
   --presentation-code-copy-color: var(--presentation-text);

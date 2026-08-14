@@ -339,7 +339,7 @@ N items → N nodes, connectors only for items 1..N-1, each center-to-center
 
 Timeline cards have no second edge rail.
 
-## 12. Chrome and Safe-Zone State
+## 12. Chrome and Section-Brand State
 
 ### Chrome Accent
 
@@ -350,18 +350,22 @@ Timeline cards have no second edge rail.
 | `chromeAccent` | derived CSS color | Frame-local |
 | `consumers` | header/footer rules, th rule, ordinary list markers, footer cap | Same role within preset/mode |
 
-### Brand Safe Zone
+### Section Brand Region
 
 | Field | Type | Rules |
 | --- | --- | --- |
-| `markPresent` | boolean | Ordinary floating UCAS/ICT mark |
-| `blockStartReserve` | CSS length | Supplied by preset/variant token |
-| `active` | boolean | Reset for header/cover variants that already separate branding |
+| `variant` | frame variant | Lockup/watermark markup is limited to cover/section policy |
+| `lockupPresent` | boolean | UCAS/ICT section only, and false when the header is visible |
+| `inlineEndReserve` | CSS layout value | Section content only; sized from preset lockup geometry |
+| `compactLockup` | CSS dimensions/offsets | Section-specific rule at 720 × 405 |
+| `watermarkOpacity` | fixed preset value | Identical across modes on a mode-independent field |
 
 Validation:
 
-- User headings, figures, captions, links, and controls do not intersect the brand bounds.
-- Reserve is limited to the block-start strip, not full-height inline padding.
+- Ordinary content and statement slides have no institutional image or brand reserve.
+- User headings, figures, captions, links, controls, and headers do not intersect visible lockups.
+- Section inline-end reserve is removed at the compact breakpoint after the lockup shrinks and
+  moves into the outer top corner.
 - Protected brand pixels/colors remain unchanged.
 
 ## 13. Bilingual Heading Separator

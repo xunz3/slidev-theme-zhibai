@@ -545,10 +545,17 @@ const coherentCanonicalDefinitions = [
   },
   {
     caseId: 'visual-brand-collision',
-    coverage: ['FR-025', 'safe-zone', 'heading', 'figure', 'caption', 'link', 'control'],
+    coverage: ['FR-025', 'section-brand', 'lockup', 'watermark', 'heading', 'figure', 'caption', 'link', 'control'],
     id: 'brand-safe-zone',
     requirementIds: ['FR-025', 'SC-007'],
     slide: 58,
+  },
+  {
+    caseId: 'visual-section-header',
+    coverage: ['FR-025', 'section-brand', 'header', 'lockup-suppression', 'watermark'],
+    id: 'section-header',
+    requirementIds: ['FR-025', 'SC-007'],
+    slide: 61,
   },
   {
     caseId: 'visual-bilingual-heading',
@@ -609,10 +616,17 @@ const coherentCompactDefinitions = [
   },
   {
     caseId: 'visual-brand-collision',
-    coverage: ['FR-025', 'compact', 'safe-zone'],
+    coverage: ['FR-025', 'compact', 'section-brand', 'lockup', 'watermark'],
     id: 'brand-safe-zone',
     requirementIds: ['FR-025', 'SC-007'],
     slide: 58,
+  },
+  {
+    caseId: 'visual-section-header',
+    coverage: ['FR-025', 'compact', 'section-brand', 'header', 'lockup-suppression'],
+    id: 'section-header',
+    requirementIds: ['FR-025', 'SC-007'],
+    slide: 61,
   },
   {
     caseId: 'visual-bilingual-heading',

@@ -106,7 +106,7 @@ Expected:
 - Checked tasks are not heavier; flat prose highlights remain distinct from code/Kbd.
 - Ordinary interactive checkboxes remain enabled, visible, and keyboard reachable.
 - Steps/Timeline nodes, rails, ordinals, endpoints, and date/undated labels pass geometry checks.
-- Canonical `end` minimal/rich closing, unframed contained logo, safe zones, chrome role, and bilingual
+- Canonical `end` minimal/rich closing, unframed contained logo, section brand regions, chrome role, and bilingual
   separator checks pass.
 
 Start failures with the case ID and retained artifact referenced by the test output. Do not
@@ -123,7 +123,7 @@ Expected:
 - Zero critical/serious Axe findings.
 - Canonical 980 × 552 coverage passes in every preset/mode.
 - Targeted 720 × 405 coverage passes for media, closing, compact callouts, sequences,
-  bilingual headings, and UCAS/ICT safe zones.
+  bilingual headings, and UCAS/ICT section lockups.
 - Valid links remain keyboard reachable with visible focus.
 - Static Badge/task/sequence/highlight/brand decoration remains outside the focus order.
 - No unintended clipping, overlap, horizontal slide overflow, broken image, or page/runtime
@@ -180,7 +180,8 @@ Review:
 - institution/email-only author cards and all link forms;
 - checked/unchecked tasks, highlights beside code/Kbd;
 - Steps/Timeline zero/one/many geometry;
-- minimal/rich closing, chrome strength, UCAS/ICT top-right safe zones, bilingual wrapping.
+- minimal/rich closing, chrome strength, UCAS/ICT section lockups and header suppression,
+  bilingual wrapping.
 
 Record reviewer, date, environment, matrix, result, and any owned follow-up in:
 
@@ -227,7 +228,7 @@ Expected:
 - Badge additions are documented as optional.
 - Kbd runtime filtering and its screen-reader “plus” separator are documented.
 - Generated image/link/callout compatibility and failure behavior are explicit.
-- Task/highlight, chrome/safe-zone, bilingual heading, and intentional visual baseline changes
+- Task/highlight, chrome/section-brand, bilingual heading, and intentional visual baseline changes
   are documented.
 - The absence of build/output/navigation performance baselines is explicit.
 - Maintained examples use ordinary Slidev authoring where standalone behavior is claimed.
@@ -237,7 +238,7 @@ Expected:
 - [ ] Static architecture and fixture-isolation gates pass.
 - [ ] All maintained decks build.
 - [ ] 114 callout and 42 Badge tone cases pass.
-- [ ] Media, links, authors, tasks, highlights, sequences, closing, chrome, safe-zone, and
+- [ ] Media, links, authors, tasks, highlights, sequences, closing, chrome, section-brand, and
       bilingual geometry contracts pass.
 - [ ] Ordinary interactive checkbox and canonical pre-1.0 API regressions pass.
 - [ ] Canonical and targeted compact accessibility/overflow checks pass.

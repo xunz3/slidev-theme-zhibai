@@ -34,7 +34,7 @@ visual review record without correcting production rendering yet.
 - [X] T002 [P] Create a requirement-linked visual review record with environment, reviewer, result, skip-owner, and follow-up fields in `qa/fix-theme-visuals/visual-review.md`
 - [X] T003 Add stable same-source Figure/image-layout/closing-logo, 19-type callout, link-form, and author-fallback cases to `fixtures/expanded-content.md` without changing shipped theme styles
 - [X] T004 Add stable seven-tone Badge, marker-state, native/generated task, prose/code highlight, and zero/one/many Steps/Timeline cases to `fixtures/expanded-content.md`
-- [X] T005 Add stable minimal/rich closing, chrome-role, UCAS/ICT safe-zone, bilingual-heading, and targeted compact-risk cases to `fixtures/expanded-content.md`
+- [X] T005 Add stable minimal/rich closing, chrome-role, UCAS/ICT section-brand, bilingual-heading, and targeted compact-risk cases to `fixtures/expanded-content.md`
 - [X] T006 [P] Add generated callout-family, ready/delayed/decorative/failed image, component-equivalence, inline/wrapped/block link, generated-task, and prose/code-highlight cases to `fixtures/obsidian-protocol.md`
 - [X] T007 [P] Create fixture-only gallery/probe composition in `fixtures/expanded-content.css` and load it only in generated fixture decks through `tests/quality/helpers.mjs`
 - [X] T008 Register deterministic delayed public/generated media ready/failure scenarios with stable case IDs and target selectors in `tests/quality/layout-stability.spec.mjs`
@@ -54,7 +54,7 @@ preset-specific component forks.
 
 - [X] T011 [P] Generalize the canonical seven-family registry and case-insensitive family normalizer for Callout and Badge use in `setup/callouts.ts`
 - [X] T012 [P] Add shared fit, alternative-text, load-state, and generated-image ownership helpers in `setup/media.ts`
-- [X] T013 [P] Define protected semantic-family roles, media viewport roles, Badge/highlight/sequence roles, frame-local chrome accent, and brand-safe-zone defaults in `styles/tokens.css` and `styles/presets/shared.css`
+- [X] T013 [P] Define protected semantic-family roles, media viewport roles, Badge/highlight/sequence roles, and the frame-local chrome accent in `styles/tokens.css` and `styles/presets/shared.css`
 - [X] T014 [P] Add one idempotent subtree-scoped render-normalization host with listener cleanup and register it through the existing app lifecycle in `setup/render-normalization.ts` and `setup/main.ts`
 - [X] T015 [P] Add canonical 980×552 DPR-2 and compact 720×405 DPR-2 reusable matrix helpers without duplicating every visual baseline in `tests/quality/helpers.mjs` and `scripts/capture-visual-review.mjs`
 
@@ -217,17 +217,17 @@ all chrome consumers, compact callouts, top-right heading/Figure/caption/link/co
 spaced-U+00B7 headings, and production-source isolation across all presets/modes at canonical
 and targeted compact viewports.
 
-**Story Dependencies**: Core closing/chrome/safe-zone/normalization work can start after Phase 2.
+**Story Dependencies**: Core closing/chrome/section-brand/normalization work can start after Phase 2.
 The complete independent test also requires US1's media/logo contract and US2's compact callout
 contract.
 
 ### Tests for User Story 6
 
 - [X] T058 [P] [US6] Add failing source-isolation and architecture assertions for quality/gallery/probe selectors, preset marker/casing overrides, shared-family ownership, fixture exclusion, runtime dependencies, and shipped assets in `tests/quality/configuration.spec.mjs`
-- [X] T059 [P] [US6] Add failing minimal/rich closing, generated-media equivalence, chrome-role, safe-zone intersection, and bilingual-separator line/idempotence assertions in `tests/quality/content-contracts.spec.mjs`
+- [X] T059 [P] [US6] Add failing minimal/rich closing, generated-media equivalence, chrome-role, section-lockup intersection, and bilingual-separator line/idempotence assertions in `tests/quality/content-contracts.spec.mjs`
 - [X] T060 [P] [US6] Add failing canonical/compact closing, generated alternative, brand collision, heading wrap, focus-order, clipping, overflow, and observer-error checks in `tests/quality/accessibility.spec.mjs`
 - [X] T061 [P] [US6] Add failing delayed generated-image success/failure geometry and zero-shift expectations in `tests/quality/layout-stability.spec.mjs`
-- [X] T062 [P] [US6] Register minimal/rich closing, generated/public media, chrome, safe-zone, compact-callout, and bilingual-wrap review scenarios in `tests/quality/visual-baselines.mjs`
+- [X] T062 [P] [US6] Register minimal/rich closing, generated/public media, chrome, section-brand, compact-callout, and bilingual-wrap review scenarios in `tests/quality/visual-baselines.mjs`
 
 ### Implementation for User Story 6
 
@@ -235,14 +235,14 @@ contract.
 - [X] T064 [US6] Normalize only the breaking space before canonical spaced U+00B7 in headings/title/subtitle text through the shared idempotent initial/addition pass in `setup/render-normalization.ts`
 - [X] T065 [P] [US6] Derive stable minimal/rich closing state, preserve message-contact-authors-logo DOM order, and omit absent region wrappers in `internals/ClosingLayout.vue`
 - [X] T066 [P] [US6] Center minimal closing content and balance rich content/logo/authors without changing logical order or compact containment in `styles/content-layouts.css`
-- [X] T067 [P] [US6] Expose frame-local chrome-accent and shallow block-start brand-safe-zone state to shared frame content and structural consumers in `components/SlideFrame.vue`, `styles/layouts.css`, and `styles/base.css`
-- [X] T068 [P] [US6] Consume the shared secondary chrome role and zero safe-zone default without redefining semantic carriers in `styles/presets/default.css`
+- [X] T067 [P] [US6] Expose the frame-local chrome accent to shared frame content and structural consumers in `components/SlideFrame.vue`, `styles/layouts.css`, and `styles/base.css`
+- [X] T068 [P] [US6] Consume the shared secondary chrome role without redefining semantic carriers in `styles/presets/default.css`
 - [X] T069 [P] [US6] Set UCAS chrome and measured shallow mark reserve while removing per-consumer strength drift and preserving protected artwork in `styles/presets/ucas.css`
 - [X] T070 [P] [US6] Set ICT chrome and measured shallow mark reserve while removing per-consumer strength drift and preserving protected artwork in `styles/presets/ict.css`
 - [X] T071 [US6] Remove shipped gallery/probe/quality selectors, replace the code-layout quality-marker dependency with a semantic internal wrapper, and retain equivalent fixture composition in `styles/components.css`, `styles/content-layouts.css`, `layouts/code.vue`, and `fixtures/expanded-content.css`
 - [X] T072 [P] [US6] Implement the packaged-source static gate for fixture selectors, preset semantic overrides, family duplication, dependency drift, asset size, and converter-boundary violations in `scripts/check-presentation-css.mjs`
 - [X] T073 [P] [US6] Reserve direct generated-image geometry from first paint and align fit, caption, state, and fallback presentation with public Figure in `styles/obsidian.css`
-- [X] T074 [US6] Run static isolation, generated protocol, closing/chrome/safe-zone/heading contracts, compact accessibility, navigation stability, affected builds, and visual review and record the independent-test result in `qa/fix-theme-visuals/visual-review.md`
+- [X] T074 [US6] Run static isolation, generated protocol, closing/chrome/section-brand/heading contracts, compact accessibility, navigation stability, affected builds, and visual review and record the independent-test result in `qa/fix-theme-visuals/visual-review.md`
 
 **Checkpoint**: User Story 6 is independently demonstrable after its declared US1/US2
 integration dependencies, and production behavior no longer depends on fixture markers.
@@ -254,7 +254,7 @@ integration dependencies, and production behavior no longer depends on fixture m
 **Purpose**: Document corrected public behavior, approve intentional visual changes only after
 semantic gates pass, and run the complete release gate.
 
-- [X] T075 [P] Document media fit/defaults, generated equivalence/failure, unframed closing logos, single link treatment, author fallback, callout invariants, Badge inputs, sequences, tasks/highlights, chrome/safe zones, bilingual wrapping, no-migration behavior, and intentional corrections in `README.md`
+- [X] T075 [P] Document media fit/defaults, generated equivalence/failure, unframed closing logos, single link treatment, author fallback, callout invariants, Badge inputs, sequences, tasks/highlights, chrome/section-brand spacing, bilingual wrapping, no-migration behavior, and intentional corrections in `README.md`
 - [X] T076 [P] Update ordinary standalone demonstrations of corrected components/layouts and preset behavior in `example.md`, `fixtures/default-preset.md`, `fixtures/ucas-preset.md`, and `fixtures/ict-preset.md`
 - [X] T077 Run all maintained production builds and focused static/semantic/accessibility/layout-stability tests, then record commands, environment, outcomes, and any owned follow-up in `qa/fix-theme-visuals/visual-review.md`
 - [X] T078 Remove obsolete build-output/navigation baseline update machinery and committed raw performance samples while retaining the shipped-asset and zero-layout-shift gates

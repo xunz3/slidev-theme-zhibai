@@ -64,14 +64,6 @@
   );
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame:is(
-  .slide-frame--cover,
-  .slide-frame--closing,
-  .slide-frame--header
-) {
-  --presentation-brand-safe-block-start: 0rem;
-}
-
 html.dark .slidev-layout[data-presentation-preset] .slide-frame {
   --presentation-table-header-bg: color-mix(
     in srgb,

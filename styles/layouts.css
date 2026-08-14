@@ -59,7 +59,6 @@
 .slide-frame__content {
   box-sizing: border-box;
   min-height: 0;
-  padding-block-start: var(--presentation-brand-safe-block-start);
   overflow: auto;
   scrollbar-color: var(--presentation-scrollbar-thumb) var(--presentation-scrollbar-track);
   scrollbar-gutter: stable;
@@ -204,6 +203,7 @@
   font-size: calc(3.7rem * var(--presentation-heading-scale));
 }
 
+.slidev-layout.intro h1,
 .slidev-layout.section h1 {
   font-size: calc(4.15rem * var(--presentation-heading-scale));
 }
@@ -508,6 +508,7 @@
     font-size: calc(3rem * var(--presentation-heading-scale));
   }
 
+  .slidev-layout.intro h1,
   .slidev-layout.section h1 {
     font-size: calc(3rem * var(--presentation-heading-scale));
   }

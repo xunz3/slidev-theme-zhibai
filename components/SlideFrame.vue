@@ -99,6 +99,7 @@ const footerMiddle = computed(() => {
     >
       <PresetBranding
         :preset="resolved.preset"
+        :show-header="resolved.showHeader"
         :variant="resolved.variant"
       />
 

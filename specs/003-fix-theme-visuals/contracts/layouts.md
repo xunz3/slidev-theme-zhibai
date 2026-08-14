@@ -167,26 +167,24 @@ Rules:
 - The centered footer resolves per-slide `footer`, root `footer`, then root `title`. The
   undocumented root `configs.info` fallback is removed.
 
-### Brand safe zone
-
-When an ordinary-slide preset mark floats at block start, CSS exposes:
-
-```css
---presentation-brand-safe-block-start: <preset/variant length>;
-```
+### Brand safe regions
 
 Rules:
 
-- Shared frame content reserves that shallow block-start strip before user content.
-- UCAS/ICT set a value based on actual mark bounds; default uses zero.
-- Header and cover variants that already place branding in a separate region reset/replace the
-  reserve.
-- The reserve is not full-height inline padding.
-- At 980 × 552 and 720 × 405, the mark bounding box must not intersect a user heading, Figure,
-  caption, link, control, or closing region.
+- Ordinary content slides render no preset mark and reserve no unused brand padding.
+- Cover branding occupies cover-owned structure and remains clear of the visible title,
+  subtitle, body, and author regions.
+- UCAS/ICT section dividers reserve inline-end space based on the rendered lockup bounds.
+- At the compact viewport, section lockups use section-specific offsets and dimensions while the
+  content returns to the full inline width.
+- When an explicitly enabled header owns the top row, the section lockup is not rendered; the
+  decorative watermark remains below the content/chrome stacking layer.
+- At 980 × 552 and 720 × 405, visible cover/section lockups must not intersect a user heading,
+  Figure, caption, link, control, or chrome region.
+- A mode-independent ceremonial field keeps the same watermark opacity in light and dark mode.
 - Protected asset pixels, aspect ratios, and institutional colors remain unchanged.
-- No `data-presentation-brand-safe-zone` attribute is required; the CSS token is the only
-  runtime state.
+- No brand-safe custom property, DOM attribute, or root state is required; layout selectors own
+  the geometry directly.
 
 ## Bilingual Heading Wrapping
 

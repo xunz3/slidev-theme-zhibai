@@ -455,6 +455,80 @@ test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 },
       }
     })
 
+    await t.test('intro titles retain the opening-slide display scale', async () => {
+      for (const preset of presets) {
+        for (const mode of modes) {
+          const page = await context.newPage()
+          try {
+            await waitForSlide(
+              page,
+              serverByPreset[preset].baseUrl,
+              6,
+              mode,
+              'invalid-inputs',
+            )
+            const contentTitleSize = await page.locator(
+              '.slidev-page-6 h1',
+            ).evaluate(element => Number.parseFloat(
+              getComputedStyle(element).fontSize,
+            ))
+            await waitForSlide(
+              page,
+              serverByPreset[preset].baseUrl,
+              9,
+              mode,
+              'layout-intro',
+            )
+            const introTitleSize = await page.locator(
+              '.slidev-page-9 h1',
+            ).evaluate(element => Number.parseFloat(
+              getComputedStyle(element).fontSize,
+            ))
+            assert.ok(
+              introTitleSize >= contentTitleSize * 1.75,
+              `${preset}/${mode}: intro ${introTitleSize}px, content ${contentTitleSize}px`,
+            )
+          } finally {
+            await page.close()
+          }
+        }
+      }
+    })
+
+    await t.test('statement slides keep their full content width', async () => {
+      for (const preset of presets) {
+        for (const mode of modes) {
+          const page = await context.newPage()
+          try {
+            await waitForSlide(
+              page,
+              serverByPreset[preset].baseUrl,
+              14,
+              mode,
+              'layout-statement',
+            )
+            const state = await page.locator(
+              '.slidev-page-14 .slide-layout-statement',
+            ).evaluate((statement) => {
+              const style = getComputedStyle(statement)
+              const frame = statement.closest('.slide-frame')
+              return {
+                identityImageCount: frame?.querySelectorAll(
+                  'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
+                ).length ?? -1,
+                paddingLeft: style.paddingLeft,
+                paddingRight: style.paddingRight,
+              }
+            })
+            assert.equal(state.identityImageCount, 0)
+            assert.equal(state.paddingRight, state.paddingLeft)
+          } finally {
+            await page.close()
+          }
+        }
+      }
+    })
+
     await t.test('keyboard navigation and TOC activation remain operable', async () => {
       const page = await context.newPage()
       const baseUrl = serverByPreset.default.baseUrl
@@ -496,7 +570,7 @@ test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 },
   }
 })
 
-test('US3 content slides remain unbranded across local accents', {
+test('US3 content stays unbranded and section identity stays protected across accents', {
   timeout: 240_000,
 }, async (t) => {
   const externalContext = readQualityBuildContext()
@@ -561,6 +635,53 @@ test('US3 content slides remain unbranded across local accents', {
     }
   }
 
+  const captureSectionIdentity = async ({ baseUrl, marker, mode, page, preset, slide }) => {
+    await waitForSlide(page, baseUrl, slide, mode, marker)
+    const lockupSelector = preset === 'ucas'
+      ? '.slide-frame__ucas-wordmark'
+      : '.slide-frame__ict-lockup--section'
+    const watermarkSelector = preset === 'ucas'
+      ? '.slide-frame__ucas-watermark'
+      : '.slide-frame__ict-watermark'
+    const lockup = page.locator(`.slidev-page-${slide} ${lockupSelector}`)
+    const watermark = page.locator(`.slidev-page-${slide} ${watermarkSelector}`)
+    await lockup.waitFor({ state: 'visible' })
+    await watermark.waitFor({ state: 'visible' })
+
+    return {
+      lockupPixels: await lockup.screenshot({ type: 'png' }),
+      state: await page.locator(`.slidev-page-${slide} .slide-frame`).evaluate(
+        (frame, selectors) => {
+          const inspect = (selector) => {
+            const image = frame.querySelector(selector)
+            if (!(image instanceof HTMLImageElement)) {
+              throw new Error(`Protected identity target is missing: ${selector}`)
+            }
+            const style = getComputedStyle(image)
+            return {
+              filter: style.filter,
+              height: style.height,
+              opacity: style.opacity,
+              src: image.currentSrc,
+              width: style.width,
+            }
+          }
+          return {
+            frameAccent: frame.style
+              .getPropertyValue('--presentation-accent').trim(),
+            identityImageCount: frame.querySelectorAll(
+              'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
+            ).length,
+            lockup: inspect(selectors.lockupSelector),
+            watermark: inspect(selectors.watermarkSelector),
+          }
+        },
+        { lockupSelector, watermarkSelector },
+      ),
+      watermarkPixels: await watermark.screenshot({ type: 'png' }),
+    }
+  }
+
   try {
     for (const preset of ['ucas', 'ict']) {
       for (const mode of modes) {
@@ -590,6 +711,49 @@ test('US3 content slides remain unbranded across local accents', {
             assert.equal(fallback.state.rootAccent, '')
             assert.equal(local.state.visibleIdentityCount, 0)
             assert.equal(fallback.state.visibleIdentityCount, 0)
+
+            const sectionLocal = await captureSectionIdentity({
+              baseUrl,
+              marker: 'us3-section-accent-local',
+              mode,
+              page,
+              preset,
+              slide: 59,
+            })
+            const sectionFallback = await captureSectionIdentity({
+              baseUrl,
+              marker: 'us3-section-accent-unaccented',
+              mode,
+              page,
+              preset,
+              slide: 60,
+            })
+            assert.equal(sectionLocal.state.frameAccent, localAccent)
+            assert.equal(sectionFallback.state.frameAccent, deckAccent)
+            assert.equal(sectionLocal.state.identityImageCount, 2)
+            assert.equal(sectionFallback.state.identityImageCount, 2)
+            assert.deepEqual(
+              sectionLocal.state.lockup,
+              sectionFallback.state.lockup,
+            )
+            assert.deepEqual(
+              sectionLocal.state.watermark,
+              sectionFallback.state.watermark,
+            )
+            assert.equal(
+              sectionLocal.state.watermark.opacity,
+              preset === 'ucas' ? '0.07' : '0.05',
+            )
+            assert.ok(
+              sectionLocal.lockupPixels.equals(sectionFallback.lockupPixels),
+              `${preset}/${mode}: protected section lockup pixels changed`,
+            )
+            assert.ok(
+              sectionLocal.watermarkPixels.equals(
+                sectionFallback.watermarkPixels,
+              ),
+              `${preset}/${mode}: protected section watermark pixels changed`,
+            )
           } finally {
             await page.close()
           }

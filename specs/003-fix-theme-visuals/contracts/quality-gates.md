@@ -368,7 +368,7 @@ is required.
 - Badge tones and marker default/options;
 - Steps versus Timeline;
 - checked-task emphasis and flat highlights;
-- chrome accent, safe zones, bilingual heading behavior;
+- chrome accent, section brand regions, bilingual heading behavior;
 - runtime-safe and screen-reader-readable Kbd key sequences;
 - expected intentional visual baseline changes and the direct pre-1.0 migration replacements,
   including removal of the undocumented `configs.info` footer fallback;

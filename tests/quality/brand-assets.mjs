@@ -100,12 +100,12 @@ export const findOversizedThemeAssets = (
 export const brandAssetDefinitions = [
   {
     path: 'assets/ICT/emblem-name-bilingual-stacked.svg',
-    displayRoles: ['cover-lockup'],
+    displayRoles: ['cover-lockup', 'section-lockup'],
     referenceSize: { height: 180, width: 242 },
   },
   {
     path: 'assets/ICT/emblem.svg',
-    displayRoles: ['header-mark', 'slide-mark', 'watermark'],
+    displayRoles: ['section-watermark'],
     referenceSize: { height: 120, width: 146 },
   },
   {
@@ -115,12 +115,12 @@ export const brandAssetDefinitions = [
   },
   {
     path: 'assets/UCAS/emblem-name-bilingual-hz-white.png',
-    displayRoles: ['dark-wordmark', 'section-wordmark'],
+    displayRoles: ['section-wordmark'],
     referenceSize: { height: 67, width: 320 },
   },
   {
     path: 'assets/UCAS/emblem-name-bilingual-hz.svg',
-    displayRoles: ['header-mark', 'slide-wordmark'],
+    displayRoles: ['package-only-source'],
     referenceSize: { height: 67, width: 320 },
   },
   {
@@ -150,7 +150,7 @@ export const brandAssetDefinitions = [
   },
   {
     path: 'assets/UCAS/emblem.svg',
-    displayRoles: ['slide-mark', 'watermark'],
+    displayRoles: ['cover-watermark'],
     referenceSize: { height: 128, width: 128 },
   },
   {

@@ -687,6 +687,11 @@ test('WCAG, layout, image, console, and interaction contract', {
         name: 'coherent-brand-collision',
         slide: 58,
       },
+      {
+        marker: 'visual-section-header',
+        name: 'coherent-section-header',
+        slide: 61,
+      },
     ]
     for (const preset of presets) {
       const baseUrl = builds[`expanded-${preset}`].baseUrl
@@ -1144,7 +1149,7 @@ test('WCAG, layout, image, console, and interaction contract', {
               assert.ok(separators.every(value => value === '\u00a0'))
             }
             if (definition.name === 'coherent-brand-collision') {
-              const collisions = await result.page.locator(
+              const brandState = await result.page.locator(
                 `.slidev-page-${definition.slide} .slide-frame`,
               ).evaluate((frame) => {
                 const visible = (element) => {
@@ -1174,16 +1179,41 @@ test('WCAG, layout, image, console, and interaction contract', {
                 const mark = [...frame.querySelectorAll(
                   '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup',
                 )].find(visible)
-                if (!mark) return []
+                if (!mark) return { collisions: [], markPresent: false }
                 const markRect = rect(mark)
-                return [...frame.querySelectorAll(
-                  '[data-quality-case="visual-brand-collision"] :is(h1, figure, figcaption, a, button)',
-                )]
-                  .filter(visible)
-                  .filter(element => overlaps(markRect, rect(element)))
-                  .map(element => element.tagName.toLowerCase())
+                return {
+                  collisions: [...frame.querySelectorAll(
+                    '[data-quality-case="visual-brand-collision"] :is(h1, figure, figcaption, a, button)',
+                  )]
+                    .filter(visible)
+                    .filter(element => overlaps(markRect, rect(element)))
+                    .map(element => element.tagName.toLowerCase()),
+                  markPresent: true,
+                }
               })
-              assert.deepEqual(collisions, [])
+              assert.equal(brandState.markPresent, preset !== 'default')
+              assert.deepEqual(brandState.collisions, [])
+            }
+            if (definition.name === 'coherent-section-header') {
+              const brandState = await result.page.locator(
+                `.slidev-page-${definition.slide} .slide-frame`,
+              ).evaluate((frame) => ({
+                headerCount: frame.querySelectorAll(
+                  '.slide-frame__header',
+                ).length,
+                identityImageCount: frame.querySelectorAll(
+                  'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
+                ).length,
+                lockupCount: frame.querySelectorAll(
+                  '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup--section',
+                ).length,
+              }))
+              assert.equal(brandState.headerCount, 1)
+              assert.equal(brandState.lockupCount, 0)
+              assert.equal(
+                brandState.identityImageCount,
+                preset === 'default' ? 0 : 1,
+              )
             }
             await result.page.close()
           }))
@@ -1228,6 +1258,11 @@ test('WCAG, layout, image, console, and interaction contract', {
             marker: 'visual-brand-collision',
             name: 'coherent-brand-collision',
             slide: 58,
+          },
+          {
+            marker: 'visual-section-header',
+            name: 'coherent-section-header',
+            slide: 61,
           },
           {
             itemCount: 4,
@@ -1286,7 +1321,7 @@ test('WCAG, layout, image, console, and interaction contract', {
               )))
             }
             if (definition.name === 'coherent-brand-collision') {
-              const collisionCount = await result.page.locator(
+              const brandState = await result.page.locator(
                 `.slidev-page-${definition.slide} .slide-frame`,
               ).evaluate((frame) => {
                 const visible = (element) => {
@@ -1301,22 +1336,47 @@ test('WCAG, layout, image, console, and interaction contract', {
                 const mark = [...frame.querySelectorAll(
                   '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup',
                 )].find(visible)
-                if (!mark) return 0
+                if (!mark) return { collisionCount: 0, markPresent: false }
                 const markRect = mark.getBoundingClientRect()
-                return [...frame.querySelectorAll(
-                  '[data-quality-case="visual-brand-collision"] :is(h1, figure, figcaption, a, button)',
-                )].filter((element) => {
-                  if (!visible(element)) return false
-                  const rect = element.getBoundingClientRect()
-                  return !(
-                    markRect.right <= rect.left
-                    || markRect.left >= rect.right
-                    || markRect.bottom <= rect.top
-                    || markRect.top >= rect.bottom
-                  )
-                }).length
+                return {
+                  collisionCount: [...frame.querySelectorAll(
+                    '[data-quality-case="visual-brand-collision"] :is(h1, figure, figcaption, a, button)',
+                  )].filter((element) => {
+                    if (!visible(element)) return false
+                    const rect = element.getBoundingClientRect()
+                    return !(
+                      markRect.right <= rect.left
+                      || markRect.left >= rect.right
+                      || markRect.bottom <= rect.top
+                      || markRect.top >= rect.bottom
+                    )
+                  }).length,
+                  markPresent: true,
+                }
               })
-              assert.equal(collisionCount, 0)
+              assert.equal(brandState.markPresent, preset !== 'default')
+              assert.equal(brandState.collisionCount, 0)
+            }
+            if (definition.name === 'coherent-section-header') {
+              const brandState = await result.page.locator(
+                `.slidev-page-${definition.slide} .slide-frame`,
+              ).evaluate((frame) => ({
+                headerCount: frame.querySelectorAll(
+                  '.slide-frame__header',
+                ).length,
+                identityImageCount: frame.querySelectorAll(
+                  'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
+                ).length,
+                lockupCount: frame.querySelectorAll(
+                  '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup--section',
+                ).length,
+              }))
+              assert.equal(brandState.headerCount, 1)
+              assert.equal(brandState.lockupCount, 0)
+              assert.equal(
+                brandState.identityImageCount,
+                preset === 'default' ? 0 : 1,
+              )
             }
             await result.page.close()
           }))
