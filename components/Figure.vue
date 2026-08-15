@@ -21,9 +21,11 @@ const resolvedFit = computed<MediaFit>(() => (
 ))
 const {
   alternative,
+  imageKey,
   loadState,
   onError,
   onLoad,
+  retry,
   showFallback,
   showImage,
   source,
@@ -32,6 +34,8 @@ const {
   fallback: () => caption.value || 'Figure',
   source: () => props.src,
 })
+
+defineExpose({ retry })
 </script>
 
 <template>
@@ -50,7 +54,7 @@ const {
     >
       <img
         v-if="showImage"
-        :key="source"
+        :key="imageKey"
         class="obsidian-slidev-media__image obsidian-slidev-media__asset"
         :src="source"
         :alt="alternative.resolvedAlt"

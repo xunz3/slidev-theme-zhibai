@@ -102,7 +102,7 @@ export const normalizeChrome = (value: unknown): PresentationChrome | undefined 
   return undefined
 }
 
-const FALLBACK_COLOR_PATTERN = /^(?:#[\da-f]{3,8}|(?:rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color|color-mix|var)\(.+\)|(?:aliceblue|black|blue|currentcolor|gray|green|grey|inherit|initial|orange|purple|rebeccapurple|red|transparent|white|yellow))$/i
+const FALLBACK_COLOR_PATTERN = /^(?:#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})|(?:rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color|color-mix|var)\(.+\)|(?:aliceblue|black|blue|currentcolor|gray|green|grey|inherit|initial|orange|purple|rebeccapurple|red|transparent|white|yellow))$/i
 
 export const supportsCssColor: CssColorSupport = (value) => {
   if (typeof globalThis.CSS?.supports === 'function') {

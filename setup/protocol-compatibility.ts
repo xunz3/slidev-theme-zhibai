@@ -5,7 +5,6 @@ export type CompatibilityReasonCode =
   | 'COMPATIBLE_CORE_AND_PROFILE'
   | 'THEME_DECLARATION_MISSING'
   | 'THEME_DECLARATION_MALFORMED'
-  | 'PUBLICATION_MISMATCH'
   | 'CORE_ID_UNSUPPORTED'
   | 'CORE_VERSION_UNSUPPORTED'
   | 'PROFILE_ID_UNSUPPORTED'
@@ -14,11 +13,6 @@ export type CompatibilityReasonCode =
 export interface ExactCoordinate {
   readonly id: string
   readonly version: string
-}
-
-export interface PublicationReference {
-  readonly version: string
-  readonly manifestSha256: string
 }
 
 export interface VersionRange {
@@ -34,12 +28,10 @@ export interface SupportCoordinate {
 export interface DeckDeclaration {
   readonly core: ExactCoordinate
   readonly profile?: ExactCoordinate
-  readonly publication: PublicationReference
 }
 
 export interface ThemeSupportDeclaration {
   readonly schemaVersion: 1
-  readonly publication: PublicationReference
   readonly core: SupportCoordinate
   readonly profiles: readonly SupportCoordinate[]
 }
@@ -58,11 +50,6 @@ export interface CompatibilityAssessment {
   readonly scope: CompatibilityScope
   readonly reasonCode: CompatibilityReasonCode
   readonly message: string
-  readonly publication: {
-    readonly status: CompatibilityStatus
-    readonly requested: PublicationReference
-    readonly supported: PublicationReference | null
-  }
   readonly core: {
     readonly status: CompatibilityStatus
     readonly requested: ExactCoordinate
@@ -85,7 +72,6 @@ interface StableVersion {
 const STABLE_VERSION = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/
 const COORDINATE_ID =
   /^[a-z0-9][a-z0-9._-]*(?:\/[a-z0-9][a-z0-9._-]*)+$/
-const SHA256 = /^[0-9a-f]{64}$/
 
 const isRecord = (value: unknown): value is Record<string, unknown> => (
   value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -153,41 +139,6 @@ const parseCoordinate = (
     return failure(issues)
   }
   return success({ id: value.id, version: version.value.raw })
-}
-
-const parsePublication = (
-  value: unknown,
-  path: string,
-): ParseResult<PublicationReference> => {
-  if (!isRecord(value)) {
-    return failure([issue(path, 'Expected a publication reference.')])
-  }
-  const issues = unknownFieldIssues(
-    value,
-    ['version', 'manifestSha256'],
-    path,
-  )
-  const version = parseStableVersion(value.version, `${path}.version`)
-  if (!version.ok) issues.push(...version.issues)
-  if (
-    typeof value.manifestSha256 !== 'string'
-    || !SHA256.test(value.manifestSha256)
-  ) {
-    issues.push(
-      issue(`${path}.manifestSha256`, 'Expected a lowercase SHA-256 digest.'),
-    )
-  }
-  if (
-    issues.length > 0
-    || !version.ok
-    || typeof value.manifestSha256 !== 'string'
-  ) {
-    return failure(issues)
-  }
-  return success({
-    version: version.value.raw,
-    manifestSha256: value.manifestSha256,
-  })
 }
 
 const parseRange = (
@@ -283,28 +234,24 @@ export const parseDeckDeclaration = (
   }
   const issues = unknownFieldIssues(
     value,
-    ['core', 'profile', 'publication'],
+    ['core', 'profile'],
     '$',
   )
   const core = parseCoordinate(value.core, '$.core')
-  const publication = parsePublication(value.publication, '$.publication')
   const profile = value.profile === undefined
     ? undefined
     : parseCoordinate(value.profile, '$.profile')
   if (!core.ok) issues.push(...core.issues)
-  if (!publication.ok) issues.push(...publication.issues)
   if (profile && !profile.ok) issues.push(...profile.issues)
   if (
     issues.length > 0
     || !core.ok
-    || !publication.ok
     || (profile && !profile.ok)
   ) {
     return failure(issues)
   }
   return success({
     core: core.value,
-    publication: publication.value,
     ...(profile ? { profile: profile.value } : {}),
   })
 }
@@ -317,15 +264,13 @@ export const parseThemeSupportDeclaration = (
   }
   const issues = unknownFieldIssues(
     value,
-    ['schemaVersion', 'publication', 'core', 'profiles'],
+    ['schemaVersion', 'core', 'profiles'],
     '$',
   )
   if (value.schemaVersion !== 1) {
     issues.push(issue('$.schemaVersion', 'Expected schema version 1.'))
   }
-  const publication = parsePublication(value.publication, '$.publication')
   const core = parseSupportCoordinate(value.core, '$.core')
-  if (!publication.ok) issues.push(...publication.issues)
   if (!core.ok) issues.push(...core.issues)
 
   const profiles: SupportCoordinate[] = []
@@ -353,14 +298,12 @@ export const parseThemeSupportDeclaration = (
   if (
     issues.length > 0
     || value.schemaVersion !== 1
-    || !publication.ok
     || !core.ok
   ) {
     return failure(issues)
   }
   return success({
     schemaVersion: 1,
-    publication: publication.value,
     core: core.value,
     profiles,
   })
@@ -382,8 +325,6 @@ const result = (
     readonly status: CompatibilityStatus
     readonly reasonCode: CompatibilityReasonCode
     readonly message: string
-    readonly publicationStatus: CompatibilityStatus
-    readonly supportedPublication: PublicationReference | null
     readonly coreStatus: CompatibilityStatus
     readonly coreRanges?: readonly VersionRange[]
     readonly profileStatus: CompatibilityStatus | 'not-applicable'
@@ -394,11 +335,6 @@ const result = (
   scope: deck.profile ? 'core+profile' : 'core',
   reasonCode: input.reasonCode,
   message: input.message,
-  publication: {
-    status: input.publicationStatus,
-    requested: deck.publication,
-    supported: input.supportedPublication,
-  },
   core: {
     status: input.coreStatus,
     requested: deck.core,
@@ -429,14 +365,6 @@ const versionIsSupported = (
   })
 }
 
-const publicationsMatch = (
-  left: PublicationReference,
-  right: PublicationReference,
-): boolean => (
-  left.version === right.version
-  && left.manifestSha256 === right.manifestSha256
-)
-
 export const assessProtocolCompatibility = (
   rawDeck: unknown,
   rawSupport?: unknown,
@@ -456,8 +384,6 @@ export const assessProtocolCompatibility = (
       reasonCode: 'THEME_DECLARATION_MISSING',
       message:
         'Theme compatibility is unverified because no support declaration was received.',
-      publicationStatus: 'unverified',
-      supportedPublication: null,
       coreStatus: 'unverified',
       profileStatus: 'unverified',
     })
@@ -470,34 +396,16 @@ export const assessProtocolCompatibility = (
       reasonCode: 'THEME_DECLARATION_MALFORMED',
       message:
         'The theme support declaration is malformed; fix or remove it before preview.',
-      publicationStatus: 'incompatible',
-      supportedPublication: null,
       coreStatus: 'incompatible',
       profileStatus: 'incompatible',
     })
   }
   const support = parsedSupport.value
-  if (!publicationsMatch(deck.publication, support.publication)) {
-    return result(deck, {
-      status: 'incompatible',
-      reasonCode: 'PUBLICATION_MISMATCH',
-      message:
-        `Theme publication ${support.publication.version}/${support.publication.manifestSha256} `
-        + `does not match requested ${deck.publication.version}/${deck.publication.manifestSha256}.`,
-      publicationStatus: 'incompatible',
-      supportedPublication: support.publication,
-      coreStatus: 'incompatible',
-      coreRanges: support.core.ranges,
-      profileStatus: 'incompatible',
-    })
-  }
   if (support.core.id !== deck.core.id) {
     return result(deck, {
       status: 'incompatible',
       reasonCode: 'CORE_ID_UNSUPPORTED',
       message: `Theme declares ${support.core.id}, not requested ${deck.core.id}.`,
-      publicationStatus: 'compatible',
-      supportedPublication: support.publication,
       coreStatus: 'incompatible',
       coreRanges: support.core.ranges,
       profileStatus: 'incompatible',
@@ -508,8 +416,6 @@ export const assessProtocolCompatibility = (
       status: 'incompatible',
       reasonCode: 'CORE_VERSION_UNSUPPORTED',
       message: `Theme does not support ${deck.core.id}@${deck.core.version}.`,
-      publicationStatus: 'compatible',
-      supportedPublication: support.publication,
       coreStatus: 'incompatible',
       coreRanges: support.core.ranges,
       profileStatus: 'incompatible',
@@ -520,8 +426,6 @@ export const assessProtocolCompatibility = (
       status: 'compatible',
       reasonCode: 'COMPATIBLE_CORE',
       message: `Theme support is compatible with ${deck.core.id}@${deck.core.version}.`,
-      publicationStatus: 'compatible',
-      supportedPublication: support.publication,
       coreStatus: 'compatible',
       coreRanges: support.core.ranges,
       profileStatus: 'not-applicable',
@@ -536,8 +440,6 @@ export const assessProtocolCompatibility = (
       status: 'incompatible',
       reasonCode: 'PROFILE_ID_UNSUPPORTED',
       message: `Theme does not declare support for ${deck.profile.id}.`,
-      publicationStatus: 'compatible',
-      supportedPublication: support.publication,
       coreStatus: 'compatible',
       coreRanges: support.core.ranges,
       profileStatus: 'incompatible',
@@ -548,8 +450,6 @@ export const assessProtocolCompatibility = (
       status: 'incompatible',
       reasonCode: 'PROFILE_VERSION_UNSUPPORTED',
       message: `Theme does not support ${deck.profile.id}@${deck.profile.version}.`,
-      publicationStatus: 'compatible',
-      supportedPublication: support.publication,
       coreStatus: 'compatible',
       coreRanges: support.core.ranges,
       profileStatus: 'incompatible',
@@ -562,8 +462,6 @@ export const assessProtocolCompatibility = (
     message:
       `Theme support is compatible with ${deck.core.id}@${deck.core.version} `
       + `and ${deck.profile.id}@${deck.profile.version}.`,
-    publicationStatus: 'compatible',
-    supportedPublication: support.publication,
     coreStatus: 'compatible',
     coreRanges: support.core.ranges,
     profileStatus: 'compatible',

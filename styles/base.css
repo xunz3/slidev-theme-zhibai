@@ -173,7 +173,7 @@
   border: 1px solid var(--presentation-code-border);
   border-radius: 12px;
   background: var(--presentation-code-bg);
-  box-shadow: 0 10px 30px rgba(30, 36, 40, 0.06);
+  box-shadow: var(--presentation-shadow);
 }
 
 .slidev-layout pre code {
@@ -188,7 +188,7 @@
 
 .slidev-layout :not(pre) > code {
   padding: 0.02em 0.28em 0.04em;
-  border: 0;
+  border: 1px solid var(--presentation-inline-code-border);
   border-radius: 0.32em;
   color: color-mix(in srgb, var(--presentation-accent) 76%, var(--presentation-text));
   background: var(--presentation-inline-code-bg);

@@ -18,7 +18,7 @@ const attrs = useAttrs()
 
 <template>
   <SlideFrame
-    :class="attrs.class"
+    v-bind="attrs"
     :chrome="props.chrome"
     :subtitle="props.subtitle"
     :title="props.title"

@@ -66,7 +66,7 @@
   flex-wrap: wrap;
   align-items: center;
   max-width: 100%;
-  gap: var(--presentation-label-gap);
+  gap: 0.38rem;
 }
 
 .presentation-media-fit-gallery {

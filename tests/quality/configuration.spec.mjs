@@ -332,6 +332,10 @@ test('accent validation and local → deck → preset fallback are first-valid',
     assert.equal(config.normalizeAccent(value), value, value)
   }
 
+  for (const value of ['#ab', '#abcde', '#abcdefg', '#abcdefghi']) {
+    assert.equal(config.normalizeAccent(value), undefined, value)
+  }
+
   assert.equal(config.resolvePresentation({
     deck: { accent: 'oklch(60% 0.2 20)' },
     slide: { accent: 'rebeccapurple' },
@@ -794,9 +798,67 @@ test('follow-up source hygiene removes dead runtime paths and remote font CSS', 
   )
   assert.match(kbd, /Array\.isArray/)
   assert.match(kbd, /typeof key === ['"]string['"]/)
-  assert.match(kbd, /join\(['"] plus ['"]\)/)
+  assert.match(kbd, /accessibleSeparator\?: string/)
+  assert.match(kbd, /join\(accessibleSeparator\.value\)/)
   assert.match(toc, /from ['"]#slidev\/slides['"]/)
   assert.doesNotMatch(toc, /\bas any\b|meta\?\.slide\?\.|slide\?\.slide\?\./)
+})
+
+test('documented style hooks and layout passthroughs remain live contracts', async () => {
+  const [
+    base,
+    codeLayout,
+    figure,
+    frame,
+    imageTextLayout,
+    media,
+    obsidian,
+    readme,
+    tokens,
+  ] = await Promise.all([
+    readFile(resolve(repositoryRoot, 'styles/base.css'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'layouts/code.vue'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'components/Figure.vue'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'components/SlideFrame.vue'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'internals/ImageTextLayout.vue'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'setup/media.ts'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'styles/obsidian.css'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'README.md'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'styles/tokens.css'), 'utf8'),
+  ])
+
+  for (const token of [
+    '--presentation-shadow',
+    '--presentation-inline-code-border',
+    '--presentation-callout-bg',
+    '--presentation-callout-border',
+  ]) {
+    assert.ok(readme.includes(`| \`${token}\` |`), token)
+  }
+  assert.match(base, /box-shadow:\s*var\(--presentation-shadow\)/)
+  assert.match(base, /border:\s*1px solid var\(--presentation-inline-code-border\)/)
+  assert.match(obsidian, /border:\s*1px solid var\(--presentation-callout-border\)/)
+  assert.match(obsidian, /--presentation-callout-family-surface:\s*var\(--presentation-callout-bg\)/)
+
+  for (const deadToken of [
+    '--presentation-badge-bg',
+    '--presentation-badge-border',
+    '--presentation-badge-text',
+    '--presentation-label-gap',
+    '--presentation-sequence-node-text',
+  ]) {
+    assert.doesNotMatch(tokens, new RegExp(`${deadToken}:`), deadToken)
+  }
+
+  assert.match(frame, /if \(slideFooter === false\) return ['"]{2}/)
+  assert.match(frame, /if \(deckFooter === false\) return ['"]{2}/)
+  assert.match(codeLayout, /<SlideFrame\s+[\s\S]*?v-bind=["']attrs["']/)
+  assert.match(imageTextLayout, /<SlideFrame\s+[\s\S]*?v-bind=["']attrs["']/)
+
+  assert.match(media, /const retry = \(\) =>/)
+  assert.match(media, /retryCount\.value \+= 1/)
+  assert.match(figure, /defineExpose\(\{ retry \}\)/)
+  assert.match(figure, /:key=["']imageKey["']/)
 })
 
 test('every layout-owned chrome prop accepts canonical values and booleans', async () => {

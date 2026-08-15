@@ -8,9 +8,11 @@ const props = defineProps<{
 
 const {
   alternative,
+  imageKey,
   loadState,
   onError,
   onLoad,
+  retry,
   showFallback,
   showImage,
   source,
@@ -19,6 +21,8 @@ const {
   fallback: () => 'Presentation logo',
   source: () => props.src,
 })
+
+defineExpose({ retry })
 </script>
 
 <template>
@@ -30,7 +34,7 @@ const {
   >
     <img
       v-if="showImage"
-      :key="source"
+      :key="imageKey"
       class="presentation-closing-logo__image"
       :src="source"
       :alt="alternative.resolvedAlt"

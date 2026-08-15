@@ -60,11 +60,9 @@ Lilas declares consumer support for the independently versioned shared contracts
 - `obsidian-slidev/core@1.0.0`
 - `obsidian-slidev/presentation@1.0.0`
 
-Both declarations use the conservative half-open range `[1.0.0, 1.1.0)` and pin publication
-`1.0.0` at SHA-256
-`3d780d44053fcdc7b23b4167285c275ab2c20cb326622811ce700ab838314b43`.
-The declaration lives at `package.json#/obsidianSlidev/support`. Package name and package
-version are provenance only; neither is a compatibility input.
+Both declarations use the conservative half-open range `[1.0.0, 1.1.0)`. The declaration lives
+at `package.json#/obsidianSlidev/support`. Package name, package version, and publication digest
+are not runtime compatibility inputs.
 
 Generated decks carry `obsidian-slidev-protocol`, and may explicitly select
 `obsidian-slidev-profile`. During setup, Lilas parses those fields and its own support
@@ -72,8 +70,8 @@ declaration, evaluates the exact coordinates, and updates the generated
 `.obsidian-slidev-compatibility` notice. In an embedded Obsidian preview it also echoes the
 opaque `obsidianSlidevToken` in an `obsidian-slidev/protocol-support` parent message. A
 compatible result hides the notice, missing support remains visibly `unverified`, and an
-explicit mismatch stays visible and stops setup with recovery guidance. The message is runtime
-advice only; it is never formal conformance evidence.
+explicit mismatch stays visible as a best-effort warning without stopping setup. The message is
+runtime advice only; it is never formal conformance evidence.
 
 In a source repository checkout, the verified publication snapshot is under
 `vendor/obsidian-slidev-protocol/1.0.0/`, with source revision, publication digest, and
@@ -231,7 +229,7 @@ These eight components auto-register for ordinary Slidev Markdown. They need no 
 | `Timeline` | none | Default slot should contain one ordered Markdown list; native `<time>` is optional |
 | `Tag` | none | Default slot is visible category text |
 | `Badge` | `tone`, `marker` | `tone="neutral"`; `marker="false"`; default slot is visible status text |
-| `Kbd` | `keys` string array | Without `keys`, the default slot is one key; non-empty `keys` wins |
+| `Kbd` | `keys` string array, `accessibleSeparator` | Without `keys`, the default slot is one key; non-empty `keys` wins; separator defaults to ` plus ` |
 
 ### Callout
 
@@ -267,6 +265,7 @@ The component emits the same core `.obsidian-slidev-callout` structure and prese
 | Omitted `alt` and caption | Uses `Figure` |
 
 An empty `src` or failed request removes the broken image and retains meaningful fallback text. The bounded media viewport reserves space before decode. Empty captions add no `figcaption`; `fit` accepts `contain` or `cover`.
+When a transient request fails, a template ref may call the exposed `retry()` method to remount the same source without changing its URL.
 
 `contain` is the default and preserves the complete source inside the bounded region; `cover`
 fills that region and may crop opposite edges when aspect ratios differ. Direct image figures
@@ -347,7 +346,9 @@ When enabled, the marker uses the same non-color semantic
 shape as the tone. Tag and Badge remain visible text, non-focusable, and distinct without
 relying on hue. `Kbd` ignores non-string and empty runtime `keys` entries, gracefully falls back
 when `keys` is not an array, and renders a readable, non-focusable key sequence. Separators are
-visible as `+` and exposed to assistive technology as the word “plus”. It is never a button.
+visible as `+` and exposed to assistive technology as the word “plus”. Set
+`accessibleSeparator` (for example, `" 加 "`) to localize that spoken separator. It is never a
+button.
 
 ### Tasks and highlights
 

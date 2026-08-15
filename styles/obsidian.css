@@ -33,7 +33,7 @@
   border-radius: 10px;
   color: var(--presentation-warning-text);
   background: var(--presentation-warning-bg);
-  box-shadow: 0 8px 24px rgba(30, 36, 40, 0.045);
+  box-shadow: var(--presentation-shadow);
 }
 
 .obsidian-slidev-warning strong {
@@ -43,10 +43,10 @@
 
 .obsidian-slidev-callout {
   --presentation-callout-family: var(--presentation-family-neutral);
-  --presentation-callout-family-surface: var(--presentation-family-neutral-surface);
+  --presentation-callout-family-surface: var(--presentation-callout-bg);
   margin: 1rem 0;
   padding: 0.86rem 1rem 0.92rem;
-  border: 1px solid color-mix(in srgb, var(--presentation-callout-family) 42%, transparent);
+  border: 1px solid var(--presentation-callout-border);
   border-left: 3px solid var(--presentation-callout-family);
   border-radius: var(--presentation-callout-radius);
   background: var(--presentation-callout-family-surface);

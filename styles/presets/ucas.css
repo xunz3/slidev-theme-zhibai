@@ -46,7 +46,7 @@
   --presentation-callout-bg: transparent;
   --presentation-callout-border: #4b75a0;
   --presentation-callout-radius: 0;
-  --presentation-callout-shadow: none;
+  --presentation-callout-shadow: var(--presentation-shadow);
   --presentation-warning-bg: transparent;
   --presentation-warning-border: #9a6b31;
   --presentation-warning-text: #715028;
@@ -54,11 +54,11 @@
   --presentation-caption-letter-spacing: 0.01em;
   --presentation-media-max-height: 70vh;
   --presentation-media-radius: 0.16rem;
-  --presentation-media-shadow: none;
+  --presentation-media-shadow: var(--presentation-shadow);
   --presentation-author-card-bg: transparent;
   --presentation-author-card-border: var(--presentation-border);
   --presentation-author-card-radius: 0;
-  --presentation-author-card-shadow: none;
+  --presentation-author-card-shadow: var(--presentation-shadow);
   --presentation-statement-size: 3.1rem;
   --presentation-quote-size: 1.78rem;
   --presentation-quote-line-height: 1.5;
@@ -198,7 +198,7 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
 .slidev-layout[data-presentation-preset="ucas"] .slide-frame pre {
   padding: 0.78rem 0.86rem;
   border-radius: 0.14rem;
-  box-shadow: none;
+  box-shadow: var(--presentation-shadow);
 }
 
 .slidev-layout[data-presentation-preset="ucas"] .slide-frame :not(pre) > code {
@@ -217,12 +217,16 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
   border-left: 1px solid;
   border-radius: 0;
   background: transparent;
-  box-shadow: none;
 }
 
 .slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout {
   border-left-color: var(--presentation-callout-family);
   background: color-mix(in srgb, var(--presentation-callout-family) 2%, transparent);
+}
+
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout[data-callout="neutral"] {
+  border-left-color: var(--presentation-callout-border);
+  background: var(--presentation-callout-bg);
 }
 
 .slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-warning {

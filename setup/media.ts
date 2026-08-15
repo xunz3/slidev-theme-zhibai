@@ -94,8 +94,10 @@ export const useMediaLoadState = ({
     fallback: fallback(),
   }))
   const loadState = ref<MediaLoadState>('missing')
+  const retryCount = ref(0)
 
   watch(normalizedSource, (value) => {
+    retryCount.value = 0
     loadState.value = mediaStateForSource(value)
   }, { immediate: true })
 
@@ -105,6 +107,12 @@ export const useMediaLoadState = ({
   const onError = () => {
     loadState.value = mediaStateAfterEvent('error')
   }
+  const retry = () => {
+    if (!normalizedSource.value) return
+    retryCount.value += 1
+    loadState.value = 'pending'
+  }
+  const imageKey = computed(() => `${normalizedSource.value}:${retryCount.value}`)
   const showImage = computed(() => (
     Boolean(normalizedSource.value) && loadState.value !== 'failed'
   ))
@@ -115,9 +123,11 @@ export const useMediaLoadState = ({
 
   return {
     alternative,
+    imageKey,
     loadState,
     onError,
     onLoad,
+    retry,
     showFallback,
     showImage,
     source: normalizedSource,

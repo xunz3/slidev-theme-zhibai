@@ -90,10 +90,6 @@
 	"obsidianSlidev": {
 		"support": {
 			"schemaVersion": 1,
-			"publication": {
-				"version": "1.0.0",
-				"manifestSha256": "3d780d44053fcdc7b23b4167285c275ab2c20cb326622811ce700ab838314b43"
-			},
 			"core": {
 				"id": "obsidian-slidev/core",
 				"ranges": [

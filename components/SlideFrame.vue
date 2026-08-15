@@ -68,10 +68,13 @@ const footerLeft = computed(() => {
 })
 
 const footerMiddle = computed(() => {
-  return frontmatter.value.footer
-    ?? configs.value.footer
-    ?? configs.value.title
-    ?? ''
+  const slideFooter = frontmatter.value.footer
+  if (slideFooter === false) return ''
+  if (slideFooter != null) return slideFooter
+
+  const deckFooter = configs.value.footer
+  if (deckFooter === false) return ''
+  return deckFooter ?? configs.value.title ?? ''
 })
 
 </script>

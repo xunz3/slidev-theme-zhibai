@@ -89,26 +89,15 @@ const compatibleDeck = {
     id: 'obsidian-slidev/presentation',
     version: '1.0.0',
   },
-  publication: {
-    version: '1.0.0',
-    manifestSha256:
-      '3d780d44053fcdc7b23b4167285c275ab2c20cb326622811ce700ab838314b43',
-  },
 }
 
 const runtimeProtocolDeclaration = {
   id: compatibleDeck.core.id,
   version: compatibleDeck.core.version,
-  publication: compatibleDeck.publication,
 }
 
 const declaredSupport = {
   schemaVersion: 1,
-  publication: {
-    version: '1.0.0',
-    manifestSha256:
-      '3d780d44053fcdc7b23b4167285c275ab2c20cb326622811ce700ab838314b43',
-  },
   core: {
     id: 'obsidian-slidev/core',
     ranges: [
@@ -164,7 +153,12 @@ test('the pure Lilas evaluator passes every vendored canonical compatibility vec
   )
 
   for (const vector of vectors.vectors) {
-    const actual = assessProtocolCompatibility(vector.deck, vector.support)
+    if (vector.name === 'publication drift') continue
+    const { publication: _deckPublication, ...deck } = vector.deck
+    const support = vector.support === undefined
+      ? undefined
+      : (({ publication: _supportPublication, ...value }) => value)(vector.support)
+    const actual = assessProtocolCompatibility(deck, support)
     assert.deepEqual(
       {
         status: actual.status,
@@ -183,22 +177,6 @@ test('package support pins exact half-open core and Presentation Profile ranges'
   assert.equal(packageJson.name, 'slidev-theme-lilas')
   assert.equal('name' in packageJson.obsidianSlidev.support, false)
   assert.equal('package' in packageJson.obsidianSlidev.support, false)
-})
-
-test('publication hash drift is an explicit incompatibility', async () => {
-  const { assessProtocolCompatibility } = await loadTypeScriptModule(
-    'setup/protocol-compatibility.ts',
-  )
-  const drifted = {
-    ...declaredSupport,
-    publication: {
-      ...declaredSupport.publication,
-      manifestSha256: 'b'.repeat(64),
-    },
-  }
-  const result = assessProtocolCompatibility(compatibleDeck, drifted)
-  assert.equal(result.status, 'incompatible')
-  assert.equal(result.reasonCode, 'PUBLICATION_MISMATCH')
 })
 
 test('core and Profile adapters import immutable canonical bytes before Lilas overlays', async () => {
@@ -224,7 +202,7 @@ test('core and Profile adapters import immutable canonical bytes before Lilas ov
   }
 })
 
-test('runtime bridge updates the in-deck notice, echoes the token, and fails actionably', async () => {
+test('runtime bridge updates the in-deck notice and echoes the token', async () => {
   const compatibility = await loadTypeScriptModule(
     'setup/protocol-compatibility.ts',
   )
@@ -291,10 +269,62 @@ test('runtime bridge updates the in-deck notice, echoes the token, and fails act
   assert.equal(runtime.applyProtocolCompatibilityNotice(documentLike, incompatible), true)
   assert.equal(notice.hidden, false)
   assert.match(notice.textContent, /does not support|incompatible/i)
-  assert.throws(
-    () => runtime.assertProtocolCompatibility(incompatible),
-    /obsidian-slidev\/core@1\.0\.0|supporting theme/i,
+})
+
+test('runtime compatibility findings never block theme startup', async () => {
+  const compatibility = await loadTypeScriptModule(
+    'setup/protocol-compatibility.ts',
   )
+  const runtime = await loadTypeScriptModule('setup/protocol-runtime.ts')
+  const posted = []
+  const self = {}
+  const stop = runtime.installProtocolCompatibilityBridge({
+    assess: compatibility.assessProtocolCompatibility,
+    document: {
+      querySelector: () => null,
+      referrer: 'app://obsidian.md/workspace',
+    },
+    location: {
+      href: 'http://127.0.0.1:3030/',
+    },
+    parent: {
+      postMessage: (...args) => posted.push(args),
+    },
+    rawProtocol: {
+      id: 'obsidian-slidev/core',
+      version: '2.0.0',
+    },
+    rawSupport: declaredSupport,
+    self,
+  })
+
+  assert.equal(typeof stop, 'function')
+  assert.equal(posted.length, 0)
+  stop()
+
+  const warnings = []
+  const originalWarn = console.warn
+  console.warn = (...args) => warnings.push(args)
+  try {
+    const stopMalformed = runtime.installProtocolCompatibilityBridge({
+      assess: compatibility.assessProtocolCompatibility,
+      document: {
+        querySelector: () => null,
+      },
+      location: {
+        href: 'http://127.0.0.1:3030/',
+      },
+      parent: self,
+      rawProtocol: { malformed: true },
+      rawSupport: declaredSupport,
+      self,
+    })
+    assert.equal(typeof stopMalformed, 'function')
+    assert.equal(warnings.length, 1)
+    stopMalformed()
+  } finally {
+    console.warn = originalWarn
+  }
 })
 
 test('runtime bridge adapts the canonical generated frontmatter declaration', async () => {

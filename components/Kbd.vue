@@ -2,8 +2,10 @@
 import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{
+  accessibleSeparator?: string
   keys?: string[]
 }>(), {
+  accessibleSeparator: ' plus ',
   keys: () => [],
 })
 
@@ -17,7 +19,12 @@ const normalizedKeys = computed(() => {
     .filter(Boolean)
 })
 
-const accessibleText = computed(() => normalizedKeys.value.join(' plus '))
+const accessibleSeparator = computed(() => (
+  typeof props.accessibleSeparator === 'string'
+    ? props.accessibleSeparator
+    : ' plus '
+))
+const accessibleText = computed(() => normalizedKeys.value.join(accessibleSeparator.value))
 </script>
 
 <template>

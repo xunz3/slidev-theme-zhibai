@@ -43,7 +43,7 @@
   --presentation-callout-bg: rgba(92, 111, 94, 0.04);
   --presentation-callout-border: color-mix(in srgb, var(--presentation-accent) 58%, transparent);
   --presentation-callout-radius: 0;
-  --presentation-callout-shadow: none;
+  --presentation-callout-shadow: var(--presentation-shadow);
   --presentation-warning-bg: rgba(128, 109, 71, 0.05);
   --presentation-warning-border: #806d47;
   --presentation-warning-text: #665536;
@@ -51,11 +51,11 @@
   --presentation-caption-letter-spacing: 0.01em;
   --presentation-media-max-height: 72vh;
   --presentation-media-radius: 0.2rem;
-  --presentation-media-shadow: none;
+  --presentation-media-shadow: var(--presentation-shadow);
   --presentation-author-card-bg: transparent;
   --presentation-author-card-border: var(--presentation-border);
   --presentation-author-card-radius: 0.18rem;
-  --presentation-author-card-shadow: none;
+  --presentation-author-card-shadow: var(--presentation-shadow);
   --presentation-statement-size: 3.05rem;
   --presentation-quote-size: 1.82rem;
   --presentation-quote-line-height: 1.46;
@@ -193,7 +193,7 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
 .slidev-layout[data-presentation-preset="default"] .slide-frame pre {
   padding: 0.76rem 0.82rem;
   border-radius: 0.18rem;
-  box-shadow: none;
+  box-shadow: var(--presentation-shadow);
 }
 
 .slidev-layout[data-presentation-preset="default"] .slide-frame blockquote {
@@ -214,7 +214,6 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
   padding: 0.66rem 0.88rem 0.7rem;
   border: 1px solid;
   border-radius: 0.22rem;
-  box-shadow: none;
 }
 
 .slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-callout {
@@ -223,7 +222,9 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
 }
 
 .slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-callout[data-callout="neutral"] {
+  border-color: var(--presentation-callout-border);
   border-style: solid;
+  background: var(--presentation-callout-bg);
 }
 
 .slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-warning {

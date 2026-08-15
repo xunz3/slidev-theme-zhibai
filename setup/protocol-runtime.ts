@@ -81,7 +81,7 @@ export const applyProtocolCompatibilityNotice = (
   notice.setAttribute('aria-live', 'polite')
   notice.hidden = assessment.status === 'compatible'
   notice.textContent = assessment.status === 'incompatible'
-    ? `Incompatible preview consumer: ${assessment.message} Select a supporting theme or update the deck protocol selection.`
+    ? `Compatibility warning: ${assessment.message} Rendering continues with best-effort support.`
     : assessment.message
   return true
 }
@@ -146,18 +146,8 @@ export const postProtocolSupport = ({
   return true
 }
 
-export const assertProtocolCompatibility = (
-  assessment: CompatibilityAssessment,
-): void => {
-  if (assessment.status !== 'incompatible') return
-  throw new Error(
-    `${assessment.message} Select a supporting theme or update the explicit protocol/Profile selection.`,
-  )
-}
-
 const PROTOCOL_DECLARATION_KEYS = new Set([
   'id',
-  'publication',
   'version',
 ])
 
@@ -180,7 +170,6 @@ export const normalizeRuntimeDeckDeclaration = (
       id: rawProtocol.id,
       version: rawProtocol.version,
     },
-    publication: rawProtocol.publication,
     ...(rawProfile === undefined ? {} : { profile: rawProfile }),
   }
 }
@@ -198,7 +187,16 @@ export const installProtocolCompatibilityBridge = ({
   if (rawProtocol === undefined || rawProtocol === null) return () => undefined
 
   const deck = normalizeRuntimeDeckDeclaration(rawProtocol, rawProfile)
-  const assessment = assess(deck, rawSupport)
+  let assessment: CompatibilityAssessment
+  try {
+    assessment = assess(deck, rawSupport)
+  } catch (error) {
+    console.warn(
+      '[slidev-theme-lilas] Protocol compatibility check was skipped; rendering continues.',
+      error,
+    )
+    return () => undefined
+  }
   const parsedDeck = deck as DeckDeclaration
   const support = rawSupport as ThemeSupportDeclaration
   applyProtocolCompatibilityNotice(documentLike, assessment)
@@ -211,7 +209,6 @@ export const installProtocolCompatibilityBridge = ({
     self,
     support,
   })
-  assertProtocolCompatibility(assessment)
 
   let active = true
   return () => {
