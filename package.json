@@ -1,6 +1,6 @@
 {
 	"name": "slidev-theme-lilas",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"type": "module",
 	"description": "A standalone Slidev theme with reusable presets and optional Obsidian integration.",
 	"license": "MIT",
