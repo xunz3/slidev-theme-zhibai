@@ -1534,6 +1534,16 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
       assert.ok(left.figureLeft < left.narrativeLeft)
       assert.ok(right.figureLeft > right.narrativeLeft)
       assert.equal(
+        await onSlide(20, '.presentation-image-text')
+          .getAttribute('data-background-size'),
+        'contain',
+      )
+      assert.equal(
+        await onSlide(20, '.presentation-image-text__figure img')
+          .evaluate(element => getComputedStyle(element).objectFit),
+        'contain',
+      )
+      assert.equal(
         await onSlide(21, '.presentation-image-text')
           .getAttribute('data-background-size'),
         'auto 72%',
@@ -3074,6 +3084,35 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
     const protocolPage = await context.newPage()
     try {
       for (const mode of expandedModes) {
+        await waitForSlide(
+          protocolPage,
+          protocolBaseUrl,
+          6,
+          mode,
+          'protocol-video-viewport',
+        )
+        const videoViewport = await protocolPage.locator(
+          '[data-quality-case="protocol-video-viewport"] video',
+        ).evaluate((video) => {
+          const figure = video.closest('.obsidian-slidev-media--video')
+          const figureRect = figure.getBoundingClientRect()
+          const rect = video.getBoundingClientRect()
+          const style = getComputedStyle(video)
+          return {
+            figureWidth: figureRect.width,
+            height: rect.height,
+            maxHeight: style.maxHeight,
+            objectFit: style.objectFit,
+            width: rect.width,
+          }
+        })
+        assert.ok(videoViewport.height > 0)
+        assert.ok(Math.abs(
+          videoViewport.width - videoViewport.figureWidth,
+        ) <= 1, JSON.stringify(videoViewport))
+        assert.equal(videoViewport.maxHeight, 'none')
+        assert.equal(videoViewport.objectFit, 'contain')
+
         await waitForSlide(
           protocolPage,
           protocolBaseUrl,

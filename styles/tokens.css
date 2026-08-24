@@ -63,7 +63,7 @@
   --presentation-media-max-height: 62vh;
   --presentation-media-radius: 0.2rem;
   --presentation-media-shadow: var(--presentation-shadow);
-  --presentation-media-viewport-bg: color-mix(in srgb, var(--presentation-bg-muted) 58%, transparent);
+  --presentation-media-viewport-bg: transparent;
   --presentation-media-viewport-height: clamp(8.5rem, 34vh, 18rem);
   --presentation-media-fit: contain;
   --presentation-media-fallback-border: var(--presentation-border-strong);

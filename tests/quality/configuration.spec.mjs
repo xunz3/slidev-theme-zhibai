@@ -854,6 +854,21 @@ test('documented style hooks and layout passthroughs remain live contracts', asy
   assert.match(frame, /if \(deckFooter === false\) return ['"]{2}/)
   assert.match(codeLayout, /<SlideFrame\s+[\s\S]*?v-bind=["']attrs["']/)
   assert.match(imageTextLayout, /<SlideFrame\s+[\s\S]*?v-bind=["']attrs["']/)
+  assert.match(
+    imageTextLayout,
+    /backgroundSize:\s*['"]contain['"]/,
+    'image-text default fit',
+  )
+  assert.match(
+    media,
+    /normalizeMediaBackgroundSize[\s\S]*?fallback\s*=\s*['"]contain['"]/,
+    'media background-size fallback',
+  )
+  assert.match(
+    obsidian,
+    /\.obsidian-slidev-media--video video\s*\{[\s\S]*?height:\s*var\(--presentation-media-viewport-height\)[\s\S]*?max-height:\s*none[\s\S]*?object-fit:\s*contain/,
+    'native video reserves stable contain-fit geometry',
+  )
 
   assert.match(media, /const retry = \(\) =>/)
   assert.match(media, /retryCount\.value \+= 1/)

@@ -349,7 +349,6 @@ title: Image left
 image: /theme/public/obsidian-card.svg
 imageAlt: Obsidian card connected to a presentation canvas
 caption: Figure 2. The narrative remains first in source order.
-backgroundSize: contain
 ---
 
 <div data-quality-case="us2-image-left">

@@ -109,7 +109,7 @@ subtitle: Image, video, audio
 
 # Video Figure
 
-<figure class="obsidian-slidev-media obsidian-slidev-media--video">
+<figure class="obsidian-slidev-media obsidian-slidev-media--video" data-quality-case="protocol-video-viewport">
   <SlidevVideo controls class="obsidian-slidev-media__video obsidian-slidev-media__asset" aria-label="Protocol fixture video">
     <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
     <p>Your browser does not support videos. <a class="obsidian-slidev-link" href="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">Open video</a></p>

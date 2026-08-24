@@ -23,16 +23,16 @@ const props = withDefaults(defineProps<{
   subtitle?: string
   title?: string
 }>(), {
-  backgroundSize: 'cover',
+  backgroundSize: 'contain',
   chrome: undefined,
 })
 
 const attrs = useAttrs()
 const image = computed(() => normalizeMediaSource(props.image))
 const backgroundSize = computed(() => (
-  normalizeMediaBackgroundSize(props.backgroundSize, 'cover')
+  normalizeMediaBackgroundSize(props.backgroundSize, 'contain')
 ))
-const fit = computed(() => normalizeMediaFit(backgroundSize.value, 'cover'))
+const fit = computed(() => normalizeMediaFit(backgroundSize.value, 'contain'))
 const customBackgroundSize = computed(() => (
   isMediaFit(backgroundSize.value) ? undefined : backgroundSize.value
 ))

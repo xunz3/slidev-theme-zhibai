@@ -33,7 +33,7 @@ export const isMediaFit = (value: unknown): value is MediaFit => (
 
 export const normalizeMediaBackgroundSize = (
   value: unknown,
-  fallback = 'cover',
+  fallback = 'contain',
 ): string => {
   if (typeof value !== 'string') return fallback
   const normalized = value.trim()

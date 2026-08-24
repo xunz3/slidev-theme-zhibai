@@ -274,6 +274,10 @@ pending/ready/failed vocabulary without being reparented. A failed meaningful ge
 replaces the broken asset with an equally sized named fallback; an explicit decorative
 `alt=""` remains unnamed and never invents fallback text.
 
+Native video figures reserve the same stable viewport height before metadata loads. The video
+fills the available width and uses `object-fit: contain`, so unusual source ratios remain fully
+visible without moving surrounding content. YouTube embeds retain their explicit 16:9 viewport.
+
 ### Links
 
 Ordinary Markdown links, generated `.obsidian-slidev-link` anchors, author email actions, and
@@ -470,8 +474,9 @@ Advanced users can override theme tokens from custom CSS or a Slidev style entry
 | `--presentation-warning-text` | Generated warning text color |
 | `--presentation-caption-font-style` | Generated media caption font style |
 | `--presentation-caption-letter-spacing` | Generated media caption tracking |
-| `--presentation-media-max-height` | Maximum generated image/video height |
-| `--presentation-media-viewport-height` | Stable Figure and direct generated-image region height |
+| `--presentation-media-max-height` | Maximum height for media assets outside a stable viewport |
+| `--presentation-media-viewport-height` | Stable Figure, generated-image, and native-video region height |
+| `--presentation-media-viewport-bg` | Media letterbox background; transparent by default |
 | `--presentation-media-fit` | Resolved `contain` or `cover` fit inside the media region |
 | `--presentation-media-radius` | Generated image/video corner radius |
 | `--presentation-media-shadow` | Generated image/video shadow |
@@ -607,12 +612,14 @@ Both orientations keep narrative then figure in the DOM; CSS alone places the im
 | Default slot | Authored narrative | Heading and prose region |
 | `image` | Omitted | Existing Slidev key; omission collapses the figure region |
 | `class` | Omitted | Existing built-in-compatible class input |
-| `backgroundSize` | `cover` | Any safe, non-empty CSS `background-size`; `cover` and `contain` use native image fit |
+| `backgroundSize` | `contain` | Any safe, non-empty CSS `background-size`; `cover` and `contain` use native image fit |
 | `imageAlt` | Caption, then `Figure` | Same tri-state rules as `Figure`; explicit `""` is decorative |
 | `caption` | Omitted | Empty values create no `figcaption` |
 
 Both regions contain wrapping and overflow, while the media shell prevents image decode/failure
-from moving the narrative. `cover` and `contain` render through the accessible image element.
+from moving the narrative. `contain` is the default across Figure and image-text layouts;
+`cover` remains available when intentional edge cropping is preferred. Both values render
+through the accessible image element.
 Other valid values such as `80%`, `auto 72%`, or `120px auto` render as a centered,
 non-repeating viewport background while the same source remains present as the accessible image
 and retains its pending/ready/failed state. Empty, unsafe, or excessively long values fall back
