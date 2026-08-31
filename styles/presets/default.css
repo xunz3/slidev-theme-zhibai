@@ -449,6 +449,56 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
   text-align: left;
 }
 
+.slidev-layout.closing[data-presentation-preset="default"] .slide-frame {
+  --presentation-slide-padding: 3.2rem;
+}
+
+.slidev-layout.closing[data-presentation-preset="default"]
+  .slide-frame
+  .presentation-closing--minimal {
+  width: min(100%, 52rem);
+}
+
+.slidev-layout.closing[data-presentation-preset="default"]
+  .slide-frame
+  .presentation-closing--minimal
+  .presentation-closing__message {
+  display: grid;
+  justify-items: center;
+}
+
+.slidev-layout.closing[data-presentation-preset="default"]
+  .slide-frame
+  .presentation-closing--minimal
+  .presentation-closing__message
+  h1 {
+  max-width: 16ch;
+  margin: 0;
+  padding-bottom: 0;
+  color: var(--presentation-brand-title);
+  background-image: none;
+  font-size: calc(3.55rem * var(--presentation-heading-scale));
+  font-weight: 600;
+  letter-spacing: -0.032em;
+  line-height: 1.04;
+}
+
+.slidev-layout.closing[data-presentation-preset="default"]
+  .slide-frame
+  .presentation-closing--minimal
+  .presentation-closing__message::after {
+  width: 5.6rem;
+  height: 1px;
+  margin-top: 1.35rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0 1.15rem,
+    color-mix(in srgb, var(--presentation-lilas) 72%, transparent) 1.15rem 4.45rem,
+    transparent 4.45rem 100%
+  );
+  content: "";
+}
+
 @media (max-width: 720px) {
   .slidev-layout.cover[data-presentation-preset="default"] .slide-frame {
     --presentation-slide-padding: 1.5rem;
@@ -457,5 +507,13 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
   .slidev-layout.cover[data-presentation-preset="default"] .slide-frame h1,
   .slidev-layout.section[data-presentation-preset="default"] .slide-frame h1 {
     font-size: calc(2.9rem * var(--presentation-heading-scale));
+  }
+
+  .slidev-layout.closing[data-presentation-preset="default"]
+    .slide-frame
+    .presentation-closing--minimal
+    .presentation-closing__message
+    h1 {
+    font-size: calc(2.75rem * var(--presentation-heading-scale));
   }
 }

@@ -59,6 +59,20 @@ Existing direct generated markup remains valid:
 An optional `data-media-fit="contain|cover"` on the figure is accepted. Omitted/unsupported fit
 uses `contain`; existing converter output need not add it.
 
+On an ordinary, non-`figure` layout, an authored advanced figure class may opt a generated image
+into a theme-local composition:
+
+```text
+obsidian-slidev-media--figure-centered
+obsidian-slidev-media--figure-stage
+obsidian-slidev-media--figure-minimal
+obsidian-slidev-media--figure-editorial
+```
+
+The producer already preserves advanced figure classes, so no parser change is required. These
+classes are presentation extensions rather than additions to the immutable core 1.0.0 media
+contract. Full-slide composition continues to use `layout: figure` plus `figureVariant`.
+
 ### CSS-first geometry
 
 Before runtime enhancement:

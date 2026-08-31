@@ -240,6 +240,37 @@ const correctedMediaScenarios = ['default', 'ucas', 'ict'].flatMap(preset => (
     },
   ])
 ))
+const figureVariantScenarios = ['default', 'ucas', 'ict'].flatMap(preset => (
+  modes.flatMap(mode => [
+    {
+      buildId: `expanded-${preset}`,
+      caseId: 'figure-variant-stage',
+      coverage: ['figure-layout', 'stage', 'responsive'],
+      id: `figure-variant-stage-${preset}-${mode}`,
+      mode,
+      preset,
+      slide: 62,
+    },
+    {
+      buildId: `expanded-${preset}`,
+      caseId: 'figure-variant-minimal',
+      coverage: ['figure-layout', 'minimal', 'transparent-tray'],
+      id: `figure-variant-minimal-${preset}-${mode}`,
+      mode,
+      preset,
+      slide: 63,
+    },
+    {
+      buildId: `expanded-${preset}`,
+      caseId: 'figure-variant-editorial',
+      coverage: ['figure-layout', 'editorial', 'caption-rail'],
+      id: `figure-variant-editorial-${preset}-${mode}`,
+      mode,
+      preset,
+      slide: 64,
+    },
+  ])
+))
 const us2SurfaceScenarios = ['default', 'ucas', 'ict'].flatMap(preset => (
   modes.flatMap(mode => [
     {
@@ -661,6 +692,7 @@ export const visualScenarios = Object.freeze([
   ...correctedLinkScenarios,
   ...generatedLinkScenarios,
   ...correctedMediaScenarios,
+  ...figureVariantScenarios,
   ...us2SurfaceScenarios,
   ...us2ClosingScenarios,
   ...us3AccentScenarios,

@@ -95,6 +95,25 @@ cite: Ada Lovelace → author: Ada Lovelace
 
 This does not affect the canonical `cite` callout type.
 
+## `figure`
+
+The figure layout accepts `figureVariant` with four canonical values. Omitted or unsupported
+values resolve to `centered`, preserving the pre-existing layout.
+
+| Value | Composition contract |
+| --- | --- |
+| `centered` | Balanced centered figure and caption below the media |
+| `stage` | Expanded media stage with caption below; never changes `fit` or `imagePosition` |
+| `minimal` | Centered figure without a tray border, tray background, or shadow |
+| `editorial` | Media and a top-aligned caption rail in two columns; collapses to media then caption on narrow viewports |
+
+The variant is exposed as `data-figure-variant` and a matching
+`.slide-layout-figure--<variant>` class. The default slot remains in authored DOM order and is
+not reparented. Presets target a direct public or generated `.obsidian-slidev-media`; arbitrary
+slot content retains the ordinary centered layout. Alternative text, failure handling, media
+fit, and focal position remain owned by Figure/generated-media normalization rather than the
+layout variant.
+
 ## `image-left` and `image-right`
 
 Both names continue to delegate to `internals/ImageTextLayout.vue`.
@@ -107,7 +126,9 @@ Inputs remain:
 | `image` | omitted | Missing value collapses media region |
 | `imageAlt` | Figure precedence | Existing tri-state behavior |
 | `caption` | omitted | Empty creates no caption |
-| `backgroundSize` | `cover` | Any safe, non-empty CSS `background-size`; invalid input falls back to `cover` |
+| `backgroundSize` | `contain` | Any safe, non-empty CSS `background-size`; invalid input falls back to `contain` |
+| `imagePosition` | `center` | Safe keyword/percentage focal position |
+| `mediaRatio` | `50` | Media track share, clamped to `30`–`70` |
 | `class` | omitted | Existing class fallthrough |
 | `title`, `subtitle`, `chrome` | existing frame behavior | No compatibility change |
 
@@ -116,13 +137,15 @@ Rules:
 - DOM order remains narrative then Figure for both orientations.
 - CSS alone mirrors visual placement.
 - `contain` and `cover` use the exact Figure geometric meanings.
-- Other valid values such as `80%`, `auto 72%`, and `120px auto` render as a centered,
-  non-repeating viewport background. The same source remains present as the accessible image
-  and owns the shared pending/ready/failed state.
+- Other valid values such as `80%`, `auto 72%`, and `120px auto` render as a non-repeating
+  viewport background positioned by `imagePosition`. The same source remains present as the
+  accessible image and owns the shared pending/ready/failed state.
 - Empty values, values longer than 256 characters, and values containing `;`, `{`, or `}` fall
-  back to `cover`.
+  back to `contain`.
 - Both orientations reserve equivalent media/caption geometry for the same source/fit.
-- Default `cover` remains unchanged.
+- The default two-column split remains 50/50. `mediaRatio` changes the media track while keeping
+  the same meaning in both orientations.
+- Captions align to the logical start edge of their media viewport.
 - Missing/failing image behavior and caption/alternative precedence use the shared Media
   Presentation contract.
 - Canonical and compact viewports show no unintended clipping, horizontal slide overflow, or

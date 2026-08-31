@@ -4,6 +4,10 @@ addons:
   - slidev-pane
 title: Slidev Presentation Theme
 subtitle: Reusable presets with optional Obsidian integration
+presentationPreset: ict
+image: /obsidian-card.svg
+imageAlt: A note card connected to a presentation canvas
+imageFit: contain
 authors:
   - name: Theme Demo
     institution: Slidev presentations
@@ -47,7 +51,7 @@ title: Figure and authors
 # Accessible Figure
 
 <Figure
-  src="./public/obsidian-card.svg"
+  src="/obsidian-card.svg"
   alt="A note card connected to a presentation canvas"
   caption="Figure 1. Media reserves space before it loads."
   fit="contain"
@@ -102,7 +106,7 @@ The local accent affects [links](https://example.com), focus, general callouts, 
 ---
 layout: image-left
 title: Image and text
-image: ./public/obsidian-card.svg
+image: /obsidian-card.svg
 imageAlt: A note card connected to a presentation canvas
 caption: Figure 2. Narrative stays first in document order.
 backgroundSize: contain

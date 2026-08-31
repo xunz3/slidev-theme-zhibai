@@ -68,6 +68,8 @@ Public props remain:
 | `alt` | string or omitted | caption, then `Figure` |
 | `caption` | string | omitted |
 | `fit` | `contain` or `cover` | `contain` |
+| `imagePosition` | safe CSS position string | `center` |
+| `variant` | `centered`, `stage`, `minimal`, or `editorial` | omitted/inherited ordinary treatment |
 
 Canonical component structure remains a native `figure` with one bounded viewport, optional
 native `img`, meaningful failure fallback, and optional `figcaption`.
@@ -76,12 +78,14 @@ Required state:
 
 ```html
 <figure
-  class="obsidian-slidev-media obsidian-slidev-media--image"
+  class="obsidian-slidev-media obsidian-slidev-media--image [obsidian-slidev-media--figure-<variant>]"
+  data-figure-variant="centered|stage|minimal|editorial"
   data-media-state="missing|pending|ready|failed"
 >
   <div
     class="obsidian-slidev-media__viewport"
     data-media-fit="contain|cover"
+    data-media-position="center|safe authored position"
   >
     <!-- img or meaningful fallback -->
   </div>
@@ -100,12 +104,24 @@ Rules:
 
 - The viewport has stable width/height before image decode.
 - `contain` and `cover` visibly differ whenever source and viewport ratios differ.
+- Fit is selected directly from `data-media-fit`; inherited theme variables cannot reinterpret
+  an explicit component fit.
+- `imagePosition` controls the focal point without changing fit geometry. Invalid values fall
+  back to `center`.
 - No preset may reinterpret the fit values.
 - `alt=""` remains decorative and is never replaced with caption text.
 - Missing/failed meaningful images remove the broken image visual and retain resolved
   alternative text in the stable viewport.
 - Caption creation, accessible-name precedence, eager loading, and public class names remain
   compatible.
+- Captions align to the logical start edge of the media viewport.
+- On non-`figure` layouts, an explicit `variant` owns only that Figure's local composition and
+  uses a compact height budget suitable for surrounding prose.
+- On `layout: figure`, slide-level `figureVariant` owns the composition; a local component
+  variant cannot silently shrink or replace the full-slide preset.
+- Generated image figures may opt into the same ordinary composition with the canonical
+  `.obsidian-slidev-media--figure-<variant>` modifier emitted through the producer's existing
+  advanced figure-class option.
 - Generated-image equivalence is defined in
   [generated-content.md](generated-content.md), not by requiring identical internal DOM.
 

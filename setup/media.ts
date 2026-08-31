@@ -2,6 +2,10 @@ import { computed, ref, watch } from 'vue'
 
 export const MEDIA_FITS = Object.freeze(['contain', 'cover'] as const)
 
+export const IMAGE_TEXT_MEDIA_RATIO_MIN = 30
+export const IMAGE_TEXT_MEDIA_RATIO_MAX = 70
+export const IMAGE_TEXT_MEDIA_RATIO_DEFAULT = 50
+
 export type MediaFit = typeof MEDIA_FITS[number]
 export type MediaLoadState = 'missing' | 'pending' | 'ready' | 'failed'
 
@@ -12,6 +16,13 @@ export type MediaAlternative = Readonly<{
 
 const supportedFits = new Set<string>(MEDIA_FITS)
 const UNSAFE_BACKGROUND_SIZE = /[;{}]/
+const MEDIA_POSITION_HORIZONTAL = '(?:left|center|right)'
+const MEDIA_POSITION_VERTICAL = '(?:top|center|bottom)'
+const MEDIA_POSITION_PERCENTAGE = '(?:100(?:\\.0+)?|\\d{1,2}(?:\\.\\d+)?)%'
+const SAFE_MEDIA_POSITION = new RegExp(
+  `^(?:${MEDIA_POSITION_HORIZONTAL}|${MEDIA_POSITION_VERTICAL}|${MEDIA_POSITION_HORIZONTAL}\\s+${MEDIA_POSITION_VERTICAL}|${MEDIA_POSITION_VERTICAL}\\s+${MEDIA_POSITION_HORIZONTAL}|${MEDIA_POSITION_PERCENTAGE}(?:\\s+${MEDIA_POSITION_PERCENTAGE})?)$`,
+  'i',
+)
 
 export const normalizeMediaSource = (value: unknown): string => (
   typeof value === 'string' ? value.trim() : ''
@@ -43,6 +54,43 @@ export const normalizeMediaBackgroundSize = (
     || UNSAFE_BACKGROUND_SIZE.test(normalized)
   ) return fallback
   return normalized
+}
+
+export const normalizeImageTextMediaRatio = (
+  value: unknown,
+  fallback = IMAGE_TEXT_MEDIA_RATIO_DEFAULT,
+): number => {
+  const normalizedFallback = Number.isFinite(fallback)
+    ? Math.min(
+        IMAGE_TEXT_MEDIA_RATIO_MAX,
+        Math.max(IMAGE_TEXT_MEDIA_RATIO_MIN, fallback),
+      )
+    : IMAGE_TEXT_MEDIA_RATIO_DEFAULT
+  const candidate = typeof value === 'number'
+    ? value
+    : typeof value === 'string' && value.trim()
+      ? Number(value)
+      : Number.NaN
+  if (!Number.isFinite(candidate)) return normalizedFallback
+  return Math.min(
+    IMAGE_TEXT_MEDIA_RATIO_MAX,
+    Math.max(IMAGE_TEXT_MEDIA_RATIO_MIN, candidate),
+  )
+}
+
+export const normalizeMediaPosition = (
+  value: unknown,
+  fallback = 'center',
+): string => {
+  const normalizedFallback = typeof fallback === 'string'
+    && SAFE_MEDIA_POSITION.test(fallback.trim())
+    ? fallback.trim().toLowerCase().replace(/\s+/g, ' ')
+    : 'center'
+  if (typeof value !== 'string') return normalizedFallback
+  const normalized = value.trim().toLowerCase().replace(/\s+/g, ' ')
+  return SAFE_MEDIA_POSITION.test(normalized)
+    ? normalized
+    : normalizedFallback
 }
 
 export const resolveMediaAlternative = ({

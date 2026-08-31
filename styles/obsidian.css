@@ -202,17 +202,30 @@
 .obsidian-slidev-media__viewport > .obsidian-slidev-media__image {
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
   max-height: none;
   margin: 0;
   border: 0;
   border-radius: inherit;
   box-shadow: none;
   object-fit: var(--presentation-media-fit, contain);
+  object-position: var(--presentation-media-position, center);
+}
+
+.obsidian-slidev-media__viewport[data-media-fit="contain"]
+  > .obsidian-slidev-media__image {
+  object-fit: contain;
+}
+
+.obsidian-slidev-media__viewport[data-media-fit="cover"]
+  > .obsidian-slidev-media__image {
+  object-fit: cover;
 }
 
 .obsidian-slidev-media[data-media-rendering="background"]
   .obsidian-slidev-media__viewport {
-  background-position: center;
+  background-position: var(--presentation-media-position, center);
   background-repeat: no-repeat;
   background-size: var(--presentation-media-background-size, cover);
 }
@@ -285,6 +298,17 @@
   background: var(--presentation-media-viewport-bg);
   box-shadow: none;
   object-fit: var(--presentation-media-fit, contain);
+  object-position: var(--presentation-media-position, center);
+}
+
+.obsidian-slidev-media--image[data-media-managed="generated"][data-media-fit="contain"]
+  > img.obsidian-slidev-media__image {
+  object-fit: contain;
+}
+
+.obsidian-slidev-media--image[data-media-managed="generated"][data-media-fit="cover"]
+  > img.obsidian-slidev-media__image {
+  object-fit: cover;
 }
 
 .obsidian-slidev-media--video,
@@ -319,13 +343,14 @@
 }
 
 .obsidian-slidev-media__caption {
+  width: 100%;
   color: var(--presentation-text-muted);
   font-size: var(--presentation-caption-size);
   font-style: var(--presentation-caption-font-style);
   font-weight: 500;
   letter-spacing: var(--presentation-caption-letter-spacing);
   line-height: 1.4;
-  text-align: center;
+  text-align: start;
 }
 
 @media (max-width: 720px) {

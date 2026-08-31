@@ -113,7 +113,9 @@
 
 .presentation-image-text {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    var(--presentation-image-text-narrative-track, minmax(0, 1fr))
+    var(--presentation-image-text-media-track, minmax(0, 1fr));
   grid-template-areas: "narrative figure";
   align-items: center;
   width: 100%;
@@ -123,6 +125,9 @@
 }
 
 .presentation-image-text--left {
+  grid-template-columns:
+    var(--presentation-image-text-media-track, minmax(0, 1fr))
+    var(--presentation-image-text-narrative-track, minmax(0, 1fr));
   grid-template-areas: "figure narrative";
 }
 

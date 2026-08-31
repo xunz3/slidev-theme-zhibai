@@ -64,6 +64,29 @@ withDefaults(defineProps<{
         decoding="async"
       />
     </template>
+
+    <template v-else-if="variant === 'closing'">
+      <aside class="slide-frame__ucas-rail slide-frame__ucas-rail--closing">
+        <img
+          class="slide-frame__ucas-rail-brand"
+          :src="ucasVerticalWordmark"
+          alt=""
+          aria-hidden="true"
+          width="185"
+          height="946"
+          decoding="async"
+        />
+      </aside>
+      <img
+        class="slide-frame__ucas-watermark slide-frame__ucas-watermark--closing"
+        :src="ucasEmblem"
+        alt=""
+        aria-hidden="true"
+        width="397"
+        height="397"
+        decoding="async"
+      />
+    </template>
   </template>
 
   <template v-else-if="preset === 'ict'">
@@ -90,6 +113,27 @@ withDefaults(defineProps<{
       />
       <img
         class="slide-frame__ict-watermark"
+        :src="ictEmblem"
+        alt=""
+        aria-hidden="true"
+        width="384"
+        height="316"
+        decoding="async"
+      />
+    </template>
+
+    <template v-else-if="variant === 'closing'">
+      <img
+        class="slide-frame__ict-lockup slide-frame__ict-lockup--closing"
+        :src="ictWordmark"
+        alt=""
+        aria-hidden="true"
+        width="728"
+        height="542"
+        decoding="async"
+      />
+      <img
+        class="slide-frame__ict-watermark slide-frame__ict-watermark--closing"
         :src="ictEmblem"
         alt=""
         aria-hidden="true"

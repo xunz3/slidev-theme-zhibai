@@ -66,6 +66,7 @@
   --presentation-media-viewport-bg: transparent;
   --presentation-media-viewport-height: clamp(8.5rem, 34vh, 18rem);
   --presentation-media-fit: contain;
+  --presentation-media-position: center;
   --presentation-media-fallback-border: var(--presentation-border-strong);
   --presentation-media-fallback-text: var(--presentation-text);
   --presentation-author-card-bg: color-mix(in srgb, var(--presentation-bg-elevated) 88%, transparent);

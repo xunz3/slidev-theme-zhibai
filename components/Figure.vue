@@ -2,15 +2,20 @@
 import { computed } from 'vue'
 import {
   normalizeMediaFit,
+  normalizeMediaPosition,
   useMediaLoadState,
 } from '../setup/media'
+import { normalizeFigureVariant } from '../setup/figure-layout'
+import type { FigureVariant } from '../setup/figure-layout'
 import type { MediaFit } from '../setup/media'
 
 const props = defineProps<{
   alt?: string
   caption?: string
   fit?: MediaFit
+  imagePosition?: string
   src?: string
+  variant?: FigureVariant
 }>()
 
 const caption = computed(() => (
@@ -18,6 +23,14 @@ const caption = computed(() => (
 ))
 const resolvedFit = computed<MediaFit>(() => (
   normalizeMediaFit(props.fit, 'contain')
+))
+const resolvedPosition = computed(() => (
+  normalizeMediaPosition(props.imagePosition, 'center')
+))
+const resolvedVariant = computed<FigureVariant | undefined>(() => (
+  props.variant === undefined
+    ? undefined
+    : normalizeFigureVariant(props.variant)
 ))
 const {
   alternative,
@@ -41,15 +54,21 @@ defineExpose({ retry })
 <template>
   <figure
     class="obsidian-slidev-media obsidian-slidev-media--image"
+    :class="resolvedVariant
+      ? `obsidian-slidev-media--figure-${resolvedVariant}`
+      : undefined"
+    :data-figure-variant="resolvedVariant"
     data-media-managed="vue"
     :data-media-decorative="alternative.decorative ? 'true' : 'false'"
     :data-media-fit="resolvedFit"
+    :data-media-position="resolvedPosition"
     :data-media-state="loadState"
-    :style="{ '--presentation-media-fit': resolvedFit }"
+    :style="{ '--presentation-media-position': resolvedPosition }"
   >
     <div
       class="obsidian-slidev-media__viewport"
       :data-media-fit="resolvedFit"
+      :data-media-position="resolvedPosition"
       data-stability-region="media-viewport"
     >
       <img

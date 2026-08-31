@@ -418,7 +418,7 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
             && item.naturalWidth > 0
             && item.viewportHeight > 0
             && item.viewportWidth > 0
-          )))
+          )), `${preset}/${mode}: ${JSON.stringify(geometry)}`)
           assert.equal(
             geometry[0].naturalWidth / geometry[0].naturalHeight,
             geometry[1].naturalWidth / geometry[1].naturalHeight,
@@ -450,25 +450,37 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
             {
               fit: 'contain',
               marker: 'visual-image-left-contain',
+              mediaRatio: '50',
               orientation: 'left',
+              position: 'center',
+              renderedPosition: '50% 50%',
               slide: 46,
             },
             {
               fit: 'cover',
               marker: 'visual-image-left-cover',
+              mediaRatio: '60',
               orientation: 'left',
+              position: '35% 45%',
+              renderedPosition: '35% 45%',
               slide: 47,
             },
             {
               fit: 'contain',
               marker: 'visual-image-right-contain',
+              mediaRatio: '50',
               orientation: 'right',
+              position: 'center',
+              renderedPosition: '50% 50%',
               slide: 48,
             },
             {
               fit: 'cover',
               marker: 'visual-image-right-cover',
+              mediaRatio: '40',
               orientation: 'right',
+              position: '65% 55%',
+              renderedPosition: '65% 55%',
               slide: 49,
             },
           ]
@@ -492,11 +504,23 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
               )
               const image = figure?.querySelector('img')
               const caption = figure?.querySelector('figcaption')
+              const narrative = root.querySelector(
+                '.presentation-image-text__narrative',
+              )
               const rect = element => element?.getBoundingClientRect()
               return {
+                captionAlign: caption
+                  ? getComputedStyle(caption).textAlign
+                  : null,
                 childClasses: [...root.children].map(child => child.className),
                 computedFit: image ? getComputedStyle(image).objectFit : null,
+                computedPosition: image
+                  ? getComputedStyle(image).objectPosition
+                  : null,
                 figure: rect(figure),
+                mediaPosition: root.getAttribute('data-media-position'),
+                mediaRatio: root.getAttribute('data-media-ratio'),
+                narrative: rect(narrative),
                 orientation: root.getAttribute('data-orientation'),
                 rootFit: figure?.getAttribute('data-media-fit') ?? null,
                 viewport: rect(viewport),
@@ -515,15 +539,35 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
             assert.equal(layout.rootFit, definition.fit)
             assert.equal(layout.viewportFit, definition.fit)
             assert.equal(layout.computedFit, definition.fit)
+            assert.equal(layout.mediaPosition, definition.position)
+            assert.equal(layout.computedPosition, definition.renderedPosition)
+            assert.equal(layout.mediaRatio, definition.mediaRatio)
+            assert.ok(['left', 'start'].includes(layout.captionAlign))
             assert.ok(layout.caption.top >= layout.viewport.bottom)
           }
+          assert.ok(
+            layoutGeometry[1].figure.width
+              > layoutGeometry[1].narrative.width,
+          )
+          assert.ok(
+            layoutGeometry[3].figure.width
+              < layoutGeometry[3].narrative.width,
+          )
           assert.equal(
+            Math.round(layoutGeometry[0].viewport.height),
+            Math.round(layoutGeometry[1].viewport.height),
+          )
+          assert.notEqual(
             Math.round(layoutGeometry[0].viewport.width),
             Math.round(layoutGeometry[1].viewport.width),
           )
           assert.equal(
             Math.round(layoutGeometry[2].viewport.height),
             Math.round(layoutGeometry[3].viewport.height),
+          )
+          assert.notEqual(
+            Math.round(layoutGeometry[2].viewport.width),
+            Math.round(layoutGeometry[3].viewport.width),
           )
 
           for (const definition of [
@@ -571,6 +615,279 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
     await context.close()
     await browser.close()
     await buildContext.close()
+  }
+})
+
+test('Figure layout variants preserve media semantics and expose distinct compositions', {
+  timeout: 240_000,
+}, async () => {
+  const buildContext = await createExpandedContentContext()
+  const browser = await chromium.launch({ headless: true })
+  const context = await browser.newContext({
+    deviceScaleFactor: 2,
+    viewport: { height: 552, width: 980 },
+  })
+
+  try {
+    for (const preset of expandedPresets) {
+      const page = await context.newPage()
+      const baseUrl = buildContext.builds[`expanded-${preset}`].baseUrl
+      try {
+        const results = []
+        for (const definition of [
+          { marker: 'figure-variant-stage', slide: 62, variant: 'stage' },
+          { marker: 'figure-variant-minimal', slide: 63, variant: 'minimal' },
+          { marker: 'figure-variant-editorial', slide: 64, variant: 'editorial' },
+        ]) {
+          await waitForSlide(
+            page,
+            baseUrl,
+            definition.slide,
+            'light',
+            definition.marker,
+          )
+          results.push(await page.locator(
+            `.slidev-page-${definition.slide} .slide-layout-figure`,
+          ).evaluate((layout) => {
+            const figure = layout.querySelector('.obsidian-slidev-media')
+            const viewport = figure?.querySelector(
+              '.obsidian-slidev-media__viewport',
+            )
+            const image = figure?.querySelector('img')
+            const caption = figure?.querySelector('figcaption')
+            const rect = element => element?.getBoundingClientRect()
+            const viewportStyle = viewport ? getComputedStyle(viewport) : null
+            const captionStyle = caption ? getComputedStyle(caption) : null
+            return {
+              caption: rect(caption),
+              captionBorderTopWidth: captionStyle?.borderTopWidth ?? null,
+              figureDisplay: figure ? getComputedStyle(figure).display : null,
+              fit: image ? getComputedStyle(image).objectFit : null,
+              imageBackground: image
+                ? getComputedStyle(image).backgroundColor
+                : null,
+              layoutClass: layout.className,
+              trayBackground: viewportStyle?.backgroundColor ?? null,
+              trayBorderWidth: viewportStyle?.borderTopWidth ?? null,
+              variant: layout.getAttribute('data-figure-variant'),
+              viewport: rect(viewport),
+            }
+          }))
+        }
+
+        assert.deepEqual(results.map(result => result.variant), [
+          'stage',
+          'minimal',
+          'editorial',
+        ])
+        for (const [index, variant] of ['stage', 'minimal', 'editorial'].entries()) {
+          assert.match(results[index].layoutClass, new RegExp(`--${variant}(?:\\s|$)`))
+          assert.ok(results[index].viewport.width > 0)
+          assert.ok(results[index].viewport.height > 0)
+        }
+        assert.equal(results[0].fit, 'contain')
+        assert.equal(results[1].fit, 'contain')
+        assert.equal(results[2].fit, 'cover')
+        assert.equal(results[1].trayBorderWidth, '0px')
+        assert.equal(results[1].trayBackground, 'rgba(0, 0, 0, 0)')
+        assert.equal(results[1].imageBackground, 'rgba(0, 0, 0, 0)')
+        assert.equal(results[2].figureDisplay, 'grid')
+        assert.equal(results[2].captionBorderTopWidth, '2px')
+        assert.ok(results[2].caption.left >= results[2].viewport.right)
+        assert.ok(results[0].viewport.width > results[1].viewport.width)
+
+        await page.setViewportSize({ height: 720, width: 640 })
+        await waitForSlide(
+          page,
+          baseUrl,
+          64,
+          'light',
+          'figure-variant-editorial',
+        )
+        const compactEditorial = await page.locator(
+          '.slidev-page-64 .slide-layout-figure--editorial',
+        ).evaluate((layout) => {
+          const figure = layout.querySelector('.obsidian-slidev-media')
+          const viewport = figure?.querySelector(
+            '.obsidian-slidev-media__viewport',
+          )
+          const caption = figure?.querySelector('figcaption')
+          const viewportRect = viewport?.getBoundingClientRect()
+          const captionRect = caption?.getBoundingClientRect()
+          return {
+            captionBelow: Boolean(
+              viewportRect
+              && captionRect
+              && captionRect.top >= viewportRect.bottom,
+            ),
+            columns: figure ? getComputedStyle(figure).gridTemplateColumns : '',
+          }
+        })
+        assert.ok(compactEditorial.captionBelow)
+        assert.doesNotMatch(compactEditorial.columns, /\s/)
+      } finally {
+        await page.close()
+      }
+    }
+  } finally {
+    await context.close()
+    await browser.close()
+  }
+})
+
+test('ordinary Figure variants stay local, compact, and generated-markup compatible', {
+  timeout: 240_000,
+}, async () => {
+  const build = {
+    id: 'figure-component-variants',
+    outDir: resolve(
+      qualityArtifactRoot,
+      'build/content-contracts/figure-component-variants',
+    ),
+    source: resolve(repositoryRoot, 'fixtures/figure-component-variants.md'),
+  }
+  await buildDeck(build)
+  const server = await startStaticServer(build.outDir)
+  const browser = await chromium.launch({ headless: true })
+  const context = await browser.newContext({
+    deviceScaleFactor: 2,
+    viewport: { height: 552, width: 980 },
+  })
+  const page = await context.newPage()
+
+  try {
+    const results = []
+    for (const definition of [
+      { marker: 'figure-component-centered', slide: 1, variant: 'centered' },
+      { marker: 'figure-component-stage', slide: 2, variant: 'stage' },
+      { marker: 'figure-component-minimal', slide: 3, variant: 'minimal' },
+      { marker: 'figure-component-editorial', slide: 4, variant: 'editorial' },
+    ]) {
+      await waitForSlide(
+        page,
+        server.baseUrl,
+        definition.slide,
+        'light',
+        definition.marker,
+      )
+      results.push(await page.locator(
+        `.slidev-page-${definition.slide} .obsidian-slidev-media`,
+      ).evaluate((figure) => {
+        const canvas = figure.closest('.slidev-layout')
+        const viewport = figure.querySelector(
+          '.obsidian-slidev-media__viewport',
+        )
+        const image = figure.querySelector('img')
+        const caption = figure.querySelector('figcaption')
+        const rect = element => element?.getBoundingClientRect()
+        return {
+          canvasClass: canvas?.className ?? '',
+          caption: rect(caption),
+          captionBorder: caption
+            ? getComputedStyle(caption).borderTopWidth
+            : null,
+          display: getComputedStyle(figure).display,
+          figure: rect(figure),
+          imageBackground: image
+            ? getComputedStyle(image).backgroundColor
+            : null,
+          modifier: figure.className,
+          trayBackground: viewport
+            ? getComputedStyle(viewport).backgroundColor
+            : null,
+          trayBorder: viewport
+            ? getComputedStyle(viewport).borderTopWidth
+            : null,
+          variant: figure.getAttribute('data-figure-variant'),
+          viewport: rect(viewport),
+        }
+      }))
+    }
+
+    assert.deepEqual(results.map(result => result.variant), [
+      'centered',
+      'stage',
+      'minimal',
+      'editorial',
+    ])
+    for (const [index, variant] of [
+      'centered',
+      'stage',
+      'minimal',
+      'editorial',
+    ].entries()) {
+      assert.doesNotMatch(results[index].canvasClass, /(?:^|\s)figure(?:\s|$)/)
+      assert.match(
+        results[index].modifier,
+        new RegExp(`(?:^|\\s)obsidian-slidev-media--figure-${variant}(?:\\s|$)`),
+      )
+      assert.ok(results[index].viewport.height > 0)
+    }
+    assert.ok(results[1].figure.width > results[2].figure.width)
+    assert.ok(results[1].viewport.height > results[2].viewport.height)
+    assert.equal(results[2].trayBorder, '0px')
+    assert.equal(results[2].trayBackground, 'rgba(0, 0, 0, 0)')
+    assert.equal(results[2].imageBackground, 'rgba(0, 0, 0, 0)')
+    assert.equal(results[3].display, 'grid')
+    assert.equal(results[3].captionBorder, '2px')
+    assert.ok(results[3].caption.left >= results[3].viewport.right)
+
+    await waitForSlide(
+      page,
+      server.baseUrl,
+      5,
+      'light',
+      'figure-generated-minimal',
+    )
+    const generated = await page.locator(
+      '.slidev-page-5 .obsidian-slidev-media--figure-minimal',
+    ).evaluate((figure) => {
+      const image = figure.querySelector('img')
+      return {
+        border: image ? getComputedStyle(image).borderTopWidth : null,
+        imageBackground: image
+          ? getComputedStyle(image).backgroundColor
+          : null,
+        managed: figure.getAttribute('data-media-managed'),
+      }
+    })
+    assert.equal(generated.managed, 'generated')
+    assert.equal(generated.border, '0px')
+    assert.equal(generated.imageBackground, 'rgba(0, 0, 0, 0)')
+
+    await page.setViewportSize({ height: 720, width: 640 })
+    await waitForSlide(
+      page,
+      server.baseUrl,
+      4,
+      'light',
+      'figure-component-editorial',
+    )
+    const responsive = await page.locator(
+      '.slidev-page-4 .obsidian-slidev-media--figure-editorial',
+    ).evaluate((figure) => {
+      const viewport = figure.querySelector(
+        '.obsidian-slidev-media__viewport',
+      )
+      const caption = figure.querySelector('figcaption')
+      const viewportRect = viewport?.getBoundingClientRect()
+      const captionRect = caption?.getBoundingClientRect()
+      return {
+        captionBelow: Boolean(
+          viewportRect
+          && captionRect
+          && captionRect.top >= viewportRect.bottom,
+        ),
+        columns: getComputedStyle(figure).gridTemplateColumns,
+      }
+    })
+    assert.ok(responsive.captionBelow)
+    assert.doesNotMatch(responsive.columns, /\s/)
+  } finally {
+    await page.close()
+    await context.close()
+    await browser.close()
+    await server.close()
   }
 })
 

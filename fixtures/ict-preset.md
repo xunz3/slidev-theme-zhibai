@@ -3,6 +3,9 @@ theme: ../
 layout: cover
 title: Systems That Learn at Scale
 subtitle: Efficient architectures for reliable intelligent computing
+image: /theme/public/obsidian-card.svg
+imageAlt: A note card connected to a presentation canvas
+imageFit: contain
 footer: Institute of Computing Technology, Chinese Academy of Sciences
 authors:
   - name: Xun Zhang

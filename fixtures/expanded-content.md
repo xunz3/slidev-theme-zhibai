@@ -947,6 +947,8 @@ image: /author-fixtures/media-portrait.svg
 imageAlt: Labeled portrait geometry fixture
 caption: The portrait fills the same media region.
 backgroundSize: cover
+imagePosition: 35% 45%
+mediaRatio: 60
 ---
 
 <div data-quality-case="visual-image-left-cover">
@@ -981,6 +983,8 @@ image: /author-fixtures/media-landscape.svg
 imageAlt: Labeled landscape geometry fixture
 caption: The landscape fills the same media region.
 backgroundSize: cover
+imagePosition: 65% 55%
+mediaRatio: 40
 ---
 
 <div data-quality-case="visual-image-right-cover">
@@ -1242,4 +1246,53 @@ presentationDensity: compact
 The watermark stays behind content while the top-right lockup is omitted.
 
 </div>
+
+---
+layout: figure
+title: Stage figure · 主视觉
+figureVariant: stage
+presentationDensity: compact
+---
+
+<span hidden data-quality-case="figure-variant-stage"></span>
+
+<Figure
+  src="/author-fixtures/media-landscape.svg"
+  alt="Wide evaluation landscape used as the primary visual"
+  caption="Stage preserves the full source while giving the evidence more of the canvas."
+  fit="contain"
+/>
+
+---
+layout: figure
+title: Minimal figure · 极简图形
+figureVariant: minimal
+presentationDensity: compact
+---
+
+<span hidden data-quality-case="figure-variant-minimal"></span>
+
+<Figure
+  src="/author-fixtures/media-portrait.svg"
+  alt="Portrait research diagram without a surrounding tray"
+  caption="Minimal removes the media tray so diagrams sit directly on the slide surface."
+  fit="contain"
+/>
+
+---
+layout: figure
+title: Editorial figure · 证据边注
+figureVariant: editorial
+presentationDensity: compact
+---
+
+<span hidden data-quality-case="figure-variant-editorial"></span>
+
+<Figure
+  src="/author-fixtures/media-landscape.svg"
+  alt="Evaluation landscape with a side annotation"
+  caption="Evidence note · The annotation rail keeps interpretation close to the image without competing with the visual."
+  fit="cover"
+  image-position="35% 45%"
+/>
 <!-- FIX-THEME-VISUALS-MATRIX-END -->

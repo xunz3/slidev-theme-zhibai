@@ -48,6 +48,7 @@ const loadTypeScriptModule = async (path) => {
 
 const config = await loadTypeScriptModule('setup/presentation-config.ts')
 const callouts = await loadTypeScriptModule('setup/callouts.ts')
+const figureLayout = await loadTypeScriptModule('setup/figure-layout.ts')
 
 test('option definitions are the immutable canonical public contract', () => {
   assert.deepEqual(config.PRESENTATION_PRESETS, ['default', 'ucas', 'ict'])
@@ -180,6 +181,20 @@ test('normalizers accept only documented enum and boolean values', () => {
     assert.equal(config.normalizeChrome(input), expected)
   }
   assert.equal(config.normalizeChrome('always'), undefined)
+})
+
+test('figure layout variants are canonical, normalized, and safely defaulted', () => {
+  assert.deepEqual(figureLayout.FIGURE_VARIANTS, [
+    'centered',
+    'stage',
+    'minimal',
+    'editorial',
+  ])
+  assert.ok(Object.isFrozen(figureLayout.FIGURE_VARIANTS))
+  assert.equal(figureLayout.normalizeFigureVariant(' editorial '), 'editorial')
+  assert.equal(figureLayout.normalizeFigureVariant('STAGE'), 'stage')
+  assert.equal(figureLayout.normalizeFigureVariant('unsupported'), 'centered')
+  assert.equal(figureLayout.normalizeFigureVariant(undefined), 'centered')
 })
 
 test('missing and invalid deck configuration resolve field-by-field to defaults', () => {
@@ -869,11 +884,28 @@ test('documented style hooks and layout passthroughs remain live contracts', asy
     /\.obsidian-slidev-media--video video\s*\{[\s\S]*?height:\s*var\(--presentation-media-viewport-height\)[\s\S]*?max-height:\s*none[\s\S]*?object-fit:\s*contain/,
     'native video reserves stable contain-fit geometry',
   )
+  assert.match(
+    obsidian,
+    /\.obsidian-slidev-media__viewport\[data-media-fit=["']contain["']\][\s\S]*?object-fit:\s*contain/,
+    'public Figure contain fit is selected directly from viewport state',
+  )
+  assert.match(obsidian, /object-position:\s*var\(--presentation-media-position/)
+  assert.match(
+    obsidian,
+    /\.obsidian-slidev-media__caption\s*\{[\s\S]*?width:\s*100%[\s\S]*?text-align:\s*start/,
+  )
+  assert.match(imageTextLayout, /mediaRatio\?: number \| string/)
+  assert.match(imageTextLayout, /imagePosition\?: string/)
+  assert.match(imageTextLayout, /normalizeImageTextMediaRatio/)
+  assert.match(imageTextLayout, /normalizeMediaPosition/)
 
   assert.match(media, /const retry = \(\) =>/)
   assert.match(media, /retryCount\.value \+= 1/)
   assert.match(figure, /defineExpose\(\{ retry \}\)/)
   assert.match(figure, /:key=["']imageKey["']/)
+  assert.match(figure, /variant\?: FigureVariant/)
+  assert.match(figure, /normalizeFigureVariant\(props\.variant\)/)
+  assert.match(figure, /obsidian-slidev-media--figure-/)
 })
 
 test('every layout-owned chrome prop accepts canonical values and booleans', async () => {
