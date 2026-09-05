@@ -3,42 +3,29 @@ import { resolve } from 'node:path'
 import { repositoryRoot } from '../tests/quality/helpers.mjs'
 
 const arguments_ = process.argv.slice(2)
-const updateVisualBaselines = arguments_.includes('--update-visual-baselines')
-const valueAfter = (name) => {
-  const index = arguments_.indexOf(name)
-  return index >= 0 ? arguments_[index + 1] : undefined
-}
 
-if (updateVisualBaselines
-  && (!valueAfter('--reviewer')?.trim() || !valueAfter('--rationale')?.trim())) {
-  console.error(
-    'Visual baseline updates require --reviewer "<name>" and --rationale "<approved reason>".',
-  )
-  process.exitCode = 2
-} else {
-  const child = spawn(
-    process.execPath,
-    [resolve(repositoryRoot, 'tests/quality/run.mjs'), ...arguments_],
-    {
-      cwd: repositoryRoot,
-      stdio: 'inherit',
-    },
-  )
-  for (const signal of ['SIGINT', 'SIGTERM']) {
-    process.once(signal, () => child.kill(signal))
-  }
-  process.exitCode = await new Promise((resolveExit) => {
-    child.once('error', (error) => {
-      console.error(error.message)
-      resolveExit(2)
-    })
-    child.once('exit', (code, signal) => {
-      if (signal) {
-        console.error(`Quality process ended with ${signal}`)
-        resolveExit(2)
-      } else {
-        resolveExit(code ?? 2)
-      }
-    })
-  })
+const child = spawn(
+  process.execPath,
+  [resolve(repositoryRoot, 'tests/quality/run.mjs'), ...arguments_],
+  {
+    cwd: repositoryRoot,
+    stdio: 'inherit',
+  },
+)
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.once(signal, () => child.kill(signal))
 }
+process.exitCode = await new Promise((resolveExit) => {
+  child.once('error', (error) => {
+    console.error(error.message)
+    resolveExit(2)
+  })
+  child.once('exit', (code, signal) => {
+    if (signal) {
+      console.error(`Quality process ended with ${signal}`)
+      resolveExit(2)
+    } else {
+      resolveExit(code ?? 2)
+    }
+  })
+})

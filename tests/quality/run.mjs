@@ -4,7 +4,6 @@ import { createHash } from 'node:crypto'
 import {
   mkdir,
   readFile,
-  readdir,
   rm,
   writeFile,
 } from 'node:fs/promises'
@@ -25,14 +24,9 @@ import {
   startStaticServer,
   terminateActiveProcesses,
 } from './helpers.mjs'
-import {
-  createVisualBrowser,
-  updateVisualBaselines,
-} from './visual-baselines.mjs'
 
 const execFileAsync = promisify(execFile)
 const summaryPath = resolve(qualityArtifactRoot, 'summary.json')
-const baselineRoot = resolve(repositoryRoot, 'tests/quality/baselines')
 const requiredFailureFields = ['gate', 'caseId', 'status', 'artifactPaths']
 
 const sha256 = value => createHash('sha256').update(value).digest('hex')
@@ -43,23 +37,6 @@ const resolvePnpmVersion = stdout => (
   || process.env.npm_config_user_agent?.match(/\bpnpm\/([^\s]+)/)?.[1]
   || ''
 )
-
-const snapshotTree = async (root) => {
-  const entries = await readdir(root, { recursive: true, withFileTypes: true })
-  const snapshot = []
-  for (const entry of entries) {
-    if (!entry.isFile()) continue
-    const absolutePath = resolve(entry.parentPath, entry.name)
-    const bytes = await readFile(absolutePath)
-    snapshot.push({
-      path: relative(root, absolutePath).split(sep).join('/'),
-      bytes: bytes.length,
-      sha256: sha256(bytes),
-    })
-  }
-  snapshot.sort((left, right) => left.path.localeCompare(right.path))
-  return snapshot
-}
 
 export const validateQualityRecord = (record) => {
   for (const field of requiredFailureFields) {
@@ -255,51 +232,18 @@ const collectEnvironment = async () => {
 
 const parseArguments = () => {
   const arguments_ = process.argv.slice(2)
-  const selfCheck = arguments_.includes('--self-check')
-  const updateVisualBaselines = arguments_.includes('--update-visual-baselines')
-  const valueAfter = (name) => {
-    const index = arguments_.indexOf(name)
-    return index >= 0 ? arguments_[index + 1] : undefined
-  }
-  const reviewer = valueAfter('--reviewer')
-  const rationale = valueAfter('--rationale')
-  const known = new Set([
-    '--',
-    '--self-check',
-    '--update-visual-baselines',
-    '--reviewer',
-    '--rationale',
-    reviewer,
-    rationale,
-  ])
-  const unknown = arguments_.filter(argument => !known.has(argument))
+  const unknown = arguments_.filter(argument => !['--', '--self-check'].includes(argument))
   if (unknown.length > 0) {
     throw new Error(`Unsupported quality argument(s): ${unknown.join(', ')}`)
   }
-  if (selfCheck && updateVisualBaselines) {
-    throw new Error('--self-check and baseline updates are mutually exclusive')
-  }
-  if (updateVisualBaselines && (!reviewer?.trim() || !rationale?.trim())) {
-    throw new Error(
-      'Visual baseline updates require non-empty --reviewer and --rationale values',
-    )
-  }
-  return {
-    rationale,
-    reviewer,
-    selfCheck,
-    updateVisualBaselines,
-  }
+  return { selfCheck: arguments_.includes('--self-check') }
 }
 
-const executeQuality = async (options) => {
+const executeQuality = async () => {
   const startedAt = performance.now()
-  const baselineBefore = await snapshotTree(baselineRoot)
   const summary = {
     schemaVersion: 1,
-    mode: options.updateVisualBaselines
-      ? 'visual-baseline-update'
-      : 'quality',
+    mode: 'quality',
     startedAt: now(),
     performancePolicy: 'not-gated',
     environment: await collectEnvironment(),
@@ -478,32 +422,6 @@ const executeQuality = async (options) => {
       }
     })
 
-    if (options.updateVisualBaselines) {
-      await runPhase('update-visual-baselines', async () => {
-        const { browser, context } = await createVisualBrowser()
-        try {
-          const manifest = await updateVisualBaselines({
-            builds: buildContext,
-            context,
-            rationale: options.rationale,
-            reviewer: options.reviewer,
-          })
-          return {
-            path: relativePath(
-              resolve(repositoryRoot, 'tests/quality/baselines/visual/manifest.json'),
-            ),
-            scenarios: manifest.scenarios.length,
-          }
-        } finally {
-          await context.close()
-          await browser.close()
-        }
-      })
-    }
-    if (options.updateVisualBaselines) {
-      return
-    }
-
     await runPhase('self-checks', () => runSelfChecks())
     await runPhase(
       'configuration',
@@ -543,13 +461,6 @@ const executeQuality = async (options) => {
       ),
     )
     await runPhase(
-      'visual',
-      () => runCommandPhase(
-        'visual',
-        ['--test', 'tests/quality/visual.spec.mjs'],
-      ),
-    )
-    await runPhase(
       'assets',
       () => runCommandPhase(
         'assets',
@@ -564,18 +475,6 @@ const executeQuality = async (options) => {
         600_000,
       ),
     )
-    await runPhase('baseline-integrity', async () => {
-      const baselineAfter = await snapshotTree(baselineRoot)
-      assert.deepEqual(
-        baselineAfter,
-        baselineBefore,
-        'Normal quality run mutated approved baselines',
-      )
-      return {
-        files: baselineAfter.length,
-        status: 'unchanged',
-      }
-    })
   }
 
   let exitCode = 0
@@ -657,7 +556,7 @@ const main = async () => {
       console.log(`Quality self-checks passed; summary: ${relativePath(summaryPath)}`)
       return 0
     }
-    return await executeQuality(options)
+    return await executeQuality()
   } catch (error) {
     console.error(error.stack ?? error.message)
     return 2

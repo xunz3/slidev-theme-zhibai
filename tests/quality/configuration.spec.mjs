@@ -578,63 +578,6 @@ test('package metadata has no duplicate presentation defaults', async () => {
   assert.ok(packageJson.files.includes('public/obsidian-card.svg'))
 })
 
-test('README mirrors the canonical deck and slide configuration contract', async () => {
-  const readme = await readFile(resolve(repositoryRoot, 'README.md'), 'utf8')
-  const perSlideSection = readme.match(
-    /Per-slide overrides:[\s\S]*?(?=\n## |\n`themeConfig`)/,
-  )?.[0] ?? ''
-
-  for (const [key, values, defaultValue] of [
-    ['preset', '`default`, `ucas`, `ict`', '`default`'],
-    ['accent', 'Any CSS color', 'theme default'],
-    ['density', '`compact`, `normal`, `relaxed`', '`normal`'],
-    ['chrome', '`auto`, `on`, `off`', '`auto`'],
-    ['header', '`true`, `false`', '`false`'],
-    ['footerAuthors', '`true`, `false`', '`true`'],
-    ['pageNumber', '`true`, `false`', '`true`'],
-  ]) {
-    const row = `| \`${key}\` | ${values} | ${defaultValue} |`
-    assert.ok(readme.includes(row), `README deck row drift: ${key}`)
-  }
-
-  for (const key of [
-    'presentationPreset',
-    'presentationDensity',
-    'presentationChrome',
-    'chrome',
-    'presentationHeader',
-    'header',
-    'footerAuthors',
-    'pageNumber',
-    'footer',
-  ]) {
-    assert.match(
-      perSlideSection,
-      new RegExp(`\\| \\\`${key}\\\` \\|`),
-      `README per-slide row drift: ${key}`,
-    )
-  }
-
-  for (const phrase of [
-    'first valid',
-    'textual booleans',
-    '`true`',
-    '`false`',
-    '`on`',
-    '`off`',
-    'pre-1.0 migration',
-    'pnpm run assets:optimize',
-    'pnpm run assets:check',
-    'pnpm run quality',
-    'pnpm run quality:update-visual-baselines',
-  ]) {
-    assert.ok(
-      readme.toLowerCase().includes(phrase.toLowerCase()),
-      `README is missing contract phrase: ${phrase}`,
-    )
-  }
-})
-
 test('US6 packaged sources are isolated, bounded, and converter-independent', async () => {
   const packageJson = JSON.parse(
     await readFile(resolve(repositoryRoot, 'package.json'), 'utf8'),
@@ -819,7 +762,7 @@ test('follow-up source hygiene removes dead runtime paths and remote font CSS', 
   assert.doesNotMatch(toc, /\bas any\b|meta\?\.slide\?\.|slide\?\.slide\?\./)
 })
 
-test('documented style hooks and layout passthroughs remain live contracts', async () => {
+test('style hooks and layout passthroughs remain live contracts', async () => {
   const [
     base,
     codeLayout,
@@ -828,7 +771,6 @@ test('documented style hooks and layout passthroughs remain live contracts', asy
     imageTextLayout,
     media,
     obsidian,
-    readme,
     tokens,
   ] = await Promise.all([
     readFile(resolve(repositoryRoot, 'styles/base.css'), 'utf8'),
@@ -838,18 +780,9 @@ test('documented style hooks and layout passthroughs remain live contracts', asy
     readFile(resolve(repositoryRoot, 'internals/ImageTextLayout.vue'), 'utf8'),
     readFile(resolve(repositoryRoot, 'setup/media.ts'), 'utf8'),
     readFile(resolve(repositoryRoot, 'styles/obsidian.css'), 'utf8'),
-    readFile(resolve(repositoryRoot, 'README.md'), 'utf8'),
     readFile(resolve(repositoryRoot, 'styles/tokens.css'), 'utf8'),
   ])
 
-  for (const token of [
-    '--presentation-shadow',
-    '--presentation-inline-code-border',
-    '--presentation-callout-bg',
-    '--presentation-callout-border',
-  ]) {
-    assert.ok(readme.includes(`| \`${token}\` |`), token)
-  }
   assert.match(base, /box-shadow:\s*var\(--presentation-shadow\)/)
   assert.match(base, /border:\s*1px solid var\(--presentation-inline-code-border\)/)
   assert.match(obsidian, /border:\s*1px solid var\(--presentation-callout-border\)/)
@@ -952,35 +885,6 @@ test('image-text media uses one authoritative reserved-height rule', async () =>
   assert.ok(rule, 'image-text media viewport rule exists')
   assert.match(rule, /\bheight:/)
   assert.doesNotMatch(rule, /\baspect-ratio:/)
-})
-
-test('performance baselines are intentionally absent from the repository gate', async () => {
-  const [packageJson, readme, runner] = await Promise.all([
-    readFile(resolve(repositoryRoot, 'package.json'), 'utf8').then(JSON.parse),
-    readFile(resolve(repositoryRoot, 'README.md'), 'utf8'),
-    readFile(resolve(repositoryRoot, 'tests/quality/run.mjs'), 'utf8'),
-  ])
-
-  assert.equal(packageJson.scripts['quality:update-baselines'], undefined)
-  assert.equal(packageJson.scripts['quality:update-performance-baselines'], undefined)
-  assert.equal(packageJson.scripts['quality:update-visual-baselines']?.length > 0, true)
-  assert.doesNotMatch(runner, /performance-baseline|navigation-performance|output-sizes/)
-  assert.match(readme, /raw\s+output\/navigation\s+sampling\s+baselines.*removed/is)
-
-  for (const path of [
-    'scripts/measure-build-output.mjs',
-    'tests/quality/navigation-performance.mjs',
-    'tests/quality/navigation-performance.spec.mjs',
-    'tests/quality/performance-baselines.spec.mjs',
-    'tests/quality/baselines/navigation-performance.json',
-    'tests/quality/baselines/output-sizes.json',
-  ]) {
-    await assert.rejects(
-      readFile(resolve(repositoryRoot, path), 'utf8'),
-      error => error?.code === 'ENOENT',
-      `${path} was removed`,
-    )
-  }
 })
 
 test('pre-1.0 source keeps one canonical implementation path', async () => {

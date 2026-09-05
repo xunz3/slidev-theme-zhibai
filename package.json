@@ -35,7 +35,6 @@
 		"node": ">=20.19.0"
 	},
 	"scripts": {
-		"assets:optimize": "node scripts/optimize-brand-assets.mjs",
 		"assets:check": "node --test tests/quality/assets.spec.mjs",
 		"build": "slidev build example.md",
 		"build:fixture": "slidev build fixtures/obsidian-protocol.md --out dist-fixture",
@@ -43,7 +42,6 @@
 		"dev:fixture": "slidev fixtures/obsidian-protocol.md --open",
 		"export": "slidev export example.md",
 		"quality": "node scripts/run-quality-gates.mjs",
-		"quality:update-visual-baselines": "node scripts/run-quality-gates.mjs --update-visual-baselines",
 		"screenshot": "slidev export example.md --format png",
 		"build:default": "slidev build fixtures/default-preset.md --out dist-default",
 		"screenshot:default": "slidev export fixtures/default-preset.md --format png --output dist-default/default-preset",
