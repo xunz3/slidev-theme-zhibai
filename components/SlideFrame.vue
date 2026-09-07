@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSlideContext } from '@slidev/client'
+import { useIsSlideActive, useSlideContext } from '@slidev/client'
 import { computed } from 'vue'
 import type { CSSProperties } from 'vue'
 import { formatAuthorNames, resolveDeckAuthors } from '../setup/authors'
@@ -13,6 +13,7 @@ import type {
 import PresetBranding from '../internals/PresetBranding.vue'
 
 const props = withDefaults(defineProps<{
+  artwork?: unknown
   canvasStyle?: CSSProperties
   chrome?: PresentationChrome | boolean
   subtitle?: string
@@ -23,7 +24,12 @@ const props = withDefaults(defineProps<{
   variant: 'default',
 })
 
-const { $slidev, $frontmatter } = useSlideContext()
+const { $slidev, $frontmatter, $renderContext, $page } = useSlideContext()
+const isActive = useIsSlideActive()
+// Only the live slide animates. Overview, next-slide previews and exports stay still.
+const motionActive = computed(() => isActive.value
+  && ['slide', 'presenter'].includes($renderContext.value)
+  && !$slidev.nav.isPrintMode)
 
 const configs = computed(() => (($slidev.configs ?? {}) as Record<string, any>))
 // Slidev injects frontmatter as a reactive object, not a Ref.
@@ -31,6 +37,7 @@ const frontmatter = computed(() => ($frontmatter as Record<string, any>))
 const presentationConfig = computed(() => configs.value.themeConfig?.presentation)
 
 const resolved = computed(() => resolvePresentation({
+  artwork: props.artwork,
   chrome: props.chrome,
   deck: presentationConfig.value,
   slide: frontmatter.value,
@@ -77,14 +84,26 @@ const footerMiddle = computed(() => {
   return deckFooter ?? configs.value.title ?? ''
 })
 
+// Let keyboard readers scroll a focused content region without advancing the deck.
+const onContentKeydown = (event: KeyboardEvent) => {
+  if (event.target !== event.currentTarget) return
+  const content = event.currentTarget as HTMLElement
+  if (
+    content.scrollHeight > content.clientHeight + 1
+    && /auto|scroll/.test(getComputedStyle(content).overflowY)
+    && ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)
+  ) event.stopPropagation()
+}
+
 </script>
 
 <template>
   <div
     class="slidev-layout"
-    :class="resolved.variant"
+    :class="[resolved.variant, { 'slidev-layout--custom-background': canvasStyle?.background }]"
     :data-presentation-preset="resolved.preset"
     :data-presentation-density="resolved.density"
+    :data-presentation-artwork="resolved.artwork.type"
     :style="outerStyle"
   >
     <div
@@ -98,9 +117,12 @@ const footerMiddle = computed(() => {
       ]"
       :data-presentation-preset="resolved.preset"
       :data-presentation-density="resolved.density"
+      :data-presentation-artwork="resolved.artwork.type"
+      :data-presentation-motion="motionActive ? 'active' : undefined"
       :style="frameStyle"
     >
       <PresetBranding
+        :artwork="resolved.artwork"
         :preset="resolved.preset"
         :show-header="resolved.showHeader"
         :variant="resolved.variant"
@@ -113,7 +135,11 @@ const footerMiddle = computed(() => {
         </div>
       </header>
 
-      <main class="slide-frame__content">
+      <main
+        class="slide-frame__content"
+        :tabindex="isActive ? 0 : -1"
+        @keydown="onContentKeydown"
+      >
         <slot />
       </main>
 
@@ -121,7 +147,9 @@ const footerMiddle = computed(() => {
         <div class="slide-frame__footer-left">{{ footerLeft }}</div>
         <div class="slide-frame__footer-middle">{{ footerMiddle }}</div>
         <div v-if="resolved.pageNumber" class="slide-frame__page">
-          {{ $slidev.nav.currentPage }} / {{ $slidev.nav.total }}
+          <span class="slide-frame__page-current">{{ String($page).padStart(2, '0') }}</span>
+          <span class="slide-frame__page-divider">/</span>
+          <span class="slide-frame__page-total">{{ String($slidev.nav.total).padStart(2, '0') }}</span>
         </div>
       </footer>
     </div>

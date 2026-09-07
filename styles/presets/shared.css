@@ -24,7 +24,7 @@
   --presentation-sequence-rail: var(--presentation-chrome-accent);
   --presentation-table-header-bg: color-mix(
     in srgb,
-    var(--presentation-accent) 8%,
+    var(--presentation-accent) 3%,
     transparent
   );
   --presentation-code-border: color-mix(
@@ -95,12 +95,400 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame {
   color: var(--presentation-chrome-accent);
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame
-  .presentation-code-layout .slidev-code-wrapper > pre.shiki {
-  background: var(--shiki-light-bg, var(--presentation-code-bg));
+.slidev-layout[data-presentation-preset] .slide-frame {
+  --slidev-code-font-family: var(--presentation-font-mono);
+  --slidev-code-font-size: var(--presentation-code-size);
+  --slidev-code-line-height: var(--presentation-code-line-height);
+  --slidev-code-padding: 1rem 1.1rem;
+  --slidev-code-radius: 0.25rem;
+  --slidev-code-margin: 0 0 var(--presentation-content-gap);
 }
 
-html.dark .slidev-layout[data-presentation-preset] .slide-frame
-  .presentation-code-layout .slidev-code-wrapper > pre.shiki {
-  background: var(--shiki-dark-bg, var(--presentation-code-bg));
+.slidev-layout[data-presentation-preset] .slide-frame .presentation-code-layout {
+  --slidev-code-margin: 0;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
+  background: color-mix(in srgb, var(--presentation-code-bg) 45%, var(--shiki-light-bg, var(--presentation-bg)));
+}
+
+html.dark .slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
+  background: color-mix(in srgb, var(--presentation-code-bg) 45%, var(--shiki-dark-bg, var(--presentation-bg)));
+}
+
+/* Give content the same considered spacing as the opening and closing slides. */
+.slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right)[data-presentation-preset]
+  .slide-frame h1 {
+  margin-bottom: 0.62em;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame table {
+  border-top-color: var(--presentation-chrome-accent);
+  border-bottom-color: var(--presentation-border);
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.slidev-layout.toc[data-presentation-preset] .slide-frame .slide-layout-toc__button--unnumbered {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.slidev-layout.quote[data-presentation-preset="default"] .slide-frame .slide-layout-quote__meta {
+  margin-left: 1.45rem;
+  border-top: 0;
+  padding-top: 0;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame
+  :is(.slide-layout-quote__content :lang(zh), .obsidian-slidev-media__caption:lang(zh)) {
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+/* Common editorial rhythm; each preset supplies its own type and color roles. */
+.slidev-layout[data-presentation-preset] .slide-frame .slide-cover__authors {
+  padding-inline: 0;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .slide-cover__author {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .slide-cover__author-name {
+  font-weight: 500;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .slide-layout-section__kicker {
+  margin-bottom: 1.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .slide-layout-toc__button {
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+/* A consistent page grid; decorative studies never participate in content flow. */
+.slidev-layout[data-presentation-preset] .slide-frame {
+  isolation: isolate;
+  color: var(--presentation-text);
+}
+
+.slidev-layout:is(.cover, .section, .closing)[data-presentation-preset] .slide-frame {
+  padding: var(--presentation-slide-padding);
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame > :is(.slide-frame__header, .slide-frame__content, .slide-frame__footer) {
+  position: relative;
+  z-index: 2;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .slide-frame__footer {
+  border-top: 1px solid var(--presentation-chrome-accent);
+  letter-spacing: 0.025em;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .slide-frame__page {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-family: var(--presentation-font-mono);
+  font-size: 0.66rem;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame :is(.slide-frame__page-divider, .slide-frame__page-total) {
+  color: var(--presentation-text-muted);
+  font-weight: 400;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork {
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 0 auto;
+  width: 34%;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--presentation-artwork-opacity, 1);
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__drawing {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__line {
+  stroke: currentColor;
+  stroke-width: 0.7;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__wash {
+  fill: currentColor;
+  opacity: 0.06;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__guide {
+  stroke: currentColor;
+  stroke-width: 0.6;
+  opacity: 0.18;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__point {
+  fill: var(--presentation-artwork-point, currentColor);
+}
+
+/* The motif is independent of the preset palette and institutional identity. */
+.slidev-layout[data-presentation-preset] .preset-artwork:is(
+  [data-artwork="flow"], [data-artwork="field"], [data-artwork="dots"], [data-artwork="custom"]
+) {
+  background: transparent;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__flow .preset-artwork__line {
+  stroke-width: 0.7;
+  opacity: 0.65;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork:is(
+  [data-artwork="flow"], [data-artwork="field"], [data-artwork="dots"]
+) {
+  mask-image: linear-gradient(to right, transparent, black 24%);
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__field {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 64% 30%, color-mix(in srgb, currentColor 20%, transparent), transparent 60%),
+    radial-gradient(ellipse at 24% 72%, color-mix(in srgb, var(--presentation-artwork-point) 15%, transparent), transparent 55%);
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__field .preset-artwork__line {
+  stroke-width: 0.75;
+  opacity: 0.32;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__custom {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: var(--presentation-artwork-fit, contain);
+  object-position: var(--presentation-artwork-position, center);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.slidev-layout[data-presentation-preset] .preset-artwork__image--dark:not(:only-child),
+html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--light:not(:only-child) {
+  display: none;
+}
+
+html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--dark {
+  display: block;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-artwork="none"]
+  .slide-frame .slide-cover:not(.slide-cover--has-visual) {
+  width: 100%;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-artwork="none"]
+  .slide-frame .slide-cover:not(.slide-cover--has-visual) h1 {
+  max-width: 20ch;
+}
+
+.slidev-layout:is(.section, .closing)[data-presentation-preset][data-presentation-artwork="none"]
+  .slide-frame :is(.slide-layout-section, .presentation-closing--minimal) {
+  padding-right: 0;
+}
+
+/* Author-provided imagery owns the visual column. The decoration steps away. */
+.slidev-layout.cover[data-presentation-preset] .slide-frame:has(.slide-cover--has-visual) .preset-artwork {
+  display: none;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--has-visual {
+  width: 100%;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
+  grid-template-areas: "cover-main cover-visual" "cover-authors cover-visual";
+  column-gap: 2rem;
+  row-gap: 1.2rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__main {
+  grid-area: cover-main;
+  min-width: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__visual {
+  grid-area: cover-visual;
+  width: 100%;
+  min-width: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__authors {
+  grid-area: cover-authors;
+  width: 100%;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual h1 {
+  font-size: calc(3.1rem * var(--presentation-heading-scale));
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--long-title h1 {
+  max-width: 100%;
+  font-size: calc(3.1rem * var(--presentation-heading-scale));
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--dense-title h1 {
+  font-size: calc(2.55rem * var(--presentation-heading-scale));
+}
+
+.slidev-layout.cover.slidev-layout--custom-background[data-presentation-preset] .slide-frame {
+  background: transparent;
+}
+
+.slidev-layout.cover.slidev-layout--custom-background[data-presentation-preset] .preset-artwork,
+.slidev-layout.closing[data-presentation-preset] .slide-frame:has(.presentation-closing--rich) .preset-artwork {
+  display: none;
+}
+
+.slidev-layout:is(.cover, .closing)[data-presentation-preset] .slide-frame--header {
+  padding-top: 6.4rem;
+}
+
+.slidev-layout[data-presentation-preset] .slide-cover__body:empty {
+  display: none;
+}
+
+/* Motion belongs to the live frame, never to individual v-click fragments.
+   No forwards fill: authored transforms/opacity regain control after entry. */
+@keyframes presentation-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--presentation-motion-x, 0px), var(--presentation-motion-distance, 10px), 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes presentation-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes presentation-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes presentation-artwork {
+  from { opacity: 0; transform: translate3d(18px, 0, 0); }
+  to { opacity: var(--presentation-artwork-opacity, 1); transform: translate3d(0, 0, 0); }
+}
+
+@keyframes presentation-rule {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] > .slide-frame__content {
+    animation: presentation-enter var(--presentation-motion-duration, 620ms) cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .slidev-layout:is(.cover, .section, .closing)[data-presentation-preset]
+    .slide-frame[data-presentation-motion="active"] > .slide-frame__content {
+    animation-delay: 60ms;
+  }
+
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] > :is(.slide-frame__header, .slide-frame__footer) {
+    animation: presentation-fade var(--presentation-motion-duration, 620ms) ease 100ms backwards;
+  }
+
+  .slidev-layout.cover[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-cover__authors {
+    animation: presentation-fade var(--presentation-motion-duration, 620ms) ease 240ms backwards;
+  }
+
+  .slidev-layout.cover[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(.slide-cover__subtitle, .slide-cover__body) {
+    animation: presentation-fade var(--presentation-motion-duration, 620ms) ease 140ms backwards;
+  }
+
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .preset-artwork {
+    animation: presentation-artwork 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(path, circle).preset-artwork__line,
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .preset-artwork__line > path {
+    stroke-dasharray: 1;
+    animation: presentation-draw 1100ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--artwork-line-index, 0) * 22ms) backwards;
+  }
+
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .preset-artwork__point {
+    animation: presentation-fade 400ms ease 500ms backwards;
+  }
+
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-cover__main::before {
+    transform-origin: left;
+    animation: presentation-rule 650ms cubic-bezier(0.22, 1, 0.36, 1) 80ms backwards;
+  }
+}
+
+@media (max-width: 760px) {
+  .slidev-layout[data-presentation-preset] .preset-artwork {
+    width: 29%;
+  }
+
+  .slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--has-visual {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 0.85rem 1.2rem;
+    margin-top: 1.8rem;
+  }
+
+  .slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual h1 {
+    font-size: calc(2.5rem * var(--presentation-heading-scale));
+  }
+
+  .slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--long-title h1 {
+    font-size: calc(2.55rem * var(--presentation-heading-scale));
+  }
+
+  .slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--dense-title h1 {
+    font-size: calc(2.15rem * var(--presentation-heading-scale));
+  }
+}
+
+/* Static output must be complete even when captured during slide entry. */
+html.print .slidev-layout[data-presentation-preset] .slide-frame *,
+html.print .slidev-layout[data-presentation-preset] .slide-frame *::before,
+html.print .slidev-layout[data-presentation-preset] .slide-frame *::after {
+  animation: none !important;
+}
+
+@media print {
+  .slidev-layout[data-presentation-preset] .slide-frame *,
+  .slidev-layout[data-presentation-preset] .slide-frame *::before,
+  .slidev-layout[data-presentation-preset] .slide-frame *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

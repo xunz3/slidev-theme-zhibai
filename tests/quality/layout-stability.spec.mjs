@@ -11,6 +11,51 @@ import {
   startStaticServer,
 } from './helpers.mjs'
 
+test('preset covers keep long titles, author details and images inside the canvas', {
+  timeout: 240_000,
+}, async () => {
+  const supplied = readQualityBuildContext()
+  const servers = []
+  const browser = await chromium.launch({ headless: true })
+  try {
+    for (const [preset, id] of [['default', 'default-only'], ['ucas', 'ucas'], ['ict', 'ict']]) {
+      let baseUrl = supplied?.[id]?.baseUrl
+      if (!baseUrl) {
+        const outDir = resolve(qualityArtifactRoot, 'build/cover-layout', preset)
+        await buildDeck({ id: `cover-layout-${preset}`, outDir, source: resolve(repositoryRoot, `fixtures/${preset}-preset.md`) })
+        const server = await startStaticServer(outDir)
+        servers.push(server)
+        baseUrl = server.baseUrl
+      }
+      for (const width of [980, 720]) {
+        const page = await browser.newPage({ viewport: { width, height: Math.round(width * 9 / 16) }, reducedMotion: 'reduce' })
+        try {
+          await page.goto(`${baseUrl}/1`, { waitUntil: 'networkidle' })
+          const frame = page.locator('.slidev-page-1 .slide-frame').first()
+          await frame.waitFor({ state: 'visible' })
+          await page.evaluate(() => document.fonts.ready)
+          const clipped = await frame.evaluate(el => {
+            const content = el.querySelector('.slide-frame__content').getBoundingClientRect()
+            return [...el.querySelectorAll('.slide-cover__title, .slide-cover__subtitle, .slide-cover__author, .slide-cover__visual')]
+              .filter(element => {
+                const rect = element.getBoundingClientRect()
+                return rect.top < content.top - 1 || rect.bottom > content.bottom + 1
+                  || rect.left < content.left - 1 || rect.right > content.right + 1
+              })
+              .map(element => element.className)
+          })
+          assert.deepEqual(clipped, [], `${preset}/${width}: no cover content is clipped`)
+        } finally {
+          await page.close()
+        }
+      }
+    }
+  } finally {
+    await browser.close()
+    await Promise.all(servers.map(server => server.close()))
+  }
+})
+
 test('delayed media state transitions preserve reserved geometry', {
   timeout: 240_000,
 }, async (t) => {
@@ -50,6 +95,8 @@ test('delayed media state transitions preserve reserved geometry', {
   const browser = await chromium.launch({ headless: true })
   const context = await browser.newContext({
     deviceScaleFactor: 2,
+    // Measure resource-driven layout changes independently of slide entry motion.
+    reducedMotion: 'reduce',
     viewport: { height: 552, width: 980 },
   })
 

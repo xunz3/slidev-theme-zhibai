@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import type {
   FrameVariant,
+  PresentationArtwork,
   PresentationPreset,
 } from '../setup/presentation-config'
-import ictEmblem from '../assets/ICT/emblem.svg'
 import ictWordmark from '../assets/ICT/emblem-name-bilingual-stacked.svg'
 import ucasEmblem from '../assets/UCAS/emblem.svg'
-import ucasEmblemWhite from '../assets/UCAS/emblem-white.png'
-import ucasWordmarkWhite from '../assets/UCAS/emblem-name-bilingual-hz-white.png'
-import ucasVerticalWordmark from '../assets/UCAS/emblem-name-bilingual-vt-white.png'
+import ucasSignature from '../assets/UCAS/emblem-name-bilingual-hz.svg'
+import PresetArtwork from './PresetArtwork.vue'
 
 withDefaults(defineProps<{
+  artwork: PresentationArtwork
   preset: PresentationPreset
   showHeader?: boolean
   variant: FrameVariant
@@ -20,20 +20,26 @@ withDefaults(defineProps<{
 </script>
 
 <template>
+  <PresetArtwork
+    v-if="artwork.type !== 'none' && ['cover', 'section', 'closing'].includes(variant)"
+    :artwork="artwork"
+  />
   <template v-if="preset === 'ucas'">
     <template v-if="variant === 'cover'">
       <aside class="slide-frame__ucas-rail">
         <img
           class="slide-frame__ucas-rail-brand"
-          :src="ucasVerticalWordmark"
+          :src="ucasSignature"
           alt="University of Chinese Academy of Sciences"
-          width="185"
-          height="946"
+          width="1016"
+          height="213"
           decoding="async"
         />
       </aside>
       <img
+        v-if="artwork.type === 'orbits'"
         class="slide-frame__ucas-watermark"
+        :style="artwork.opacity === null ? undefined : { opacity: artwork.opacity }"
         :src="ucasEmblem"
         alt=""
         aria-hidden="true"
@@ -47,20 +53,11 @@ withDefaults(defineProps<{
       <img
         v-if="!showHeader"
         class="slide-frame__ucas-wordmark"
-        :src="ucasWordmarkWhite"
+        :src="ucasSignature"
         alt=""
         aria-hidden="true"
         width="1016"
         height="213"
-        decoding="async"
-      />
-      <img
-        class="slide-frame__ucas-watermark"
-        :src="ucasEmblemWhite"
-        alt=""
-        aria-hidden="true"
-        width="397"
-        height="397"
         decoding="async"
       />
     </template>
@@ -69,16 +66,18 @@ withDefaults(defineProps<{
       <aside class="slide-frame__ucas-rail slide-frame__ucas-rail--closing">
         <img
           class="slide-frame__ucas-rail-brand"
-          :src="ucasVerticalWordmark"
+          :src="ucasSignature"
           alt=""
           aria-hidden="true"
-          width="185"
-          height="946"
+          width="1016"
+          height="213"
           decoding="async"
         />
       </aside>
       <img
+        v-if="artwork.type === 'orbits'"
         class="slide-frame__ucas-watermark slide-frame__ucas-watermark--closing"
+        :style="artwork.opacity === null ? undefined : { opacity: artwork.opacity }"
         :src="ucasEmblem"
         alt=""
         aria-hidden="true"
@@ -90,15 +89,16 @@ withDefaults(defineProps<{
   </template>
 
   <template v-else-if="preset === 'ict'">
-    <img
-      v-if="variant === 'cover'"
-      class="slide-frame__ict-lockup"
-      :src="ictWordmark"
-      alt="Institute of Computing Technology, Chinese Academy of Sciences"
-      width="728"
-      height="542"
-      decoding="async"
-    />
+    <template v-if="variant === 'cover'">
+      <img
+        class="slide-frame__ict-lockup"
+        :src="ictWordmark"
+        alt="Institute of Computing Technology, Chinese Academy of Sciences"
+        width="728"
+        height="542"
+        decoding="async"
+      />
+    </template>
 
     <template v-else-if="variant === 'section'">
       <img
@@ -111,15 +111,6 @@ withDefaults(defineProps<{
         height="542"
         decoding="async"
       />
-      <img
-        class="slide-frame__ict-watermark"
-        :src="ictEmblem"
-        alt=""
-        aria-hidden="true"
-        width="384"
-        height="316"
-        decoding="async"
-      />
     </template>
 
     <template v-else-if="variant === 'closing'">
@@ -130,15 +121,6 @@ withDefaults(defineProps<{
         aria-hidden="true"
         width="728"
         height="542"
-        decoding="async"
-      />
-      <img
-        class="slide-frame__ict-watermark slide-frame__ict-watermark--closing"
-        :src="ictEmblem"
-        alt=""
-        aria-hidden="true"
-        width="384"
-        height="316"
         decoding="async"
       />
     </template>

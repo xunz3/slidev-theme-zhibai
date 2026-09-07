@@ -1,6 +1,6 @@
 :root {
   /* Slidev controls use the default preset's primary; slide palettes remain preset-owned. */
-  --slidev-theme-primary: #5c6f5e;
+  --slidev-theme-primary: #74618e;
 }
 
 .slide-frame {
@@ -19,7 +19,7 @@
   --presentation-heading-line-height: 1.08;
   --presentation-slide-title-size: 2.12rem;
   --presentation-local-title-size: 1.3rem;
-  --presentation-local-title-weight: 700;
+  --presentation-local-title-weight: 600;
   --presentation-local-title-letter-spacing: -0.012em;
   --presentation-local-title-line-height: 1.2;
   --presentation-list-spacing: 0.28em;
@@ -31,6 +31,8 @@
   --presentation-table-row-alt-bg: color-mix(in srgb, var(--presentation-bg-muted) 42%, transparent);
   --presentation-code-bg: color-mix(in srgb, var(--presentation-bg-muted) 70%, transparent);
   --presentation-code-border: var(--presentation-border);
+  --presentation-code-size: 0.86rem;
+  --presentation-code-line-height: 1.65;
   --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 9%, transparent);
   --presentation-inline-code-border: color-mix(in srgb, var(--presentation-accent) 22%, var(--presentation-border));
   --presentation-inline-code-shadow: none;
@@ -71,8 +73,9 @@
   --presentation-media-fallback-text: var(--presentation-text);
   --presentation-author-card-bg: color-mix(in srgb, var(--presentation-bg-elevated) 88%, transparent);
   --presentation-author-card-border: var(--presentation-border);
-  --presentation-author-card-radius: 0.7rem;
   --presentation-author-card-shadow: var(--presentation-shadow);
+  --presentation-authors-margin: 0.65rem 0 1rem;
+  --presentation-authors-gap: 1.2rem;
   --presentation-closing-gap: 0.8rem;
   --presentation-image-text-gap: 2rem;
   --presentation-sequence-gap: 0.54rem;
@@ -119,6 +122,9 @@ html.dark .slide-frame {
   --presentation-chrome-size: 0.68rem;
   --presentation-caption-size: 0.76rem;
   --presentation-footnote-size: 0.7rem;
+  --presentation-code-size: 0.8rem;
+  --presentation-authors-margin: 0.4rem 0 0.65rem;
+  --presentation-authors-gap: 0.65rem 1rem;
   --presentation-statement-size: 2.8rem;
   --presentation-quote-size: 1.48rem;
   --presentation-quote-line-height: 1.38;
@@ -133,6 +139,7 @@ html.dark .slide-frame {
   --presentation-chrome-size: 0.76rem;
   --presentation-caption-size: 0.84rem;
   --presentation-footnote-size: 0.78rem;
+  --presentation-code-size: 0.92rem;
   --presentation-statement-size: 3.55rem;
   --presentation-quote-size: 1.9rem;
   --presentation-quote-line-height: 1.46;

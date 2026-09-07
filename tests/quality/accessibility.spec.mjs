@@ -1212,7 +1212,7 @@ test('WCAG, layout, image, console, and interaction contract', {
               assert.equal(brandState.lockupCount, 0)
               assert.equal(
                 brandState.identityImageCount,
-                preset === 'default' ? 0 : 1,
+                0,
               )
             }
             await result.page.close()
@@ -1375,7 +1375,7 @@ test('WCAG, layout, image, console, and interaction contract', {
               assert.equal(brandState.lockupCount, 0)
               assert.equal(
                 brandState.identityImageCount,
-                preset === 'default' ? 0 : 1,
+                0,
               )
             }
             await result.page.close()

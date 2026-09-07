@@ -178,8 +178,8 @@
 
 .slidev-layout pre code {
   font-family: var(--presentation-font-mono);
-  font-size: 0.88em;
-  line-height: 1.6;
+  font-size: var(--presentation-code-size);
+  line-height: var(--presentation-code-line-height);
 }
 
 .slidev-layout .slidev-code-copy {

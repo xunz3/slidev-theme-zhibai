@@ -1243,7 +1243,7 @@ presentationDensity: compact
 
 # Section lockups yield to the header
 
-The watermark stays behind content while the top-right lockup is omitted.
+The illustration stays behind content while the institutional lockup is omitted.
 
 </div>
 

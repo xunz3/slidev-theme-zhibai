@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="560" viewBox="0 0 400 560" fill="none">
+  <title>A custom signal study for dark mode</title>
+  <path d="M58 120V440H355" stroke="#a8c9d5" stroke-width="1" opacity=".35"/>
+  <path d="M58 340C92 340 98 340 115 295S139 160 165 250S195 416 220 285S248 151 278 245S311 297 350 180" stroke="#95cbdc" stroke-width="2"/>
+  <path d="M58 340C115 310 144 225 180 261S248 315 350 180" stroke="#739cac" stroke-width="1" stroke-dasharray="3 7"/>
+  <circle cx="165" cy="250" r="5" fill="#d2dfa0"/>
+  <circle cx="278" cy="245" r="4" fill="#d2dfa0"/>
+  <path d="M58 260H355M58 180H355M58 340H355" stroke="#a8c9d5" opacity=".12"/>
+</svg>

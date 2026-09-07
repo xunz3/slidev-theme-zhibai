@@ -15,14 +15,14 @@ const props = withDefaults(defineProps<{
   kicker: undefined,
 })
 
-const { $slidev, $frontmatter } = useSlideContext()
+const { $page, $frontmatter } = useSlideContext()
 
 const frontmatter = computed(() => ($frontmatter as Record<string, unknown>))
 
 // Section dividers are numbered in deck order, matching the toc layout's index.
 const sectionIndex = computed(() => {
   const all = slides.value ?? []
-  const currentPage = $slidev.nav.currentPage
+  const currentPage = $page.value
   let index = 0
   for (let page = 1; page <= Math.min(currentPage, all.length); page++) {
     const slide = all[page - 1]?.meta?.slide?.frontmatter as Record<string, unknown> | undefined

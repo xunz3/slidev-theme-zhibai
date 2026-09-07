@@ -16,6 +16,10 @@ export const PRESENTATION_CHROME_VALUES = Object.freeze([
   'off',
 ] as const)
 
+export const PRESENTATION_ARTWORK_TYPES = Object.freeze([
+  'auto', 'none', 'folds', 'orbits', 'lattice', 'flow', 'field', 'dots', 'custom',
+] as const)
+
 export const FRAME_VARIANTS = Object.freeze([
   'default',
   'cover',
@@ -38,6 +42,15 @@ type TupleValue<T extends readonly unknown[]> = T[number]
 export type PresentationPreset = TupleValue<typeof PRESENTATION_PRESETS>
 export type PresentationDensity = TupleValue<typeof PRESENTATION_DENSITIES>
 export type PresentationChrome = TupleValue<typeof PRESENTATION_CHROME_VALUES>
+export type PresentationArtworkType = TupleValue<typeof PRESENTATION_ARTWORK_TYPES>
+export type PresentationArtwork = Readonly<{
+  type: PresentationArtworkType
+  src: string | null
+  darkSrc: string | null
+  fit: 'contain' | 'cover'
+  position: string
+  opacity: number | null
+}>
 export type FrameVariant = TupleValue<typeof FRAME_VARIANTS>
 export type CssColorSupport = (value: string) => boolean
 
@@ -49,6 +62,7 @@ export type DeckPresentationState = Readonly<{
   footerAuthors: boolean
   pageNumber: boolean
   accent: string | null
+  artwork: PresentationArtwork
 }>
 
 export type ResolvedPresentationState = DeckPresentationState & Readonly<{
@@ -135,6 +149,54 @@ export const normalizeFrameVariant = (value: unknown): FrameVariant | undefined 
   return normalizeEnum(value, FRAME_VARIANTS)
 }
 
+const defaultArtwork = Object.freeze({
+  type: 'auto',
+  src: null,
+  darkSrc: null,
+  fit: 'contain',
+  position: 'center',
+  opacity: null,
+} as const)
+
+const presetArtwork = Object.freeze({
+  default: 'folds',
+  ucas: 'orbits',
+  ict: 'lattice',
+} as const)
+
+const artworkSource = (value: unknown): string | null => (
+  typeof value === 'string' && value.trim() ? value.trim() : null
+)
+
+export const normalizeArtwork = (value: unknown): PresentationArtwork | undefined => {
+  if (value === false) return Object.freeze({ ...defaultArtwork, type: 'none' })
+  if (typeof value === 'string') {
+    const type = normalizeEnum(value, PRESENTATION_ARTWORK_TYPES)
+    // Custom artwork needs an explicit source, rather than an empty image.
+    return type && type !== 'custom' ? Object.freeze({ ...defaultArtwork, type }) : undefined
+  }
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined
+  const raw = value as Record<string, unknown>
+  const src = artworkSource(raw.src)
+  const type = normalizeEnum(raw.type ?? (src ? 'custom' : undefined), PRESENTATION_ARTWORK_TYPES)
+  if (!type || (type === 'custom' && !src)) return undefined
+  const opacity = typeof raw.opacity === 'number'
+    || (typeof raw.opacity === 'string' && raw.opacity.trim())
+    ? Number(raw.opacity)
+    : Number.NaN
+  const position = typeof raw.position === 'string' ? raw.position.trim().toLowerCase() : ''
+  // Image positioning accepts keywords or one/two percentages, never arbitrary CSS.
+  const validPosition = /^(?:(?:left|center|right)(?:\s+(?:top|center|bottom))?|(?:top|center|bottom)(?:\s+(?:left|center|right))?|(?:100(?:\.0+)?|\d{1,2}(?:\.\d+)?)%(?:\s+(?:100(?:\.0+)?|\d{1,2}(?:\.\d+)?)%)?)$/.test(position)
+  return Object.freeze({
+    type,
+    src: type === 'custom' ? src : null,
+    darkSrc: type === 'custom' ? artworkSource(raw.darkSrc) : null,
+    fit: normalizeEnum(raw.fit, ['contain', 'cover'] as const) ?? 'contain',
+    position: validPosition ? position.replace(/\s+/g, ' ') : 'center',
+    opacity: Number.isFinite(opacity) ? Math.max(0, Math.min(1, opacity)) : null,
+  })
+}
+
 const freezeDefinition = <T>(
   definition: Omit<
     PresentationOptionDefinition<T>,
@@ -194,6 +256,13 @@ export const PRESENTATION_OPTIONS = Object.freeze({
     slideKeys: ['accent'],
     defaultValue: null,
     normalize: normalizeAccent,
+  }),
+  artwork: freezeDefinition<PresentationArtwork>({
+    deckKey: 'artwork',
+    inputKeys: ['artwork'],
+    slideKeys: ['presentationArtwork'],
+    defaultValue: defaultArtwork,
+    normalize: normalizeArtwork,
   }),
 } satisfies Record<string, PresentationOptionDefinition<unknown>>)
 
@@ -310,6 +379,7 @@ export const resolvePresentation = (
     deck?: unknown
     slide?: unknown
     chrome?: unknown
+    artwork?: unknown
     variant?: unknown
     supportsColor?: CssColorSupport
   }> = {},
@@ -328,6 +398,7 @@ export const resolvePresentation = (
   ])) as unknown as DeckPresentationState
   const {
     accent,
+    artwork,
     chrome,
     density,
     footerAuthors,
@@ -346,6 +417,10 @@ export const resolvePresentation = (
     footerAuthors,
     pageNumber,
     accent,
+    artwork: Object.freeze({
+      ...artwork,
+      type: artwork.type === 'auto' ? presetArtwork[preset] : artwork.type,
+    }),
     variant,
     showChrome,
     showHeader,

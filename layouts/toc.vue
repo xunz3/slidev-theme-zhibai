@@ -93,11 +93,14 @@ const goToSection = (slideNo?: number) => {
           <component
             :is="section.slideNo ? 'button' : 'div'"
             class="slide-layout-toc__button"
-            :class="{ 'slide-layout-toc__button--static': !section.slideNo }"
+            :class="{
+              'slide-layout-toc__button--static': !section.slideNo,
+              'slide-layout-toc__button--unnumbered': !showNumbers,
+            }"
             :type="section.slideNo ? 'button' : undefined"
             @click="section.slideNo && goToSection(section.slideNo)"
           >
-            <span v-if="showNumbers" class="slide-layout-toc__number">{{ section.index }}</span>
+            <span v-if="showNumbers" class="slide-layout-toc__number">{{ String(section.index).padStart(2, '0') }}</span>
             <span class="slide-layout-toc__text">
               <span class="slide-layout-toc__title">{{ section.title }}</span>
               <span v-if="section.subtitle" class="slide-layout-toc__subtitle">{{ section.subtitle }}</span>

@@ -56,7 +56,10 @@ const closingState = computed<'minimal' | 'rich'>(() => (
   >
     <div
       class="presentation-closing"
-      :class="`presentation-closing--${closingState}`"
+      :class="[
+        `presentation-closing--${closingState}`,
+        { 'presentation-closing--has-logo': logo },
+      ]"
       :data-closing-state="closingState"
     >
       <div class="presentation-closing__message">

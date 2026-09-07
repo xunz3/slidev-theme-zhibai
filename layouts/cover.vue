@@ -33,6 +33,10 @@ const title = computed(() => {
   const value = frontmatter.value.title ?? configs.value.title
   return typeof value === 'string' ? value.trim() : ''
 })
+// CJK glyphs occupy roughly twice the horizontal space of Latin characters.
+const titleLength = computed(() => [...title.value].reduce((length, char) => (
+  length + (/[\u2e80-\u9fff\uac00-\ud7af\uf900-\ufaff]/u.test(char) ? 2 : 1)
+), 0))
 const subtitle = computed(() => {
   const value = frontmatter.value.subtitle ?? configs.value.subtitle
   return typeof value === 'string' ? value.trim() : ''
@@ -56,12 +60,19 @@ const style = computed(() => {
 </script>
 
 <template>
-  <SlideFrame variant="cover" :chrome="chrome" :canvas-style="style">
+  <SlideFrame
+    variant="cover"
+    :chrome="chrome"
+    :canvas-style="style"
+    :artwork="image || background ? 'none' : undefined"
+  >
     <div
       class="slide-cover"
       :class="{
         'slide-cover--has-title': title,
         'slide-cover--has-visual': image,
+        'slide-cover--long-title': titleLength > 30,
+        'slide-cover--dense-title': titleLength > 72,
       }"
     >
       <div class="slide-cover__main">

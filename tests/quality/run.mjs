@@ -345,6 +345,8 @@ const executeQuality = async () => {
         { id: 'default-only', source: 'fixtures/default-preset.md' },
         { id: 'ucas', source: 'fixtures/ucas-preset.md' },
         { id: 'ict', source: 'fixtures/ict-preset.md' },
+        { id: 'artwork-gallery', source: 'fixtures/artwork-gallery.md' },
+        { id: 'elements-gallery', source: 'fixtures/elements-gallery.md' },
         { id: 'protocol', source: 'fixtures/obsidian-protocol.md' },
         { id: 'protocol-core', source: 'fixtures/protocol-core.md' },
         { id: 'protocol-profile', source: 'fixtures/protocol-profile.md' },
@@ -361,7 +363,7 @@ const executeQuality = async () => {
         })),
         ...expandedDefinitions,
       ]
-      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 13)
+      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 15)
       for (const build of buildDefinitions) {
         assert.ok(resolve(build.outDir) === build.outDir, `${build.id}: absolute output`)
       }
@@ -473,6 +475,27 @@ const executeQuality = async () => {
         'layout-stability',
         ['--test', 'tests/quality/layout-stability.spec.mjs'],
         600_000,
+      ),
+    )
+    await runPhase(
+      'motion',
+      () => runCommandPhase(
+        'motion',
+        ['--test', 'tests/quality/motion.spec.mjs'],
+      ),
+    )
+    await runPhase(
+      'artwork',
+      () => runCommandPhase(
+        'artwork',
+        ['--test', 'tests/quality/artwork.spec.mjs'],
+      ),
+    )
+    await runPhase(
+      'elements',
+      () => runCommandPhase(
+        'elements',
+        ['--test', 'tests/quality/elements.spec.mjs'],
       ),
     )
   }

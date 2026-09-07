@@ -79,6 +79,7 @@ test('option definitions are the immutable canonical public contract', () => {
     'footerAuthors',
     'pageNumber',
     'accent',
+    'artwork',
   ])
   assert.deepEqual(config.PRESENTATION_DEFAULTS, {
     preset: 'default',
@@ -88,6 +89,7 @@ test('option definitions are the immutable canonical public contract', () => {
     footerAuthors: true,
     pageNumber: true,
     accent: null,
+    artwork: { type: 'auto', src: null, darkSrc: null, fit: 'contain', position: 'center', opacity: null },
   })
 
   assert.equal(config.PRESENTATION_OPTIONS.preset.deckKey, 'preset')
@@ -233,6 +235,7 @@ test('deck normalization accepts every supported value and textual boolean', () 
     footerAuthors: false,
     pageNumber: false,
     accent: '#345f8f',
+    artwork: config.PRESENTATION_DEFAULTS.artwork,
   })
 })
 
@@ -268,6 +271,7 @@ test('slide resolution uses first-valid prop, slide, deck, and default precedenc
     pageNumber: true,
     accent: '#123456',
     variant: 'default',
+    artwork: { ...config.PRESENTATION_DEFAULTS.artwork, type: 'lattice' },
     showChrome: true,
     showHeader: false,
   })
@@ -316,6 +320,7 @@ test('invalid higher-priority input inherits the next valid candidate', () => {
     pageNumber: false,
     accent: null,
     variant: 'intro',
+    artwork: { ...config.PRESENTATION_DEFAULTS.artwork, type: 'orbits' },
     showChrome: false,
     showHeader: false,
   })
@@ -383,6 +388,46 @@ test('accent validation and local → deck → preset fallback are first-valid',
     variant: 'default',
     supportsColor,
   }).accent, 'rebeccapurple')
+})
+
+test('artwork is independent of the preset, with local overrides and auto reset', () => {
+  const deck = { preset: 'ucas', artwork: 'flow' }
+  const resolve = slide => config.resolvePresentation({ deck, slide, variant: 'cover' })
+  assert.equal(resolve({}).artwork.type, 'flow')
+  assert.equal(resolve({ presentationPreset: 'ict' }).artwork.type, 'flow')
+  assert.equal(resolve({ presentationPreset: 'ict', presentationArtwork: 'auto' }).artwork.type, 'lattice')
+  assert.equal(resolve({ presentationArtwork: 'dots' }).artwork.type, 'dots')
+  assert.equal(resolve({ presentationArtwork: false }).artwork.type, 'none')
+  for (const invalid of ['unknown', 'custom', {}, { type: 'custom', src: '' }, null, []]) {
+    assert.equal(resolve({ presentationArtwork: invalid }).artwork.type, 'flow')
+  }
+  assert.equal(config.resolvePresentation({ deck, slide: { presentationArtwork: 'dots' }, artwork: 'none' }).artwork.type, 'none')
+  assert.equal(config.resolvePresentation({ slide: { presentationPreset: 'default' } }).artwork.type, 'folds')
+})
+
+test('custom artwork retains sources and normalizes fit, position, and opacity', () => {
+  const custom = config.normalizeArtwork({
+    src: ' /artwork/light.svg ', darkSrc: '/artwork/dark.svg',
+    fit: 'cover', position: 'right top', opacity: '0.45',
+  })
+  assert.deepEqual(custom, {
+    type: 'custom', src: '/artwork/light.svg', darkSrc: '/artwork/dark.svg',
+    fit: 'cover', position: 'right top', opacity: 0.45,
+  })
+  assert.ok(Object.isFrozen(custom))
+  const deck = { artwork: custom }
+  assert.deepEqual(config.resolvePresentation({ deck }).artwork, custom)
+  // An explicit local object replaces the deck artwork rather than leaking its source.
+  const local = config.resolvePresentation({ deck, slide: { presentationArtwork: { type: 'field', opacity: 0 } } }).artwork
+  assert.equal(local.type, 'field')
+  assert.equal(local.src, null)
+  assert.equal(local.darkSrc, null)
+  assert.equal(local.opacity, 0)
+  assert.equal(config.normalizeArtwork({ type: 'dots', opacity: 8 }).opacity, 1)
+  assert.equal(config.normalizeArtwork({ type: 'dots', opacity: -1 }).opacity, 0)
+  assert.equal(config.normalizeArtwork({ type: 'dots', opacity: 'invalid' }).opacity, null)
+  assert.equal(config.normalizeArtwork({ type: 'custom', src: '/own.svg', fit: 'fill', position: 'left left' }).position, 'center')
+  assert.equal(config.normalizeArtwork({ type: 'custom', src: '/own.svg', fit: 'fill' }).fit, 'contain')
 })
 
 test('app setup remains deck-only while the shared frame owns local accent scope', async () => {

@@ -30,6 +30,11 @@
   width: min(100%, 58rem);
 }
 
+.presentation-closing--rich:not(.presentation-closing--has-logo) {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "message" "contact" "authors";
+}
+
 .presentation-closing__message {
   grid-area: message;
   min-width: 0;
@@ -56,6 +61,7 @@
 .presentation-closing__authors .presentation-authors {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.48rem;
+  margin: 0;
 }
 
 .presentation-closing__authors .presentation-author {
@@ -153,6 +159,12 @@
 .presentation-image-text__figure .obsidian-slidev-media__viewport {
   width: 100%;
   height: min(48vh, 17.5rem);
+  border: 0;
+  background: transparent;
+}
+
+.presentation-image-text__figure .obsidian-slidev-media__viewport > .obsidian-slidev-media__image {
+  background: transparent;
 }
 
 .presentation-image-text--narrative-only {
@@ -194,7 +206,7 @@
 .presentation-code-layout__content > pre,
 .presentation-code-layout__content > :only-child > .slidev-code-wrapper,
 .presentation-code-layout__content > :only-child > pre {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   width: 100%;
   max-width: none;
   min-width: 0;
@@ -212,14 +224,6 @@
   min-height: 100%;
   margin: 0;
   overflow: visible;
-}
-
-.presentation-code-layout .slidev-code-wrapper > pre.shiki {
-  background: var(--shiki-light-bg, var(--presentation-code-bg));
-}
-
-html.dark .presentation-code-layout .slidev-code-wrapper > pre.shiki {
-  background: var(--shiki-dark-bg, var(--presentation-code-bg));
 }
 
 .presentation-code-layout .slidev-code-wrapper > pre.shiki

@@ -70,6 +70,11 @@
   height: 0.42rem;
 }
 
+.slide-frame__content:focus-visible {
+  outline: 2px solid var(--presentation-accent);
+  outline-offset: -2px;
+}
+
 .slide-frame__content::-webkit-scrollbar-track {
   background: var(--presentation-scrollbar-track);
 }
@@ -396,6 +401,14 @@
   color: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
 }
 
+.slide-layout-toc__button:is(button):is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--presentation-accent) 5%, transparent);
+}
+
+.slide-layout-toc__button:is(button):is(:hover, :focus-visible) .slide-layout-toc__title {
+  color: var(--presentation-accent);
+}
+
 .slide-layout-toc__button:is(button) {
   cursor: pointer;
 }
@@ -638,17 +651,30 @@
   font-variant-numeric: tabular-nums;
 }
 
-.slide-layout-references li {
-  margin-bottom: 0.52em;
+.slide-layout-references li:not(.presentation-author) {
+  margin-bottom: 0.74em;
   padding-left: 0;
+  line-height: 1.5;
 }
 
 .slide-layout-two-cols {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--presentation-two-cols-gap, 2.5rem);
   align-items: start;
-  height: 100%;
+  height: auto;
+}
+
+/* One gutter, with its divider centered between equally usable columns. */
+.slide-layout-two-cols::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1px solid var(--presentation-border);
+  content: "";
+  pointer-events: none;
 }
 
 .slide-layout-two-cols--reverse .slide-layout-two-cols__pane:first-child {
@@ -713,6 +739,10 @@
 
   .slide-layout-two-cols--reverse .slide-layout-two-cols__pane:first-child {
     order: initial;
+  }
+
+  .slide-layout-two-cols::before {
+    display: none;
   }
 
   .slide-layout-figure--stage {

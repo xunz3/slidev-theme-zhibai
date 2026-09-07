@@ -640,13 +640,11 @@ test('US3 content stays unbranded and section identity stays protected across ac
     const lockupSelector = preset === 'ucas'
       ? '.slide-frame__ucas-wordmark'
       : '.slide-frame__ict-lockup--section'
-    const watermarkSelector = preset === 'ucas'
-      ? '.slide-frame__ucas-watermark'
-      : '.slide-frame__ict-watermark'
+    const artworkSelector = '.preset-artwork'
     const lockup = page.locator(`.slidev-page-${slide} ${lockupSelector}`)
-    const watermark = page.locator(`.slidev-page-${slide} ${watermarkSelector}`)
+    const artwork = page.locator(`.slidev-page-${slide} ${artworkSelector}`)
     await lockup.waitFor({ state: 'visible' })
-    await watermark.waitFor({ state: 'visible' })
+    await artwork.waitFor({ state: 'visible' })
 
     return {
       lockupPixels: await lockup.screenshot({ type: 'png' }),
@@ -654,11 +652,13 @@ test('US3 content stays unbranded and section identity stays protected across ac
         (frame, selectors) => {
           const inspect = (selector) => {
             const image = frame.querySelector(selector)
-            if (!(image instanceof HTMLImageElement)) {
+            if (!(image instanceof HTMLElement)) {
               throw new Error(`Protected identity target is missing: ${selector}`)
             }
             const style = getComputedStyle(image)
             return {
+              color: style.color,
+              background: style.backgroundColor,
               filter: style.filter,
               height: style.height,
               opacity: style.opacity,
@@ -673,12 +673,12 @@ test('US3 content stays unbranded and section identity stays protected across ac
               'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
             ).length,
             lockup: inspect(selectors.lockupSelector),
-            watermark: inspect(selectors.watermarkSelector),
+            artwork: inspect(selectors.artworkSelector),
           }
         },
-        { lockupSelector, watermarkSelector },
+        { lockupSelector, artworkSelector },
       ),
-      watermarkPixels: await watermark.screenshot({ type: 'png' }),
+      artworkPixels: await artwork.screenshot({ type: 'png' }),
     }
   }
 
@@ -730,29 +730,29 @@ test('US3 content stays unbranded and section identity stays protected across ac
             })
             assert.equal(sectionLocal.state.frameAccent, localAccent)
             assert.equal(sectionFallback.state.frameAccent, deckAccent)
-            assert.equal(sectionLocal.state.identityImageCount, 2)
-            assert.equal(sectionFallback.state.identityImageCount, 2)
+            assert.equal(sectionLocal.state.identityImageCount, 1)
+            assert.equal(sectionFallback.state.identityImageCount, 1)
             assert.deepEqual(
               sectionLocal.state.lockup,
               sectionFallback.state.lockup,
             )
             assert.deepEqual(
-              sectionLocal.state.watermark,
-              sectionFallback.state.watermark,
+              sectionLocal.state.artwork,
+              sectionFallback.state.artwork,
             )
             assert.equal(
-              sectionLocal.state.watermark.opacity,
-              preset === 'ucas' ? '0.07' : '0.05',
+              sectionLocal.state.artwork.opacity,
+              preset === 'ucas' ? '0.6' : '1',
             )
             assert.ok(
               sectionLocal.lockupPixels.equals(sectionFallback.lockupPixels),
               `${preset}/${mode}: protected section lockup pixels changed`,
             )
             assert.ok(
-              sectionLocal.watermarkPixels.equals(
-                sectionFallback.watermarkPixels,
+              sectionLocal.artworkPixels.equals(
+                sectionFallback.artworkPixels,
               ),
-              `${preset}/${mode}: protected section watermark pixels changed`,
+              `${preset}/${mode}: protected section artwork pixels changed`,
             )
           } finally {
             await page.close()

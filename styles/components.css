@@ -23,22 +23,23 @@
   grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
   align-items: stretch;
   width: 100%;
-  margin: 0;
+  margin: var(--presentation-authors-margin);
   padding: 0;
-  gap: 0.7rem;
+  gap: var(--presentation-authors-gap);
   list-style: none;
 }
 
 .slidev-layout .presentation-author {
   min-width: 0;
   margin: 0;
-  padding: 0.72rem 0.8rem;
-  border: 1px solid color-mix(
+  padding: 0.72rem 0 0.6rem;
+  border: 0;
+  border-top: 1px solid color-mix(
     in srgb,
-    var(--presentation-accent) 22%,
+    var(--presentation-accent) 14%,
     var(--presentation-author-card-border)
   );
-  border-radius: var(--presentation-author-card-radius);
+  border-radius: 0;
   background: var(--presentation-author-card-bg);
   box-shadow: var(--presentation-author-card-shadow);
   overflow-wrap: anywhere;
@@ -52,7 +53,7 @@
 .presentation-author__name {
   display: block;
   color: var(--presentation-text);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.25;
 }
 
@@ -241,26 +242,26 @@
   color: var(--presentation-text);
   font-family: var(--presentation-font-label);
   font-size: 0.78em;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.25;
   vertical-align: middle;
 }
 
 .presentation-tag {
-  border: 1px dashed color-mix(
+  border: 1px solid color-mix(
     in srgb,
-    var(--presentation-accent) 64%,
-    var(--presentation-border-strong)
+    var(--presentation-accent) 16%,
+    var(--presentation-border)
   );
   border-radius: 0.28rem;
   background: transparent;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.01em;
 }
 
 .presentation-badge {
   --presentation-badge-family: var(--presentation-family-neutral);
   --presentation-badge-family-surface: var(--presentation-family-neutral-surface);
-  border: 1px solid var(--presentation-badge-family);
+  border: 1px solid color-mix(in srgb, var(--presentation-badge-family) 24%, transparent);
   border-radius: 999px;
   color: var(--presentation-badge-family);
   background: var(--presentation-badge-family-surface);

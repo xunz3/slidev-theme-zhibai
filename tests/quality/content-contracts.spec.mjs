@@ -1518,7 +1518,8 @@ test('US4 42-case Badge, task-weight, and flat-highlight contract', {
               const markerStyle = marker ? getComputedStyle(marker) : null
               const roleProbe = document.createElement('span')
               roleProbe.style.color = `var(--presentation-family-${tone})`
-              badge.append(roleProbe)
+              // Resolve currentColor-based accents from the same parent as the label.
+              badge.after(roleProbe)
               const roleColor = getComputedStyle(roleProbe).color
               roleProbe.remove()
               const shape = markerStyle
@@ -1537,7 +1538,7 @@ test('US4 42-case Badge, task-weight, and flat-highlight contract', {
                           : 'circle'
                 : null
               return {
-                borderColor: style.borderTopColor,
+                textColor: style.color,
                 markerAriaHidden: marker?.getAttribute('aria-hidden') ?? null,
                 markerCount: badge.querySelectorAll(
                   '.presentation-badge__marker',
@@ -1555,7 +1556,8 @@ test('US4 42-case Badge, task-weight, and flat-highlight contract', {
           assert.ok(states.slice(0, 7).every(state => (
             state.markerCount === 0
             && state.markerRequested === 'false'
-            && state.borderColor === state.roleColor
+            // The label carries the semantic color; its outline is intentionally quieter.
+            && state.textColor === state.roleColor
             && state.tabIndex === null
           )))
           assert.deepEqual(
@@ -2692,7 +2694,8 @@ test('US4 code, sequence, status, and keyboard contracts preserve native meaning
         ['Ctrl', 'P'],
       )
       assert.equal(await onSlide(41, 'button').count(), 0)
-      assert.equal(await onSlide(41, '[tabindex]').count(), 0)
+      // Keycaps are descriptive text. The surrounding slide may be keyboard-scrollable.
+      assert.equal(await onSlide(41, '[data-quality-case="us4-keyboard"] [tabindex]').count(), 0)
     } finally {
       await page.close()
     }
@@ -3050,9 +3053,9 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
             minimal.childClasses,
             ['presentation-closing__message'],
           )
-          assert.equal(minimal.messageTextAlign, 'center')
+          assert.equal(minimal.messageTextAlign, 'left')
           assert.ok(Math.abs(
-            minimal.message.centerX - minimal.content.centerX,
+            minimal.message.left - minimal.content.left,
           ) <= 1, JSON.stringify(minimal))
           assert.ok(Math.abs(
             minimal.message.centerY - minimal.content.centerY,
@@ -3201,11 +3204,6 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
                 '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup',
               ),
             ].find(visible)
-            const watermark = [
-              ...frame.querySelectorAll(
-                '.slide-frame__ucas-watermark, .slide-frame__ict-watermark',
-              ),
-            ].find(visible)
             const probes = [
               ...frame.querySelectorAll(
                 '[data-quality-case="visual-brand-collision"] :is(h1, figure, figcaption, a, button)',
@@ -3224,13 +3222,6 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
                 rect: toRect(element),
                 tagName: element.tagName.toLowerCase(),
               })),
-              watermark: watermark
-                ? {
-                    filter: getComputedStyle(watermark).filter,
-                    opacity: getComputedStyle(watermark).opacity,
-                    rect: toRect(watermark),
-                  }
-                : null,
             }
           })
           assert.equal(safeZone.isSection, true)
@@ -3238,19 +3229,15 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
           if (preset === 'default') {
             assert.equal(safeZone.identityImageCount, 0)
             assert.equal(safeZone.mark, null)
-            assert.equal(safeZone.watermark, null)
           } else {
             assert.equal(
               safeZone.backgroundColor,
-              preset === 'ucas' ? 'rgb(15, 58, 107)' : 'rgb(10, 34, 51)',
+              mode === 'dark'
+                ? (preset === 'ucas' ? 'rgb(18, 61, 105)' : 'rgb(16, 31, 43)')
+                : (preset === 'ucas' ? 'rgb(237, 242, 246)' : 'rgb(245, 249, 250)'),
             )
-            assert.equal(safeZone.identityImageCount, 2)
+            assert.equal(safeZone.identityImageCount, 1)
             assert.ok(safeZone.mark, JSON.stringify(safeZone))
-            assert.ok(safeZone.watermark, JSON.stringify(safeZone))
-            assert.equal(
-              safeZone.watermark.opacity,
-              preset === 'ucas' ? '0.07' : '0.05',
-            )
             assert.ok(
               safeZone.probes.every(
                 probe => !intersects(safeZone.mark, probe.rect),
@@ -3291,33 +3278,17 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
             const lockups = [...frame.querySelectorAll(
               '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup--section',
             )]
-            const watermarks = [...frame.querySelectorAll(
-              '.slide-frame__ucas-watermark, .slide-frame__ict-watermark',
-            )].filter(visible)
             return {
               header: visible(header) ? toRect(header) : null,
               identityImageCount: frame.querySelectorAll(
                 'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
               ).length,
               lockupCount: lockups.length,
-              watermarkRects: watermarks.map(toRect),
             }
           })
           assert.ok(headerSafeBrand.header, JSON.stringify(headerSafeBrand))
           assert.equal(headerSafeBrand.lockupCount, 0)
-          if (preset === 'default') {
-            assert.equal(headerSafeBrand.identityImageCount, 0)
-            assert.deepEqual(headerSafeBrand.watermarkRects, [])
-          } else {
-            assert.equal(headerSafeBrand.identityImageCount, 1)
-            assert.equal(headerSafeBrand.watermarkRects.length, 1)
-            assert.ok(
-              headerSafeBrand.watermarkRects.every(
-                rect => !intersects(headerSafeBrand.header, rect),
-              ),
-              JSON.stringify(headerSafeBrand),
-            )
-          }
+          assert.equal(headerSafeBrand.identityImageCount, 0)
 
           await waitForSlide(
             page,
