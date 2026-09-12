@@ -96,28 +96,6 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   --presentation-brand-toc: #82c8e3;
 }
 
-.slidev-layout[data-presentation-preset="ict"][data-presentation-density="compact"],
-.slidev-layout[data-presentation-preset="ict"] .slide-frame[data-presentation-density="compact"] {
-  --presentation-slide-padding: 1.48rem 2.1rem 0.88rem;
-  --presentation-content-gap: 0.58rem;
-  --presentation-body-size: 0.96rem;
-  --presentation-list-spacing: 0.09em;
-  --presentation-statement-size: 2.76rem;
-  --presentation-quote-size: 1.4rem;
-  --presentation-reference-size: 0.78rem;
-}
-
-.slidev-layout[data-presentation-preset="ict"][data-presentation-density="relaxed"],
-.slidev-layout[data-presentation-preset="ict"] .slide-frame[data-presentation-density="relaxed"] {
-  --presentation-slide-padding: 2.95rem 3.35rem 1.5rem;
-  --presentation-content-gap: 1.04rem;
-  --presentation-body-size: 1.09rem;
-  --presentation-list-spacing: 0.27em;
-  --presentation-statement-size: 3.52rem;
-  --presentation-quote-size: 1.82rem;
-  --presentation-reference-size: 0.93rem;
-}
-
 .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   isolation: isolate;
 }
@@ -139,7 +117,6 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   left: 3.55rem;
   width: 5.7rem;
 }
-
 
 .slidev-layout[data-presentation-preset="ict"] .slide-frame .slide-frame__header {
   padding: 0 0 0.46rem;
@@ -398,7 +375,6 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   letter-spacing: -0.032em;
 }
 
-
 /* ICT — cool paper, blue-green geometry, and small sage details in light mode. */
 .slidev-layout:is(.cover, .section, .closing)[data-presentation-preset="ict"] .slide-frame {
   --presentation-slide-padding: 4rem 4rem 2.7rem;
@@ -430,7 +406,6 @@ html.dark .slidev-layout:is(.cover, .section, .statement, .closing)[data-present
 }
 
 .slidev-layout[data-presentation-preset="ict"] .preset-artwork {
-  width: 38%;
   color: #7da5b3;
   background: transparent;
 }
@@ -454,40 +429,18 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame .slide-fra
   filter: brightness(0) invert(1);
 }
 
-
 .slidev-layout.cover[data-presentation-preset="ict"] .slide-frame .slide-cover {
-  width: 100%;
   margin-top: 3rem;
-  justify-items: start;
-  gap: 2rem;
-  text-align: left;
-}
-
-.slidev-layout.cover[data-presentation-preset="ict"] .slide-frame .slide-cover:not(.slide-cover--has-visual) {
-  width: 64%;
-  justify-self: start;
-}
-
-.slidev-layout.cover[data-presentation-preset="ict"] .slide-frame .slide-cover__main {
-  justify-items: start;
-  gap: 0.6rem;
 }
 
 .slidev-layout.cover[data-presentation-preset="ict"] .slide-frame h1 {
-  max-width: 14ch;
-  margin-bottom: 0.15em;
   color: var(--presentation-brand-title);
-  font-size: calc(4.2rem * var(--presentation-heading-scale));
   font-weight: 500;
   letter-spacing: -0.055em;
-  line-height: 1.03;
 }
 
 .slidev-layout.cover[data-presentation-preset="ict"] .slide-frame .slide-cover__subtitle {
   color: var(--presentation-brand-muted);
-  font-size: 1.08rem;
-  letter-spacing: 0.065em;
-  line-height: 1.5;
 }
 
 .slidev-layout.cover[data-presentation-preset="ict"] .slide-cover__subtitle::before {
@@ -495,17 +448,7 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame .slide-fra
 }
 
 .slidev-layout.cover[data-presentation-preset="ict"] .slide-frame .slide-cover__body {
-  justify-items: start;
-  margin-top: 0.8rem;
   color: var(--presentation-text-muted);
-  font-size: 0.84rem;
-  line-height: 1.55;
-}
-
-.slidev-layout.cover[data-presentation-preset="ict"] .slide-frame .slide-cover__authors {
-  justify-content: flex-start;
-  gap: 0.8rem 1.8rem;
-  font-size: 0.88rem;
 }
 
 .slidev-layout.cover[data-presentation-preset="ict"] .slide-frame .slide-cover__author-name {

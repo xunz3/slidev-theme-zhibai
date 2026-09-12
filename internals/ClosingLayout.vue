@@ -49,6 +49,7 @@ const closingState = computed<'minimal' | 'rich'>(() => (
 
 <template>
   <SlideFrame
+    :artwork="closingState === 'rich' ? 'none' : undefined"
     :chrome="props.chrome"
     :subtitle="props.subtitle"
     :title="props.title"

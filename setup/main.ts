@@ -6,6 +6,7 @@ import { resolveDeckPresentation } from './presentation-config'
 import { assessProtocolCompatibility } from './protocol-compatibility'
 import { installProtocolCompatibilityBridge } from './protocol-runtime'
 import { observePresentationRendering } from './render-normalization'
+import { installImageViewer } from './image-viewer'
 
 const getRawPresentationConfig = (): unknown => {
   return (configs as any)?.themeConfig?.presentation
@@ -32,9 +33,17 @@ export const applyPresentationConfig = (rawPresentation = getRawPresentationConf
   }
 }
 
-export default defineAppSetup(({ app }) => {
+export default defineAppSetup(({ app, router }) => {
   applyPresentationConfig()
   const stopRenderNormalization = observePresentationRendering()
+  const imageViewer = installImageViewer({
+    enabled: () => router.currentRoute.value.name !== 'export'
+      && !Object.hasOwn(router.currentRoute.value.query, 'print'),
+  })
+  const stopImageViewerNavigation = router.afterEach(() => {
+    imageViewer.close()
+    imageViewer.refresh()
+  })
   const stopProtocolCompatibility = installProtocolCompatibilityBridge({
     assess: assessProtocolCompatibility,
     rawProfile: getRawProfileSelection(),
@@ -47,6 +56,8 @@ export default defineAppSetup(({ app }) => {
     () => applyPresentationConfig(),
   )
   app.onUnmount(() => {
+    stopImageViewerNavigation()
+    imageViewer.stop()
     stopPresentationWatch()
     stopProtocolCompatibility()
     stopRenderNormalization()

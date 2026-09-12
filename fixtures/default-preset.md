@@ -11,7 +11,6 @@ authors:
 themeConfig:
   presentation:
     preset: default
-    density: normal
     chrome: auto
     header: false
     footerAuthors: true
@@ -130,7 +129,6 @@ Connect decisions, artifacts, workflow, and ownership
 
 ---
 title: Decision boundary
-presentationDensity: compact
 accent: "#8a4b2a"
 ---
 
@@ -155,7 +153,6 @@ Press <Kbd>Esc</Kbd> to leave overview, or use
 ---
 layout: two-cols
 title: Evidence record and ownership
-presentationDensity: compact
 ---
 
 # Accessible evidence record
@@ -178,7 +175,6 @@ The component reads the deck-level author collection and keeps valid email addre
 ---
 layout: two-cols
 title: Reproducibility workflow
-presentationDensity: compact
 ---
 
 # Steps
@@ -207,7 +203,6 @@ presentationDensity: compact
 
 ---
 title: Replication status
-presentationDensity: compact
 ---
 
 # Presentation-only review checklist
@@ -222,7 +217,6 @@ The <mark>reviewed operating boundary</mark> is emphasized as prose, while
 ---
 layout: code
 title: Auditable calibration code
-presentationDensity: compact
 ---
 
 # Calibration contract

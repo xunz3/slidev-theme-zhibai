@@ -4,7 +4,6 @@ title: Ordinary Figure variants
 themeConfig:
   presentation:
     preset: default
-    density: normal
     chrome: auto
 ---
 
@@ -23,7 +22,6 @@ Supporting prose remains above the default bounded figure.
 
 ---
 title: Stage in ordinary flow
-presentationDensity: compact
 ---
 
 <span hidden data-quality-case="figure-component-stage"></span>
@@ -41,7 +39,6 @@ The image receives emphasis without taking over the entire slide composition.
 
 ---
 title: Minimal in ordinary flow
-presentationDensity: compact
 ---
 
 <span hidden data-quality-case="figure-component-minimal"></span>
@@ -59,7 +56,6 @@ The surrounding paragraph and caption retain one reading axis.
 
 ---
 title: Editorial in ordinary flow
-presentationDensity: compact
 ---
 
 <span hidden data-quality-case="figure-component-editorial"></span>
@@ -78,7 +74,6 @@ The annotation stays attached to the evidence without displacing the heading.
 
 ---
 title: Generated minimal modifier
-presentationDensity: compact
 ---
 
 <span hidden data-quality-case="figure-generated-minimal"></span>

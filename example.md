@@ -17,7 +17,6 @@ authors:
     email: theme@example.com
 themeConfig:
   presentation:
-    density: normal
     chrome: auto
     header: false
     footerAuthors: true

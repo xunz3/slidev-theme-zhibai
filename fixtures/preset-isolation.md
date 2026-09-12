@@ -10,7 +10,6 @@ authors:
 themeConfig:
   presentation:
     preset: __GLOBAL_PRESET__
-    density: compact
     chrome: auto
     header: true
     footerAuthors: false
@@ -27,7 +26,6 @@ The following slides contain the canonical same-run equivalence cases.
 layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
-presentationDensity: compact
 presentationHeader: true
 footerAuthors: false
 pageNumber: false
@@ -39,7 +37,7 @@ pageNumber: false
 
 Identical content must depend only on the **resolved preset**, including `inline code`.
 
-- First-valid configuration keeps valid deck values.
+- Valid deck values are inherited.
 - 标题、列表与表格在局部覆盖时保持一致。
 
 | Surface | Expected behavior |
@@ -69,7 +67,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: default
-presentationDensity: compact
 presentationHeader: true
 footerAuthors: false
 pageNumber: false
@@ -81,7 +78,7 @@ pageNumber: false
 
 Identical content must depend only on the **resolved preset**, including `inline code`.
 
-- First-valid configuration keeps valid deck values.
+- Valid deck values are inherited.
 - 标题、列表与表格在局部覆盖时保持一致。
 
 | Surface | Expected behavior |
@@ -111,7 +108,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: ucas
-presentationDensity: compact
 presentationHeader: true
 footerAuthors: false
 pageNumber: false
@@ -123,7 +119,7 @@ pageNumber: false
 
 Identical content must depend only on the **resolved preset**, including `inline code`.
 
-- First-valid configuration keeps valid deck values.
+- Valid deck values are inherited.
 - 标题、列表与表格在局部覆盖时保持一致。
 
 | Surface | Expected behavior |
@@ -153,7 +149,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: ict
-presentationDensity: compact
 presentationHeader: true
 footerAuthors: false
 pageNumber: false
@@ -165,7 +160,7 @@ pageNumber: false
 
 Identical content must depend only on the **resolved preset**, including `inline code`.
 
-- First-valid configuration keeps valid deck values.
+- Valid deck values are inherited.
 - 标题、列表与表格在局部覆盖时保持一致。
 
 | Surface | Expected behavior |
@@ -193,7 +188,6 @@ const resolved = localPreset ?? deckPreset
 ---
 title: Invalid local values inherit
 presentationPreset: unsupported
-presentationDensity: spacious
 presentationChrome: sometimes
 presentationHeader: maybe
 footerAuthors: no

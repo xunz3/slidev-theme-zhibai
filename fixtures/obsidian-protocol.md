@@ -20,7 +20,6 @@ authors:
     email: contract@example.com
 themeConfig:
   presentation:
-    density: normal
     chrome: auto
     header: false
     footerAuthors: true
@@ -181,7 +180,6 @@ export function isObsidianSlidevDeck(frontmatter: Record<string, unknown>) {
 ---
 title: Generated Tasks And Highlights
 subtitle: Presentation-only reading cues
-presentationDensity: compact
 ---
 
 # Generated Tasks And Highlights
@@ -224,8 +222,7 @@ The default preset is selected automatically; UCAS and ICT remain opt-in visual 
 
 ---
 title: Default Preset
-presentationDensity: compact
-footer: Default compact preset
+footer: Default preset
 ---
 
 # Default Preset
@@ -381,7 +378,6 @@ If this deck builds and previews, the current plugin/theme protocol is still coh
 ---
 title: Generated Semantic Families
 subtitle: Canonical class fallback and authored casing
-presentationDensity: compact
 ---
 
 <div data-quality-case="protocol-callout-families" class="presentation-callout-gallery">
@@ -420,7 +416,6 @@ presentationDensity: compact
 ---
 title: Generated Image States
 subtitle: Ready, delayed, decorative, and failed
-presentationDensity: compact
 ---
 
 <div data-quality-case="protocol-generated-image-states" class="presentation-figure-gallery">
@@ -447,7 +442,6 @@ presentationDensity: compact
 ---
 title: Public and Generated Image Equivalence
 subtitle: Default contained presentation
-presentationDensity: compact
 ---
 
 <div data-quality-case="protocol-image-equivalence" class="presentation-media-fit-gallery">
@@ -468,7 +462,6 @@ presentationDensity: compact
 ---
 title: Generated Link Forms
 subtitle: Inline, wrapped, and block
-presentationDensity: compact
 ---
 
 <div data-quality-case="protocol-link-forms" class="presentation-link-probe">
@@ -491,7 +484,6 @@ stays bounded beside punctuation.
 ---
 title: Generated Task and Highlight Scope
 subtitle: Nested states and code resets
-presentationDensity: compact
 ---
 
 <div data-quality-case="protocol-task-highlight-scope">

@@ -2,6 +2,7 @@
 import type {
   FrameVariant,
   PresentationArtwork,
+  PresentationCoverAlign,
   PresentationPreset,
 } from '../setup/presentation-config'
 import ictWordmark from '../assets/ICT/emblem-name-bilingual-stacked.svg'
@@ -11,6 +12,7 @@ import PresetArtwork from './PresetArtwork.vue'
 
 withDefaults(defineProps<{
   artwork: PresentationArtwork
+  coverAlign: PresentationCoverAlign
   preset: PresentationPreset
   showHeader?: boolean
   variant: FrameVariant
@@ -37,7 +39,7 @@ withDefaults(defineProps<{
         />
       </aside>
       <img
-        v-if="artwork.type === 'orbits'"
+        v-if="artwork.type === 'orbits' && artwork.placement === 'right' && coverAlign === 'left'"
         class="slide-frame__ucas-watermark"
         :style="artwork.opacity === null ? undefined : { opacity: artwork.opacity }"
         :src="ucasEmblem"
@@ -75,7 +77,7 @@ withDefaults(defineProps<{
         />
       </aside>
       <img
-        v-if="artwork.type === 'orbits'"
+        v-if="artwork.type === 'orbits' && artwork.placement === 'right'"
         class="slide-frame__ucas-watermark slide-frame__ucas-watermark--closing"
         :style="artwork.opacity === null ? undefined : { opacity: artwork.opacity }"
         :src="ucasEmblem"

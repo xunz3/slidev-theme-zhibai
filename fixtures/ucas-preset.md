@@ -11,7 +11,6 @@ authors:
 themeConfig:
   presentation:
     preset: ucas
-    density: normal
     chrome: auto
     header: false
     footerAuthors: true
@@ -90,7 +89,6 @@ From an equivariant hypothesis to an inspectable result
 
 ---
 title: Review signals
-presentationDensity: compact
 accent: "#a24b2a"
 ---
 
@@ -115,7 +113,6 @@ Press <Kbd>Esc</Kbd> to leave overview, or use
 ---
 layout: two-cols
 title: Experiment record and ownership
-presentationDensity: compact
 ---
 
 # Accessible experiment record
@@ -138,7 +135,6 @@ Deck metadata is reused without duplicating author markup on the slide.
 ---
 layout: two-cols
 title: From hypothesis to release
-presentationDensity: compact
 ---
 
 # Steps
@@ -167,7 +163,6 @@ presentationDensity: compact
 
 ---
 title: Replication status
-presentationDensity: compact
 ---
 
 # Presentation-only review checklist
@@ -182,7 +177,6 @@ The <mark>pre-registered geometric prior</mark> is highlighted as prose, while
 ---
 layout: code
 title: Auditable equivariance code
-presentationDensity: compact
 ---
 
 # Equivariance check

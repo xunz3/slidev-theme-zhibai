@@ -346,6 +346,7 @@ const executeQuality = async () => {
         { id: 'ucas', source: 'fixtures/ucas-preset.md' },
         { id: 'ict', source: 'fixtures/ict-preset.md' },
         { id: 'artwork-gallery', source: 'fixtures/artwork-gallery.md' },
+        { id: 'cover-alignment', source: 'fixtures/cover-alignment.md' },
         { id: 'elements-gallery', source: 'fixtures/elements-gallery.md' },
         { id: 'protocol', source: 'fixtures/obsidian-protocol.md' },
         { id: 'protocol-core', source: 'fixtures/protocol-core.md' },
@@ -363,7 +364,7 @@ const executeQuality = async () => {
         })),
         ...expandedDefinitions,
       ]
-      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 15)
+      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 16)
       for (const build of buildDefinitions) {
         assert.ok(resolve(build.outDir) === build.outDir, `${build.id}: absolute output`)
       }
@@ -452,7 +453,7 @@ const executeQuality = async () => {
       'content-contracts',
       () => runCommandPhase(
         'content-contracts',
-        ['--test', 'tests/quality/content-contracts.spec.mjs'],
+        ['--test', 'tests/quality/content-contracts.spec.mjs', 'tests/quality/image-viewer.spec.mjs'],
       ),
     )
     await runPhase(
@@ -489,6 +490,13 @@ const executeQuality = async () => {
       () => runCommandPhase(
         'artwork',
         ['--test', 'tests/quality/artwork.spec.mjs'],
+      ),
+    )
+    await runPhase(
+      'cover-alignment',
+      () => runCommandPhase(
+        'cover-alignment',
+        ['--test', 'tests/quality/cover-alignment.spec.mjs'],
       ),
     )
     await runPhase(

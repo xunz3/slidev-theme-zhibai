@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="160" viewBox="0 0 1000 160" fill="none">
+  <title>A custom signal study across a shared horizon</title>
+  <path d="M60 16V144H951" stroke="#7494a5" stroke-width="1" opacity=".35"/>
+  <path d="M60 104C162 104 180 104 231 86S303 32 381 68S471 134.4 546 82S630 28.4 720 66S819 86.8 936 40" stroke="#527e94" stroke-width="2"/>
+  <path d="M60 104C231 92 318 58 426 72.4S630 94 936 40" stroke="#9ab3c0" stroke-width="1" stroke-dasharray="3 7"/>
+  <circle cx="381" cy="68" r="5" fill="#829f8c"/>
+  <circle cx="720" cy="66" r="4" fill="#829f8c"/>
+  <path d="M60 72H951M60 40H951M60 104H951" stroke="#7494a5" opacity=".12"/>
+</svg>

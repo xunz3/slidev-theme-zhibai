@@ -281,7 +281,7 @@ test('expanded-content production harness', async (t) => {
             slide: 2,
           })
           assert.equal(state.preset, preset)
-          assert.equal(state.density, 'normal')
+          assert.equal(state.density, undefined)
           assert.match(state.markerText, /Stable navigation control/)
           assert.deepEqual(runtimeErrors, [])
         } finally {

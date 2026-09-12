@@ -368,8 +368,8 @@ test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 },
             try {
               assert.equal(actual.state.canvasPreset, localPreset, 'outer canvas preset')
               assert.equal(actual.state.framePreset, localPreset, 'inner frame preset')
-              assert.equal(actual.state.canvasDensity, 'compact', 'outer canvas density')
-              assert.equal(actual.state.frameDensity, 'compact', 'inner frame density')
+              assert.equal(actual.state.canvasDensity, null, 'outer canvas density')
+              assert.equal(actual.state.frameDensity, null, 'inner frame density')
               assert.deepEqual(actual.state.fingerprint, expected.state.fingerprint)
               assertBrandBoundary(localPreset, actual.state.brandClasses)
               assert.deepEqual(actual.state.brandClasses, expected.state.brandClasses)

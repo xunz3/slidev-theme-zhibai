@@ -102,8 +102,9 @@ const onContentKeydown = (event: KeyboardEvent) => {
     class="slidev-layout"
     :class="[resolved.variant, { 'slidev-layout--custom-background': canvasStyle?.background }]"
     :data-presentation-preset="resolved.preset"
-    :data-presentation-density="resolved.density"
     :data-presentation-artwork="resolved.artwork.type"
+    :data-presentation-artwork-placement="resolved.artwork.placement"
+    :data-presentation-cover-align="resolved.variant === 'cover' ? resolved.coverAlign : undefined"
     :style="outerStyle"
   >
     <div
@@ -116,13 +117,15 @@ const onContentKeydown = (event: KeyboardEvent) => {
         },
       ]"
       :data-presentation-preset="resolved.preset"
-      :data-presentation-density="resolved.density"
       :data-presentation-artwork="resolved.artwork.type"
+      :data-presentation-artwork-placement="resolved.artwork.placement"
+      :data-presentation-cover-align="resolved.variant === 'cover' ? resolved.coverAlign : undefined"
       :data-presentation-motion="motionActive ? 'active' : undefined"
       :style="frameStyle"
     >
       <PresetBranding
         :artwork="resolved.artwork"
+        :cover-align="resolved.coverAlign"
         :preset="resolved.preset"
         :show-header="resolved.showHeader"
         :variant="resolved.variant"

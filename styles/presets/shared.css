@@ -175,6 +175,8 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
 .slidev-layout[data-presentation-preset] .slide-frame {
   isolation: isolate;
   color: var(--presentation-text);
+  --presentation-artwork-width: 32%;
+  --presentation-artwork-band-height: 7rem;
 }
 
 .slidev-layout:is(.cover, .section, .closing)[data-presentation-preset] .slide-frame {
@@ -208,7 +210,7 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
   position: absolute;
   z-index: 0;
   inset: 0 0 0 auto;
-  width: 34%;
+  width: var(--presentation-artwork-width);
   overflow: hidden;
   pointer-events: none;
   user-select: none;
@@ -240,6 +242,71 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
 
 .slidev-layout[data-presentation-preset] .preset-artwork__point {
   fill: var(--presentation-artwork-point, currentColor);
+}
+
+/* Cover hierarchy is shared; each preset retains its typeface and ink colors. */
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover {
+  width: 100%;
+  gap: 1.5rem;
+  justify-items: start;
+  text-align: left;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover:not(.slide-cover--has-visual) {
+  width: 64%;
+  justify-self: start;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__main {
+  gap: 0.6rem;
+  justify-items: start;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame h1 {
+  max-width: 14ch;
+  margin-bottom: 0;
+  font-size: calc(4rem * var(--presentation-heading-scale));
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__subtitle {
+  margin-top: 0.25rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__body {
+  justify-items: start;
+  margin-top: 0.25rem;
+  gap: 0.6rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__body > p {
+  margin-block: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__authors {
+  justify-content: flex-start;
+  gap: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__author-details {
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+/* Original motifs blend into the page instead of ending at a hard panel edge. */
+.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="right"]:not([data-artwork="custom"]) {
+  mask-image: linear-gradient(to right, transparent, black 30%);
+}
+
+.slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-watermark {
+  opacity: 0.5;
 }
 
 /* The motif is independent of the preset palette and institutional identity. */
@@ -378,6 +445,181 @@ html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--dark 
   display: none;
 }
 
+/* Placement owns the composition; preset colors remain local to the artwork. */
+.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="bottom"] {
+  inset: auto 0 0;
+  width: 100%;
+  height: var(--presentation-artwork-band-height);
+  background: transparent;
+  mask-image: linear-gradient(to bottom, transparent, black 55%);
+  --presentation-artwork-motion-x: 0px;
+  --presentation-artwork-motion-y: 10px;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="background"] {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  --presentation-artwork-opacity: 0.65;
+  --presentation-artwork-motion-x: 0px;
+  mask-image: radial-gradient(ellipse 48% 65% at center, transparent 45%, black 100%);
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="bottom"] .preset-artwork__field {
+  background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, currentColor 20%, transparent), transparent 72%);
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="background"] .preset-artwork__field {
+  background:
+    radial-gradient(ellipse at 0% 60%, color-mix(in srgb, currentColor 24%, transparent), transparent 55%),
+    radial-gradient(ellipse at 100% 60%, color-mix(in srgb, currentColor 24%, transparent), transparent 55%);
+}
+
+/* A bottom image is a complete, centered vignette, with no directional fade. */
+.slidev-layout[data-presentation-preset] .preset-artwork[data-artwork="custom"][data-artwork-placement="bottom"] {
+  padding: 0.4rem 3rem 0.8rem;
+  mask-image: none;
+}
+
+.slidev-layout.cover[data-presentation-preset]:is(
+  [data-presentation-artwork-placement="bottom"], [data-presentation-artwork-placement="background"]
+) .slide-frame .slide-cover:not(.slide-cover--has-visual) {
+  width: 100%;
+}
+
+.slidev-layout:is(.section, .closing)[data-presentation-preset]:is(
+  [data-presentation-artwork-placement="bottom"], [data-presentation-artwork-placement="background"]
+) .slide-frame :is(.slide-layout-section, .presentation-closing--minimal) {
+  padding-right: 0;
+}
+
+.slidev-layout:is(.cover, .section, .closing)[data-presentation-preset][data-presentation-artwork-placement="bottom"]:not([data-presentation-artwork="none"]) .slide-frame {
+  padding-bottom: calc(var(--presentation-artwork-band-height) + 0.5rem);
+}
+
+.slidev-layout:is(.section, .closing)[data-presentation-preset][data-presentation-artwork-placement="bottom"] .slide-frame h1 {
+  max-width: 24ch;
+  font-size: calc(3.5rem * var(--presentation-heading-scale));
+  text-wrap: balance;
+}
+
+/* Explicit side artwork on a centered cover becomes an edge detail. The title
+   keeps its full reading width, and no secondary seal competes with its axis. */
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .preset-artwork[data-artwork-placement="right"] {
+  background: transparent;
+  mask-image:
+    linear-gradient(to right, transparent calc(100% - 2rem), black),
+    linear-gradient(to bottom, black, transparent 16%, transparent 84%, black);
+}
+
+/* Centering is a cover option shared by every palette, including branding. */
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame__content {
+  scrollbar-gutter: auto;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover {
+  width: 100%;
+  margin-top: 0;
+  justify-self: center;
+  justify-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame :is(.slide-cover__main, .slide-cover__body) {
+  justify-items: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__main::before {
+  margin-bottom: 0.6rem;
+  transform-origin: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover h1 {
+  max-width: min(100%, 24ch);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--long-title h1 {
+  max-width: 100%;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover {
+  gap: 1rem;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover h1 {
+  font-size: calc(3.1rem * var(--presentation-heading-scale));
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover--long-title h1 {
+  font-size: calc(2.15rem * var(--presentation-heading-scale));
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover__main {
+  gap: 0.35rem;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header :is(.slide-cover__subtitle, .slide-cover__body) {
+  margin-top: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover__main::before {
+  content: none;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame :is(.slide-cover__subtitle, .slide-cover__body) {
+  max-width: 42rem;
+  text-wrap: pretty;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__body > p {
+  margin-block: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__authors {
+  justify-content: center;
+  width: 100%;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__author {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame :is(.slide-frame__ucas-rail, .slide-frame__ict-lockup) {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+.slidev-layout.cover:is([data-presentation-preset="ucas"], [data-presentation-preset="ict"])[data-presentation-cover-align="center"] .slide-frame:not(.slide-frame--header) {
+  padding-top: 7rem;
+}
+
+/* Content images follow the centered reading order and retain their alt text. */
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--has-visual {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "cover-main" "cover-visual" "cover-authors";
+  gap: 0.85rem;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--has-visual h1 {
+  font-size: calc(2.55rem * var(--presentation-heading-scale));
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--has-visual .slide-cover__main::before {
+  content: none;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__visual {
+  width: min(100%, 30rem);
+  --presentation-media-viewport-height: 9rem;
+}
+
 /* Motion belongs to the live frame, never to individual v-click fragments.
    No forwards fill: authored transforms/opacity regain control after entry. */
 @keyframes presentation-enter {
@@ -402,7 +644,10 @@ html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--dark 
 }
 
 @keyframes presentation-artwork {
-  from { opacity: 0; transform: translate3d(18px, 0, 0); }
+  from {
+    opacity: 0;
+    transform: translate3d(var(--presentation-artwork-motion-x, 18px), var(--presentation-artwork-motion-y, 0px), 0);
+  }
   to { opacity: var(--presentation-artwork-opacity, 1); transform: translate3d(0, 0, 0); }
 }
 
@@ -437,7 +682,7 @@ html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--dark 
     animation: presentation-artwork 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
   }
 
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(path, circle).preset-artwork__line,
+  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(path, circle, ellipse).preset-artwork__line,
   .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .preset-artwork__line > path {
     stroke-dasharray: 1;
     animation: presentation-draw 1100ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--artwork-line-index, 0) * 22ms) backwards;
@@ -454,8 +699,12 @@ html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--dark 
 }
 
 @media (max-width: 760px) {
-  .slidev-layout[data-presentation-preset] .preset-artwork {
-    width: 29%;
+  .slidev-layout.cover[data-presentation-preset] .slide-frame h1 {
+    font-size: calc(3.15rem * var(--presentation-heading-scale));
+  }
+
+  .slidev-layout:is(.section, .closing)[data-presentation-preset][data-presentation-artwork-placement="bottom"] .slide-frame h1 {
+    font-size: calc(2.85rem * var(--presentation-heading-scale));
   }
 
   .slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--has-visual {

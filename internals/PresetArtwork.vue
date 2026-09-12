@@ -53,12 +53,114 @@ const dots = Array.from({ length: 180 }, (_, i) => {
     opacity: 0.15 + (1 - i / 180) * 0.6,
   }
 })
+
+// Wide artwork is composed around the page, rather than stretching the right-hand
+// illustration. Bottom bands use their own shallow canvas to keep the motif visible.
+const wide = computed(() => ['background', 'bottom'].includes(props.artwork.placement))
+const landscape = computed(() => {
+  const bottom = props.artwork.placement === 'bottom'
+  const height = bottom ? 160 : 560
+  const baseline = bottom ? 100 : 450
+  const foldPaths = Array.from({ length: 13 }, (_, i) => {
+    const y = baseline + i * 7
+    return `M -40 ${y - 55} C 150 ${y - 130} 270 ${y + 70} 500 ${y + 6} S 850 ${y - 130} 1040 ${y - 55}`
+  })
+  const flowPaths = Array.from({ length: 13 }, (_, i) => {
+    const y = baseline + i * 5
+    return `M -50 ${y + 20} C 170 ${y - 160 + i * 4} 270 ${y + 105 - i * 4} 500 ${y - 8} S 840 ${y - 110 + i * 3} 1050 ${y + 20}`
+  })
+  // Carry the nested lattice into the two lower corners; the middle stays open.
+  const cubes = (bottom ? [150, 850] : [95, 905]).map(x => {
+    const radius = bottom ? 120 : 160
+    const y = bottom ? 150 : 450
+    const rise = radius * 0.575
+    const outlines = [1, 86 / 120, 51 / 120].map((scale, index) => {
+      const span = radius * scale
+      const step = span * 0.575
+      const outer = index === 0
+      return `M ${x} ${y - step * 2} L ${x + span} ${y - step} V ${y + step} L ${x} ${y + step * 2} L ${x - span} ${y + step} V ${y - step} Z M ${x - span} ${y - step} L ${x} ${y} L ${x + span} ${y - step}${outer ? ` M ${x} ${y} V ${y + step * 2}` : ''}`
+    })
+    return {
+      top: `M ${x} ${y - rise * 2} L ${x + radius} ${y - rise} L ${x} ${y} L ${x - radius} ${y - rise} Z`,
+      outlines,
+      guide: `M ${x} ${y - rise * 2} V ${y} L ${x - radius} ${y + rise} M ${x} ${y} L ${x + radius} ${y + rise}`,
+      x,
+      y,
+    }
+  })
+  const points = Array.from({ length: 90 }, (_, i) => {
+    const radius = Math.sqrt(i / 90)
+    const angle = i * 2.399963229728653
+    const x = (bottom ? 245 : 75) + Math.cos(angle) * radius * (bottom ? 285 : 220)
+    const y = (bottom ? 132 : 390) + Math.sin(angle) * radius * (bottom ? 115 : 230)
+    const point = {
+      y,
+      radius: 0.8 + (1 - i / 90),
+      opacity: 0.15 + (1 - i / 90) * 0.5,
+    }
+    return [{ ...point, x }, { ...point, x: 1000 - x }]
+  }).flat()
+  return { bottom, height, baseline, folds: foldPaths, flows: flowPaths, cubes, dots: points }
+})
 </script>
 
 <template>
-  <div class="preset-artwork" :data-artwork="artwork.type" :style="style" aria-hidden="true">
+  <div class="preset-artwork" :data-artwork="artwork.type" :data-artwork-placement="artwork.placement" :style="style" aria-hidden="true">
     <svg
-      v-if="artwork.type === 'folds'"
+      v-if="wide && artwork.type !== 'custom' && artwork.type !== 'none'"
+      class="preset-artwork__drawing preset-artwork__wide"
+      :class="`preset-artwork__${artwork.type}`"
+      :viewBox="`0 0 1000 ${landscape.height}`"
+      fill="none"
+      preserveAspectRatio="xMidYMax slice"
+    >
+      <g v-if="artwork.type === 'folds'">
+        <path :d="`${landscape.folds[6]} L 1040 ${landscape.height + 20} H -40 Z`" class="preset-artwork__wash" />
+        <path v-for="(path, i) in landscape.folds" :key="i" :d="path" pathLength="1" class="preset-artwork__line" :style="{ '--artwork-line-index': i }" />
+      </g>
+
+      <g v-else-if="artwork.type === 'orbits'">
+        <template v-if="landscape.bottom">
+          <ellipse v-for="i in 6" :key="i" cx="500" cy="220" :rx="170 + i * 64" :ry="65 + i * 23" pathLength="1" class="preset-artwork__line" :style="{ '--artwork-line-index': i * 2 }" />
+          <path d="M 35 130 H 965 M 500 128 V 152" class="preset-artwork__guide" />
+          <circle cx="500" cy="132" r="3" class="preset-artwork__point" />
+        </template>
+        <template v-else>
+          <g v-for="x in [0, 1000]" :key="x">
+            <circle v-for="(r, i) in [170, 220, 270, 320, 370]" :key="r" :cx="x" cy="370" :r="r" pathLength="1" class="preset-artwork__line" :style="{ '--artwork-line-index': i * 2 }" />
+          </g>
+          <path d="M 30 370 H 170 M 830 370 H 970" class="preset-artwork__guide" />
+          <circle v-for="x in [170, 830]" :key="x" :cx="x" cy="370" r="3" class="preset-artwork__point" />
+        </template>
+      </g>
+
+      <g v-else-if="artwork.type === 'lattice'">
+        <g v-for="(cube, i) in landscape.cubes" :key="i">
+          <path :d="cube.top" class="preset-artwork__wash" />
+          <path v-for="(outline, j) in cube.outlines" :key="j" :d="outline" pathLength="1" class="preset-artwork__line" :style="{ '--artwork-line-index': i * 3 + j }" />
+          <path :d="cube.guide" class="preset-artwork__guide" />
+          <rect :x="cube.x - 2.5" :y="cube.y - 2.5" width="5" height="5" class="preset-artwork__point" />
+        </g>
+      </g>
+
+      <g v-else-if="artwork.type === 'flow'">
+        <path v-for="(path, i) in landscape.flows" :key="i" :d="path" pathLength="1" class="preset-artwork__line" :style="{ '--artwork-line-index': i }" />
+        <path :d="`M -40 ${landscape.baseline - 60} Q 250 ${landscape.baseline + 110} 500 ${landscape.baseline + 40} T 1040 ${landscape.baseline - 60}`" class="preset-artwork__guide" />
+      </g>
+
+      <g v-else-if="artwork.type === 'field'">
+        <ellipse cx="500" :cy="landscape.height + 55" rx="410" :ry="landscape.bottom ? 120 : 245" pathLength="1" class="preset-artwork__line" />
+        <path :d="`M -30 ${landscape.baseline - 90} C 160 ${landscape.baseline + 45} 260 ${landscape.baseline - 65} 370 ${landscape.height + 15} M 1030 ${landscape.baseline - 90} C 840 ${landscape.baseline + 45} 740 ${landscape.baseline - 65} 630 ${landscape.height + 15}`" class="preset-artwork__guide" />
+        <circle v-for="x in [165, 835]" :key="x" :cx="x" :cy="landscape.baseline - 20" r="2.5" class="preset-artwork__point" />
+      </g>
+
+      <g v-else-if="artwork.type === 'dots'" fill="currentColor">
+        <circle v-for="(dot, i) in landscape.dots" :key="i" :cx="dot.x" :cy="dot.y" :r="dot.radius" :opacity="dot.opacity" />
+      </g>
+    </svg>
+
+    <svg
+      v-else-if="artwork.type === 'folds'"
       class="preset-artwork__drawing preset-artwork__fold"
       viewBox="0 0 400 560"
       fill="none"

@@ -4,20 +4,22 @@ export const PRESENTATION_PRESETS = Object.freeze([
   'ict',
 ] as const)
 
-export const PRESENTATION_DENSITIES = Object.freeze([
-  'compact',
-  'normal',
-  'relaxed',
-] as const)
-
 export const PRESENTATION_CHROME_VALUES = Object.freeze([
   'auto',
   'on',
   'off',
 ] as const)
 
+export const PRESENTATION_COVER_ALIGN_VALUES = Object.freeze([
+  'left', 'center',
+] as const)
+
 export const PRESENTATION_ARTWORK_TYPES = Object.freeze([
   'auto', 'none', 'folds', 'orbits', 'lattice', 'flow', 'field', 'dots', 'custom',
+] as const)
+
+export const PRESENTATION_ARTWORK_PLACEMENTS = Object.freeze([
+  'auto', 'right', 'background', 'bottom',
 ] as const)
 
 export const FRAME_VARIANTS = Object.freeze([
@@ -40,11 +42,13 @@ export const FRAME_VARIANTS = Object.freeze([
 type TupleValue<T extends readonly unknown[]> = T[number]
 
 export type PresentationPreset = TupleValue<typeof PRESENTATION_PRESETS>
-export type PresentationDensity = TupleValue<typeof PRESENTATION_DENSITIES>
 export type PresentationChrome = TupleValue<typeof PRESENTATION_CHROME_VALUES>
+export type PresentationCoverAlign = TupleValue<typeof PRESENTATION_COVER_ALIGN_VALUES>
 export type PresentationArtworkType = TupleValue<typeof PRESENTATION_ARTWORK_TYPES>
+export type PresentationArtworkPlacement = TupleValue<typeof PRESENTATION_ARTWORK_PLACEMENTS>
 export type PresentationArtwork = Readonly<{
   type: PresentationArtworkType
+  placement: PresentationArtworkPlacement
   src: string | null
   darkSrc: string | null
   fit: 'contain' | 'cover'
@@ -56,7 +60,7 @@ export type CssColorSupport = (value: string) => boolean
 
 export type DeckPresentationState = Readonly<{
   preset: PresentationPreset
-  density: PresentationDensity
+  coverAlign: PresentationCoverAlign
   chrome: PresentationChrome
   header: boolean
   footerAuthors: boolean
@@ -92,8 +96,8 @@ export const normalizePreset = (value: unknown): PresentationPreset | undefined 
   return normalizeEnum(value, PRESENTATION_PRESETS)
 }
 
-export const normalizeDensity = (value: unknown): PresentationDensity | undefined => {
-  return normalizeEnum(value, PRESENTATION_DENSITIES)
+export const normalizeCoverAlign = (value: unknown): PresentationCoverAlign | undefined => {
+  return normalizeEnum(value, PRESENTATION_COVER_ALIGN_VALUES)
 }
 
 export const normalizeBoolean = (value: unknown): boolean | undefined => {
@@ -151,6 +155,7 @@ export const normalizeFrameVariant = (value: unknown): FrameVariant | undefined 
 
 const defaultArtwork = Object.freeze({
   type: 'auto',
+  placement: 'auto',
   src: null,
   darkSrc: null,
   fit: 'contain',
@@ -189,6 +194,7 @@ export const normalizeArtwork = (value: unknown): PresentationArtwork | undefine
   const validPosition = /^(?:(?:left|center|right)(?:\s+(?:top|center|bottom))?|(?:top|center|bottom)(?:\s+(?:left|center|right))?|(?:100(?:\.0+)?|\d{1,2}(?:\.\d+)?)%(?:\s+(?:100(?:\.0+)?|\d{1,2}(?:\.\d+)?)%)?)$/.test(position)
   return Object.freeze({
     type,
+    placement: normalizeEnum(raw.placement, PRESENTATION_ARTWORK_PLACEMENTS) ?? 'auto',
     src: type === 'custom' ? src : null,
     darkSrc: type === 'custom' ? artworkSource(raw.darkSrc) : null,
     fit: normalizeEnum(raw.fit, ['contain', 'cover'] as const) ?? 'contain',
@@ -220,11 +226,11 @@ export const PRESENTATION_OPTIONS = Object.freeze({
     defaultValue: 'default',
     normalize: normalizePreset,
   }),
-  density: freezeDefinition<PresentationDensity>({
-    deckKey: 'density',
-    slideKeys: ['presentationDensity'],
-    defaultValue: 'normal',
-    normalize: normalizeDensity,
+  coverAlign: freezeDefinition<PresentationCoverAlign>({
+    deckKey: 'coverAlign',
+    slideKeys: ['presentationCoverAlign'],
+    defaultValue: 'left',
+    normalize: normalizeCoverAlign,
   }),
   chrome: freezeDefinition<PresentationChrome>({
     deckKey: 'chrome',
@@ -400,7 +406,7 @@ export const resolvePresentation = (
     accent,
     artwork,
     chrome,
-    density,
+    coverAlign,
     footerAuthors,
     header,
     pageNumber,
@@ -411,7 +417,7 @@ export const resolvePresentation = (
 
   return Object.freeze({
     preset,
-    density,
+    coverAlign,
     chrome,
     header,
     footerAuthors,
@@ -420,6 +426,9 @@ export const resolvePresentation = (
     artwork: Object.freeze({
       ...artwork,
       type: artwork.type === 'auto' ? presetArtwork[preset] : artwork.type,
+      placement: artwork.placement === 'auto'
+        ? (variant === 'cover' && coverAlign === 'center' ? 'bottom' : 'right')
+        : artwork.placement,
     }),
     variant,
     showChrome,

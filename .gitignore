@@ -9,6 +9,7 @@ fixtures/dist-*/
 build/
 coverage/
 .artifacts/quality/
+.artifacts/design-review-*/
 *.log
 .env*
 *.tmp

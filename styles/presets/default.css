@@ -90,32 +90,6 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
   --presentation-warning-text: #d9c9a6;
 }
 
-.slidev-layout[data-presentation-preset="default"][data-presentation-density="compact"],
-.slidev-layout[data-presentation-preset="default"] .slide-frame[data-presentation-density="compact"] {
-  --presentation-slide-padding: 1.15rem 1.45rem 0.85rem;
-  --presentation-content-gap: 0.58rem;
-  --presentation-body-size: 0.96rem;
-  --presentation-list-spacing: 0.1em;
-  --presentation-media-max-height: 75vh;
-  --presentation-statement-size: 2.62rem;
-  --presentation-quote-size: 1.42rem;
-  --presentation-quote-line-height: 1.44;
-  --presentation-reference-size: 0.78rem;
-}
-
-.slidev-layout[data-presentation-preset="default"][data-presentation-density="relaxed"],
-.slidev-layout[data-presentation-preset="default"] .slide-frame[data-presentation-density="relaxed"] {
-  --presentation-slide-padding: 3rem 3.35rem 1.5rem;
-  --presentation-content-gap: 0.95rem;
-  --presentation-body-size: 1.08rem;
-  --presentation-list-spacing: 0.24em;
-  --presentation-media-max-height: 68vh;
-  --presentation-statement-size: 3.25rem;
-  --presentation-quote-size: 1.8rem;
-  --presentation-quote-line-height: 1.52;
-  --presentation-reference-size: 0.92rem;
-}
-
 .slidev-layout[data-presentation-preset="default"] {
   background: var(--presentation-bg);
 }
@@ -367,47 +341,23 @@ html.dark .slidev-layout[data-presentation-preset="default"] .preset-artwork {
   --presentation-artwork-point: #dec9ee;
 }
 
-.slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover {
-  width: 100%;
-  justify-items: start;
-  gap: 2.25rem;
-  text-align: left;
-}
-
-.slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover:not(.slide-cover--has-visual) {
-  width: 65%;
-  justify-self: start;
-}
-
-.slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover__main {
-  justify-items: start;
-  gap: 0.7rem;
-}
-
 .slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover__main::before {
   width: 2.5rem;
   height: 2px;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
   background: var(--presentation-lilas);
   content: "";
 }
 
 .slidev-layout.cover[data-presentation-preset="default"] .slide-frame h1 {
-  max-width: 12ch;
-  margin-bottom: 0;
-  font-size: calc(4.6rem * var(--presentation-heading-scale));
   font-weight: 400;
-  letter-spacing: -0.055em;
-  line-height: 1.02;
-  text-wrap: balance;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 .slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover__subtitle {
-  margin-top: 0.5rem;
-  color: var(--presentation-text-muted);
-  font-size: 1.05rem;
-  letter-spacing: 0.045em;
-  line-height: 1.6;
+  color: var(--presentation-text);
+  font-weight: 500;
 }
 
 .slidev-layout.cover[data-presentation-preset="default"] .slide-cover__subtitle::before {
@@ -415,16 +365,26 @@ html.dark .slidev-layout[data-presentation-preset="default"] .preset-artwork {
 }
 
 .slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover__body {
-  justify-items: start;
-  margin-top: 0.6rem;
-  color: var(--presentation-text-muted);
-  font-size: 0.86rem;
+  color: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
 }
 
-.slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover__authors {
-  justify-content: flex-start;
-  gap: 0.8rem 1.8rem;
-  font-size: 0.88rem;
+/* Grid gaps own the spacing; Markdown paragraph margins must not add a second gap. */
+.slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover__body > p {
+  margin-block: 0;
+}
+
+/* Plain Markdown covers get the same lead hierarchy as frontmatter subtitles. */
+.slidev-layout.cover[data-presentation-preset="default"] .slide-cover__main:not(:has(.slide-cover__subtitle))
+  .slide-cover__body > p:first-of-type {
+  color: var(--presentation-text);
+  font-size: 1.12rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.slidev-layout.cover[data-presentation-preset="default"] .slide-frame .slide-cover__author {
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .slidev-layout.section[data-presentation-preset="default"] .slide-frame {

@@ -151,23 +151,6 @@
   margin-bottom: 0;
 }
 
-.slide-frame[data-presentation-density="compact"] .obsidian-slidev-callout {
-  margin-block: 0.7rem;
-  padding: 0.66rem 0.78rem 0.7rem;
-}
-
-.slide-frame[data-presentation-density="compact"]
-  .obsidian-slidev-callout__title {
-  margin-bottom: 0.3rem;
-  font-size: 0.9em;
-}
-
-.slide-frame[data-presentation-density="compact"]
-  .obsidian-slidev-callout__content {
-  font-size: 0.94em;
-  line-height: 1.42;
-}
-
 .obsidian-slidev-media {
   display: flex;
   flex-direction: column;

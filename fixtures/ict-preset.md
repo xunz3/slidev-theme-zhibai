@@ -14,7 +14,6 @@ authors:
 themeConfig:
   presentation:
     preset: ict
-    density: normal
     chrome: auto
     header: false
     footerAuthors: true
@@ -129,7 +128,6 @@ Connect benchmark results to an inspectable execution path
 
 ---
 title: Benchmark status
-presentationDensity: compact
 accent: "#b45b2a"
 ---
 
@@ -154,7 +152,6 @@ Press <Kbd>Esc</Kbd> to leave overview, or use
 ---
 layout: two-cols
 title: Benchmark record and ownership
-presentationDensity: compact
 ---
 
 # Accessible benchmark record
@@ -177,7 +174,6 @@ The standalone component exposes the same ordered metadata used by the cover and
 ---
 layout: two-cols
 title: From profiling to release
-presentationDensity: compact
 ---
 
 # Steps
@@ -206,7 +202,6 @@ presentationDensity: compact
 
 ---
 title: Replication status
-presentationDensity: compact
 ---
 
 # Presentation-only review checklist
@@ -221,7 +216,6 @@ The <mark>co-designed execution path</mark> is highlighted as prose, while
 ---
 layout: code
 title: Auditable benchmark code
-presentationDensity: compact
 ---
 
 # Reproducible benchmark

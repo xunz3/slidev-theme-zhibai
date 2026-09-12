@@ -24,6 +24,21 @@ Preview the twelve-slide [design comparison](./fixtures/preset-design.md), inclu
 pnpm exec slidev fixtures/preset-design.md
 ```
 
+For bilingual research covers, use `title` for the main heading, `subtitle` for
+its translation or short explanation, and a body paragraph for the research
+question. The `default` preset groups these into a clearer reading order, with
+larger supporting text and readable author details. Without a `subtitle`, the
+first direct Markdown paragraph takes the lead style. Long author details wrap
+within the cover's text column.
+
+Preview the [research cover examples](./fixtures/research-cover.md), including
+frontmatter and Markdown subtitles, a long Chinese title, and covers with or
+without an image:
+
+```bash
+pnpm exec slidev fixtures/research-cover.md
+```
+
 ## Quick start
 
 In your Slidev project:
@@ -64,29 +79,51 @@ Set deck-wide options under `themeConfig.presentation`:
 | Option | Values | Default |
 | --- | --- | --- |
 | `preset` | `default`, `ucas`, `ict` | `default` |
+| `coverAlign` | `left`, `center` — cover composition, independent of preset | `left` |
 | `accent` | CSS color | Preset color |
 | `artwork` | `auto`, `none`, `folds`, `orbits`, `lattice`, `flow`, `field`, `dots`, or a custom image object | `auto` |
-| `density` | `compact`, `normal`, `relaxed` | `normal` |
 | `chrome` | `auto`, `on`, `off` — footer visibility | `auto` |
 | `header` | Show slide title/subtitle in the header | `false` |
 | `footerAuthors` | Show author names in the footer | `true` |
 | `pageNumber` | Show page numbers | `true` |
 
+The former `density` and `presentationDensity` options have been removed. Each preset retains its former `normal` typography and spacing; remove these keys from existing decks. Pages previously using `compact` or `relaxed` now use that preset’s standard layout and may need content reflow.
+
 Keep `title`, `subtitle`, `authors`, and `footer` at the frontmatter root. Authors can be names or objects with `name`, `institution`, and `email`. The center footer uses `footer`, falling back to the deck title.
 
-Override an individual slide with `presentationPreset`, `presentationArtwork`, `presentationDensity`, `presentationChrome`, `presentationHeader`, `accent`, `footerAuthors`, or `pageNumber`:
+Override an individual slide with `presentationPreset`, `presentationCoverAlign`, `presentationArtwork`, `presentationChrome`, `presentationHeader`, `accent`, `footerAuthors`, or `pageNumber`:
 
 ```yaml
 layout: default
 presentationPreset: ucas
-presentationDensity: compact
 accent: "#345f8f"
 footer: Results
 ```
 
+### Choose the cover alignment
+
+Every preset supports both cover alignments. `left` keeps a common reading edge for long titles, bilingual explanations, research questions, and a result figure on the right. `center` centers the title, subtitle, authors, and institutional signature for a formal opening. It only changes `layout: cover`; other layouts retain their own composition. Covers share a title/subtitle/body/author scale and spacing rhythm while preserving each preset's typefaces and palette.
+
+```yaml
+themeConfig:
+  presentation:
+    preset: ucas
+    coverAlign: center
+```
+
+Override a single cover with `presentationCoverAlign: left` or `presentationCoverAlign: center`. Omitted or invalid values inherit the deck setting. Existing decks remain left-aligned by default.
+
+With automatic artwork placement, left-aligned covers use the right-hand composition; centered covers use a balanced horizontal study along the bottom. An authored cover `image` sits beside the text in left mode, and between the title and authors in center mode. Prefer short titles and concise supporting text for centered covers with images.
+
+Preview the [cover alignment examples](./fixtures/cover-alignment.md), including all three presets, long bilingual titles, custom artwork, and content images:
+
+```bash
+pnpm exec slidev fixtures/cover-alignment.md
+```
+
 ### Choose the artwork independently
 
-The preset controls typography, colors, and institutional identity. The artwork selects the decorative right-hand composition on covers, sections, and closing slides. Every built-in motif works with every preset and follows its light/dark palette.
+The preset controls typography, colors, and institutional identity. The artwork selects the decoration on covers, sections, and closing slides. Every built-in motif works with every preset and follows its light/dark palette. Alignment and artwork placement are separate choices.
 
 ```yaml
 themeConfig:
@@ -99,7 +136,7 @@ themeConfig:
 | --- | --- |
 | `auto` | Original preset motif: Default → `folds`, UCAS → `orbits`, ICT → `lattice` |
 | `folds` | A continuous study of folded lines |
-| `orbits` | Concentric rings; UCAS also displays its seal on covers and closing slides |
+| `orbits` | Concentric rings; UCAS adds a subdued secondary seal on left-aligned covers and minimal closing slides with right-hand artwork |
 | `lattice` | Nested geometric volumes |
 | `flow` | Fine flowing lines and a few connecting points |
 | `field` | A soft color field and a circular contour |
@@ -114,7 +151,43 @@ presentationPreset: ucas
 presentationArtwork: dots
 ```
 
-`presentationArtwork: auto` returns that slide to its preset's original motif, even when the deck selects another artwork. Omitted or invalid values inherit the deck setting. An explicit object replaces the whole deck artwork configuration. The institution's main signature stays visible when artwork is changed or disabled; the extra UCAS seal appears only with `orbits`.
+`presentationArtwork: auto` returns that slide to its preset's original motif, even when the deck selects another artwork. Omitted or invalid values inherit the deck setting. An explicit object replaces the whole deck artwork configuration. The institution's main signature stays visible when artwork is changed or disabled; centered covers omit the secondary UCAS seal to keep a single visual axis.
+
+Use an object to choose placement for either a built-in motif or a custom image:
+
+```yaml
+layout: cover
+presentationCoverAlign: center
+presentationArtwork:
+  type: flow
+  placement: background
+  opacity: 0.35
+```
+
+| `placement` | Behavior |
+| --- | --- |
+| `auto` (default) | `bottom` on centered covers; `right` elsewhere |
+| `right` | A decorative column along the right edge |
+| `bottom` | A full-width horizontal study, or a centered custom image, below the cover text |
+| `background` | Full-slide artwork softened toward the central reading area |
+
+Built-in bottom and background motifs use horizontal compositions. `bottom` keeps custom images intact with `fit: contain`; `background` fades the image through the central reading area, so use it for decorative textures. Set `none` for an undecorated cover. `placement` controls the artwork region; `position` controls a custom image's alignment inside that region.
+
+On a centered cover, explicit `right` artwork stays on the right but is masked toward the outer edges, keeping the central reading area clear. Use `auto` or `bottom` for a horizontal composition, or `background` for a soft surrounding field. Bottom artwork reserves space on covers, section dividers, and minimal closing slides. Closing slides with contact details, authors, or a custom logo use that space for content and omit artwork.
+
+### Match the motif to the content
+
+Keep one motif through the deck, and let its placement adapt to the layout. The choices below are starting points; every motif still works with every preset.
+
+| Content | Alignment and artwork |
+| --- | --- |
+| Long title or bilingual research question | `left` with `folds` or `flow` on the right |
+| Defense opening or institutional report | `center` with bottom `orbits`, or background `field` |
+| Systems, methods, and structure | `lattice`: nested forms at the side or lower corners |
+| Collaboration or an open-ended conclusion | `dots` or `flow`, using the same motif as the opening |
+| A result figure that the audience should read | Use `image` and `imageAlt`; the content figure takes the artwork's place |
+
+For custom bottom artwork, choose a wide source with little empty space inside the image—around 6:1 suits the shallow band. A portrait illustration works better on the right; `contain` will correctly shrink it to fit a bottom band. Background sources should be decorative enough to tolerate the center being faded out. See the wide light/dark SVG pair in the [cover examples](./fixtures/cover-alignment.md).
 
 ### Use your own SVG or image
 
@@ -126,6 +199,7 @@ presentationArtwork:
   type: custom
   src: /artwork/my-research.svg
   darkSrc: /artwork/my-research-dark.svg
+  placement: auto
   fit: contain
   position: center
   opacity: 0.8
@@ -175,11 +249,13 @@ Also available: `Authors`, `Steps`, `Timeline`, `Tag`, `Badge`, and `Kbd`. Put a
 <Kbd :keys="['Ctrl', 'Enter']" />
 ```
 
-Content pages use quiet table rules, unboxed author details, and a consistent title rhythm. Code uses a larger reading size and a lightly tinted surface: short examples fit their content, while long examples scroll inside the code area. `density: compact` keeps dense material practical; `relaxed` adds space and increases text size. Figure captions retain readable text rather than technical label styling.
+Content pages use quiet table rules, unboxed author details, and a consistent title rhythm. Code uses a larger reading size and a lightly tinted surface: short examples fit their content, while long examples scroll inside the code area. Each preset owns a single typography and spacing system. Choose a different preset for a different visual density. Figure captions retain readable text rather than technical label styling.
 
 The `toc` layout accepts `showNumbers: false` for an unnumbered outline. Numbered entries use two-digit labels, and linked entries support pointer and keyboard navigation. In `two-cols`, `gap` sets the space between two equally sized columns; `reverse: true` swaps their visual order on wide screens. Narrow screens retain source order.
 
 For image/text layouts, set `image`, `imageAlt`, and optionally `caption`, `backgroundSize: contain` or `cover`, and `mediaRatio` (30–70). The `figure` layout supports `figureVariant: centered`, `stage`, `minimal`, or `editorial`; use `variant` on a standalone `Figure`.
+
+Click a content image to view it fullscreen, fitted to the window without cropping. This works with Markdown images, `Figure`, image layouts, and Obsidian-generated images. Focus an image and press Enter or Space to open it; press Esc, click the backdrop, or use the close button to return. Captions appear below the enlarged image. Decorative images, linked images, and print/export views are excluded. Add `data-image-zoom="false"` to an image, `Figure`, or its container to disable the viewer locally.
 
 See [example.md](./example.md) and the preset decks: [default](./fixtures/default-preset.md), [UCAS](./fixtures/ucas-preset.md), [ICT](./fixtures/ict-preset.md).
 

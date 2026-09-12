@@ -27,7 +27,6 @@ author:
 themeConfig:
   presentation:
     preset: default # __EXPANDED_PRESET__
-    density: normal
     chrome: auto
     header: false
     footerAuthors: true
@@ -60,7 +59,6 @@ before any feature-specific media or component content.
 <!-- EXPANDED-US1-START -->
 ---
 title: Informational callouts
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callouts-info" class="presentation-callout-gallery">
@@ -75,7 +73,6 @@ presentationDensity: compact
 
 ---
 title: Positive callouts
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callouts-positive" class="presentation-callout-gallery">
@@ -88,7 +85,6 @@ presentationDensity: compact
 
 ---
 title: Caution callouts
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callouts-caution" class="presentation-callout-gallery">
@@ -101,7 +97,6 @@ presentationDensity: compact
 
 ---
 title: Danger callouts
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callouts-danger" class="presentation-callout-gallery">
@@ -114,7 +109,6 @@ presentationDensity: compact
 
 ---
 title: Question callouts
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callouts-question" class="presentation-callout-gallery">
@@ -127,7 +121,6 @@ presentationDensity: compact
 
 ---
 title: Quotation callouts
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callouts-quotation" class="presentation-callout-gallery">
@@ -139,7 +132,6 @@ presentationDensity: compact
 
 ---
 title: Callout normalization and rich content
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callout-fallbacks">
@@ -163,7 +155,6 @@ Formatted body with **strong meaning**, `inline code`, a [link](https://example.
 
 ---
 title: Generated callout equivalence
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-callout-equivalence" class="presentation-callout-gallery">
@@ -187,7 +178,6 @@ presentationDensity: compact
 
 ---
 title: Figure alternatives and failure states
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-figures-alternatives" class="presentation-figure-gallery">
@@ -217,7 +207,6 @@ presentationDensity: compact
 
 ---
 title: Figure geometry
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-figures-geometry" class="presentation-figure-gallery">
@@ -241,7 +230,6 @@ presentationDensity: compact
 
 ---
 title: Root author normalization
-presentationDensity: compact
 ---
 
 <div data-quality-case="us1-authors-mixed">
@@ -284,7 +272,6 @@ title: Minimal closing comparison
 ---
 layout: end
 title: Closing with metadata
-presentationDensity: compact
 contact: research@example.org
 showAuthors: true
 logo: /theme/public/obsidian-card.svg
@@ -431,7 +418,6 @@ image: /theme/public/obsidian-card.svg
 imageAlt: Diagram showing a bilingual research workflow
 caption: Figure 3. Collection, normalization, validation, publication · 采集、规范化、验证与发布。
 backgroundSize: contain
-presentationDensity: compact
 ---
 
 <div data-quality-case="us2-image-bilingual">
@@ -447,12 +433,11 @@ The same logical order supports a longer bilingual explanation. 数据采集以�
 <!-- EXPANDED-US3-START -->
 ---
 title: Valid local accent
-presentationDensity: compact
 presentationHeader: true
 accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 ---
 
-<div data-quality-case="us3-accent-local-a" class="presentation-accent-probe">
+<div data-quality-case="us3-accent-local-a" class="presentation-accent-probe presentation-accent-probe--overview">
 
 # Local accent A
 
@@ -478,11 +463,10 @@ accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 
 ---
 title: Unaccented fallback
-presentationDensity: compact
 presentationHeader: true
 ---
 
-<div data-quality-case="us3-accent-unaccented" class="presentation-accent-probe">
+<div data-quality-case="us3-accent-unaccented" class="presentation-accent-probe presentation-accent-probe--overview">
 
 # Deck fallback
 
@@ -508,7 +492,6 @@ presentationHeader: true
 
 ---
 title: Empty local accent
-presentationDensity: compact
 presentationHeader: true
 accent: ""
 ---
@@ -525,7 +508,6 @@ accent: ""
 
 ---
 title: Invalid local accent
-presentationDensity: compact
 presentationHeader: true
 accent: definitely-not-a-css-color
 ---
@@ -542,7 +524,6 @@ accent: definitely-not-a-css-color
 
 ---
 title: Valid local accent B
-presentationDensity: compact
 presentationHeader: true
 accent: "color-mix(in srgb, currentColor 68%, #047857)"
 ---
@@ -567,7 +548,6 @@ accent: "color-mix(in srgb, currentColor 68%, #047857)"
 
 ---
 title: Local accent equal to deck
-presentationDensity: compact
 presentationHeader: true
 accent: "color-mix(in srgb, currentColor 72%, #5b4fc4)"
 ---
@@ -700,7 +680,6 @@ title: Steps with one item
 
 ---
 title: Steps with many items
-presentationDensity: compact
 ---
 
 <div data-quality-case="us4-steps-many">
@@ -752,7 +731,6 @@ title: Timeline with one undated event
 
 ---
 title: Timeline with dated and undated events
-presentationDensity: compact
 ---
 
 <div data-quality-case="us4-timeline-many">
@@ -772,7 +750,6 @@ presentationDensity: compact
 
 ---
 title: Category and status labels
-presentationDensity: compact
 ---
 
 <div data-quality-case="us4-status-labels">
@@ -792,7 +769,6 @@ The category outline and status fill/icon remain distinct without relying on hue
 
 ---
 title: Keyboard input
-presentationDensity: compact
 ---
 
 <div data-quality-case="us4-keyboard">
@@ -817,7 +793,6 @@ Use <Kbd :keys="['⌘', '', ' K ', '语言']" /> for a filtered symbolic bilingu
 <!-- EXPANDED-US5-START -->
 ---
 title: Native task-list cues
-presentationDensity: compact
 ---
 
 <div data-quality-case="us5-tasks-native">
@@ -836,7 +811,6 @@ presentationDensity: compact
 
 ---
 title: Generated task compatibility
-presentationDensity: compact
 ---
 
 <div data-quality-case="us5-tasks-generated">
@@ -864,7 +838,6 @@ presentationDensity: compact
 
 ---
 title: Native and generated highlights
-presentationDensity: compact
 ---
 
 <div data-quality-case="us5-highlights">
@@ -891,7 +864,6 @@ The cue remains distinct beside [a link](https://example.com/evidence), *emphasi
 <!-- FIX-THEME-VISUALS-MATRIX-START -->
 ---
 title: Same-source Figure fit matrix
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-media-figure-fits" class="presentation-media-fit-gallery">
@@ -1017,7 +989,6 @@ title: Transparent tall closing logo
 showAuthors: true
 logo: /author-fixtures/transparent-logo-tall.svg
 logoAlt: Transparent tall research logo
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-closing-logo-tall">
@@ -1030,7 +1001,6 @@ Rich closing content remains balanced and preserves message, authors, then logo 
 
 ---
 title: Authored callout casing and compact risk
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-callout-authored-compact" class="presentation-callout-gallery presentation-callout-gallery--dense">
@@ -1047,7 +1017,6 @@ presentationDensity: compact
 
 ---
 title: Link forms and author fallbacks
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-links-authors" class="presentation-link-probe">
@@ -1071,7 +1040,6 @@ An [inline link](https://example.com/inline) stays glyph-bounded beside punctuat
 
 ---
 title: Seven Badge tones and marker states
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-badge-matrix" class="presentation-badge-gallery">
@@ -1097,7 +1065,6 @@ presentationDensity: compact
 
 ---
 title: Authored sequence numbering
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-sequences-custom">
@@ -1127,7 +1094,6 @@ presentationDensity: compact
 ---
 title: Frame chrome and brand safe-zone probe
 presentationHeader: true
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-chrome-safe-zone" class="presentation-safe-zone-probe">
@@ -1157,7 +1123,6 @@ presentationDensity: compact
 
 ---
 title: Bilingual separator wrapping
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-bilingual-heading">
@@ -1174,7 +1139,6 @@ The centered separator remains with the preceding phrase while the following phr
 layout: section
 title: Section brand collision probe
 presentationHeader: false
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-brand-collision" class="presentation-safe-zone-probe">
@@ -1202,7 +1166,6 @@ layout: section
 title: Protected section identity
 kicker: false
 presentationHeader: false
-presentationDensity: compact
 accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 ---
 
@@ -1219,7 +1182,6 @@ layout: section
 title: Protected section identity
 kicker: false
 presentationHeader: false
-presentationDensity: compact
 ---
 
 <div data-quality-case="us3-section-accent-unaccented">
@@ -1236,7 +1198,6 @@ title: Header-safe section branding
 subtitle: Optional chrome owns the top row
 presentationChrome: "on"
 presentationHeader: true
-presentationDensity: compact
 ---
 
 <div data-quality-case="visual-section-header">
@@ -1251,7 +1212,6 @@ The illustration stays behind content while the institutional lockup is omitted.
 layout: figure
 title: Stage figure · 主视觉
 figureVariant: stage
-presentationDensity: compact
 ---
 
 <span hidden data-quality-case="figure-variant-stage"></span>
@@ -1267,7 +1227,6 @@ presentationDensity: compact
 layout: figure
 title: Minimal figure · 极简图形
 figureVariant: minimal
-presentationDensity: compact
 ---
 
 <span hidden data-quality-case="figure-variant-minimal"></span>
@@ -1283,7 +1242,6 @@ presentationDensity: compact
 layout: figure
 title: Editorial figure · 证据边注
 figureVariant: editorial
-presentationDensity: compact
 ---
 
 <span hidden data-quality-case="figure-variant-editorial"></span>

@@ -50,10 +50,23 @@ const config = await loadTypeScriptModule('setup/presentation-config.ts')
 const callouts = await loadTypeScriptModule('setup/callouts.ts')
 const figureLayout = await loadTypeScriptModule('setup/figure-layout.ts')
 
+test('removed density inputs do not change preset presentation state', () => {
+  for (const preset of config.PRESENTATION_PRESETS) {
+    const expected = config.resolvePresentation({ deck: { preset } })
+    for (const density of ['compact', 'normal', 'relaxed']) {
+      assert.deepEqual(config.resolvePresentation({
+        deck: { preset, density },
+        slide: { presentationDensity: density },
+      }), expected)
+    }
+  }
+})
+
 test('option definitions are the immutable canonical public contract', () => {
   assert.deepEqual(config.PRESENTATION_PRESETS, ['default', 'ucas', 'ict'])
-  assert.deepEqual(config.PRESENTATION_DENSITIES, ['compact', 'normal', 'relaxed'])
   assert.deepEqual(config.PRESENTATION_CHROME_VALUES, ['auto', 'on', 'off'])
+  assert.deepEqual(config.PRESENTATION_COVER_ALIGN_VALUES, ['left', 'center'])
+  assert.deepEqual(config.PRESENTATION_ARTWORK_PLACEMENTS, ['auto', 'right', 'background', 'bottom'])
   assert.deepEqual(config.FRAME_VARIANTS, [
     'default',
     'cover',
@@ -73,7 +86,7 @@ test('option definitions are the immutable canonical public contract', () => {
 
   assert.deepEqual(Object.keys(config.PRESENTATION_OPTIONS), [
     'preset',
-    'density',
+    'coverAlign',
     'chrome',
     'header',
     'footerAuthors',
@@ -83,17 +96,19 @@ test('option definitions are the immutable canonical public contract', () => {
   ])
   assert.deepEqual(config.PRESENTATION_DEFAULTS, {
     preset: 'default',
-    density: 'normal',
+    coverAlign: 'left',
     chrome: 'auto',
     header: false,
     footerAuthors: true,
     pageNumber: true,
     accent: null,
-    artwork: { type: 'auto', src: null, darkSrc: null, fit: 'contain', position: 'center', opacity: null },
+    artwork: { type: 'auto', placement: 'auto', src: null, darkSrc: null, fit: 'contain', position: 'center', opacity: null },
   })
 
   assert.equal(config.PRESENTATION_OPTIONS.preset.deckKey, 'preset')
   assert.deepEqual(config.PRESENTATION_OPTIONS.preset.slideKeys, ['presentationPreset'])
+  assert.equal(config.PRESENTATION_OPTIONS.coverAlign.deckKey, 'coverAlign')
+  assert.deepEqual(config.PRESENTATION_OPTIONS.coverAlign.slideKeys, ['presentationCoverAlign'])
   assert.deepEqual(config.PRESENTATION_OPTIONS.chrome.slideKeys, ['presentationChrome', 'chrome'])
   assert.deepEqual(config.PRESENTATION_OPTIONS.header.slideKeys, ['presentationHeader', 'header'])
   assert.deepEqual(config.PRESENTATION_OPTIONS.pageNumber.slideKeys, ['pageNumber'])
@@ -101,8 +116,9 @@ test('option definitions are the immutable canonical public contract', () => {
   assert.equal('scope' in config.PRESENTATION_OPTIONS.accent, false)
 
   assert.ok(Object.isFrozen(config.PRESENTATION_PRESETS))
-  assert.ok(Object.isFrozen(config.PRESENTATION_DENSITIES))
   assert.ok(Object.isFrozen(config.PRESENTATION_CHROME_VALUES))
+  assert.ok(Object.isFrozen(config.PRESENTATION_COVER_ALIGN_VALUES))
+  assert.ok(Object.isFrozen(config.PRESENTATION_ARTWORK_PLACEMENTS))
   assert.ok(Object.isFrozen(config.FRAME_VARIANTS))
   assert.ok(Object.isFrozen(config.PRESENTATION_OPTIONS))
   assert.ok(Object.isFrozen(config.PRESENTATION_DEFAULTS))
@@ -121,7 +137,6 @@ test('the option registry drives resolution instead of duplicating field logic',
   assert.match(source, /resolveDeckOption/)
   assert.match(source, /resolveSlideOption/)
   assert.doesNotMatch(source, /normalizePreset\(raw\.preset\)/)
-  assert.doesNotMatch(source, /normalizeDensity\(raw\.density\)/)
   assert.doesNotMatch(source, /normalizeBoolean\(raw\.(?:header|footerAuthors|pageNumber)\)/)
 })
 
@@ -154,8 +169,11 @@ test('normalizers accept only documented enum and boolean values', () => {
   assert.equal(config.normalizePreset(' ucas '), 'ucas')
   assert.equal(config.normalizePreset('UCAS'), undefined)
   assert.equal(config.normalizePreset('unknown'), undefined)
-  assert.equal(config.normalizeDensity(' relaxed '), 'relaxed')
-  assert.equal(config.normalizeDensity('dense'), undefined)
+  assert.equal(config.normalizeCoverAlign(' center '), 'center')
+  assert.equal(config.normalizeCoverAlign('left'), 'left')
+  for (const value of ['CENTER', 'right', '', true, null, {}, []]) {
+    assert.equal(config.normalizeCoverAlign(value), undefined)
+  }
 
   for (const [input, expected] of [
     [true, true],
@@ -205,7 +223,7 @@ test('missing and invalid deck configuration resolve field-by-field to defaults'
   assert.deepEqual(config.resolveDeckPresentation([]), config.PRESENTATION_DEFAULTS)
   assert.deepEqual(config.resolveDeckPresentation({
     preset: 'invalid',
-    density: 1,
+    coverAlign: 'middle',
     chrome: 'always',
     header: 'yes',
     footerAuthors: 0,
@@ -219,7 +237,7 @@ test('missing and invalid deck configuration resolve field-by-field to defaults'
 test('deck normalization accepts every supported value and textual boolean', () => {
   assert.deepEqual(config.resolveDeckPresentation({
     preset: 'ict',
-    density: 'compact',
+    coverAlign: ' center ',
     chrome: 'true',
     header: 'on',
     footerAuthors: 'false',
@@ -229,7 +247,7 @@ test('deck normalization accepts every supported value and textual boolean', () 
     supportsColor: value => value === '#345f8f',
   }), {
     preset: 'ict',
-    density: 'compact',
+    coverAlign: 'center',
     chrome: 'on',
     header: true,
     footerAuthors: false,
@@ -242,7 +260,6 @@ test('deck normalization accepts every supported value and textual boolean', () 
 test('slide resolution uses first-valid prop, slide, deck, and default precedence', () => {
   const deck = {
     preset: 'ucas',
-    density: 'relaxed',
     chrome: 'off',
     header: true,
     footerAuthors: false,
@@ -254,7 +271,6 @@ test('slide resolution uses first-valid prop, slide, deck, and default precedenc
     deck,
     slide: {
       presentationPreset: 'ict',
-      presentationDensity: 'compact',
       presentationChrome: 'on',
       presentationHeader: 'off',
       footerAuthors: 'true',
@@ -264,14 +280,14 @@ test('slide resolution uses first-valid prop, slide, deck, and default precedenc
     supportsColor: value => value === '#123456',
   }), {
     preset: 'ict',
-    density: 'compact',
+    coverAlign: 'left',
     chrome: 'on',
     header: false,
     footerAuthors: true,
     pageNumber: true,
     accent: '#123456',
     variant: 'default',
-    artwork: { ...config.PRESENTATION_DEFAULTS.artwork, type: 'lattice' },
+    artwork: { ...config.PRESENTATION_DEFAULTS.artwork, type: 'lattice', placement: 'right' },
     showChrome: true,
     showHeader: false,
   })
@@ -291,7 +307,6 @@ test('invalid higher-priority input inherits the next valid candidate', () => {
   const resolved = config.resolvePresentation({
     deck: {
       preset: 'ucas',
-      density: 'relaxed',
       chrome: 'on',
       header: true,
       footerAuthors: false,
@@ -299,7 +314,6 @@ test('invalid higher-priority input inherits the next valid candidate', () => {
     },
     slide: {
       presentationPreset: 'unsupported',
-      presentationDensity: 'dense',
       presentationChrome: 'sometimes',
       chrome: 'off',
       presentationHeader: 'maybe',
@@ -313,14 +327,14 @@ test('invalid higher-priority input inherits the next valid candidate', () => {
 
   assert.deepEqual(resolved, {
     preset: 'ucas',
-    density: 'relaxed',
+    coverAlign: 'left',
     chrome: 'off',
     header: false,
     footerAuthors: false,
     pageNumber: false,
     accent: null,
     variant: 'intro',
-    artwork: { ...config.PRESENTATION_DEFAULTS.artwork, type: 'orbits' },
+    artwork: { ...config.PRESENTATION_DEFAULTS.artwork, type: 'orbits', placement: 'right' },
     showChrome: false,
     showHeader: false,
   })
@@ -390,6 +404,104 @@ test('accent validation and local → deck → preset fallback are first-valid',
   }).accent, 'rebeccapurple')
 })
 
+test('cover alignment is independent of every preset and respects slide overrides', () => {
+  for (const preset of config.PRESENTATION_PRESETS) {
+    assert.equal(config.resolvePresentation({ deck: { preset }, variant: 'cover' }).coverAlign, 'left')
+    for (const coverAlign of config.PRESENTATION_COVER_ALIGN_VALUES) {
+      const deck = { preset, coverAlign }
+      const resolved = config.resolvePresentation({ deck, variant: 'cover' })
+      assert.equal(resolved.coverAlign, coverAlign)
+      assert.equal(resolved.artwork.placement, coverAlign === 'center' ? 'bottom' : 'right')
+      for (const override of config.PRESENTATION_COVER_ALIGN_VALUES) {
+        const local = config.resolvePresentation({
+          deck, slide: { presentationCoverAlign: override }, variant: 'cover',
+        })
+        assert.equal(local.coverAlign, override)
+        assert.equal(local.preset, preset)
+        assert.equal(local.artwork.placement, override === 'center' ? 'bottom' : 'right')
+      }
+      for (const invalid of ['middle', 'CENTER', false, {}, [], null, undefined]) {
+        assert.equal(config.resolvePresentation({
+          deck, slide: { presentationCoverAlign: invalid }, variant: 'cover',
+        }).coverAlign, coverAlign)
+      }
+    }
+  }
+  assert.equal(config.resolvePresentation({
+    deck: { coverAlign: 'invalid' }, slide: { presentationCoverAlign: 'invalid' }, variant: 'cover',
+  }).coverAlign, 'left')
+})
+
+test('automatic artwork placement follows cover alignment for built-in and custom artwork', () => {
+  for (const type of config.PRESENTATION_ARTWORK_TYPES) {
+    const artwork = type === 'custom' ? { src: '/own.svg' } : type
+    assert.equal(config.normalizeArtwork(artwork).placement, 'auto', type)
+    assert.equal(config.resolveDeckPresentation({ artwork }).artwork.placement, 'auto', type)
+    for (const variant of config.FRAME_VARIANTS) {
+      const left = config.resolvePresentation({ deck: { artwork, coverAlign: 'left' }, variant })
+      const center = config.resolvePresentation({ deck: { artwork, coverAlign: 'center' }, variant })
+      assert.equal(left.artwork.placement, 'right', `${type}: ${variant}`)
+      assert.equal(center.artwork.placement, variant === 'cover' ? 'bottom' : 'right', `${type}: ${variant}`)
+      if (variant !== 'cover') {
+        assert.deepEqual({ ...center, coverAlign: 'left' }, left, `${type}: ${variant} stays unchanged`)
+      }
+    }
+  }
+})
+
+test('explicit artwork placement overrides automatic composition and remains independent of image position', () => {
+  for (const placement of ['right', 'background', 'bottom']) {
+    for (const variant of ['cover', 'section', 'closing']) {
+      for (const coverAlign of config.PRESENTATION_COVER_ALIGN_VALUES) {
+        for (const artwork of [
+          { type: 'orbits', placement, opacity: 0.3 },
+          { src: '/own.svg', darkSrc: '/own-dark.svg', placement, position: 'right top', opacity: 0 },
+        ]) {
+          const resolved = config.resolvePresentation({ deck: { coverAlign, artwork }, variant })
+          assert.equal(resolved.artwork.placement, placement)
+          assert.equal(resolved.artwork.opacity, artwork.opacity)
+          assert.equal(resolved.artwork.position, artwork.position ?? 'center')
+        }
+      }
+    }
+  }
+})
+
+test('artwork placement normalizes safely and slide artwork replaces the whole deck object', () => {
+  const deck = {
+    coverAlign: 'center',
+    artwork: { src: '/deck.svg', darkSrc: '/deck-dark.svg', placement: 'background', opacity: 0.2 },
+  }
+  assert.equal(config.normalizeArtwork({ type: 'dots', placement: ' bottom ' }).placement, 'bottom')
+  for (const invalid of ['top', 'BOTTOM', false, {}, [], null, undefined]) {
+    const localArtwork = { type: 'dots', placement: invalid }
+    assert.equal(config.normalizeArtwork(localArtwork).placement, 'auto')
+    const resolved = config.resolvePresentation({
+      deck, slide: { presentationArtwork: localArtwork }, variant: 'cover',
+    }).artwork
+    assert.equal(resolved.type, 'dots')
+    assert.equal(resolved.placement, 'bottom')
+    assert.equal(resolved.src, null)
+    assert.equal(resolved.darkSrc, null)
+    assert.equal(resolved.opacity, null)
+  }
+  assert.equal(config.resolvePresentation({
+    deck, slide: { presentationArtwork: { type: 'custom' } }, variant: 'cover',
+  }).artwork.placement, 'background')
+  assert.equal(config.resolvePresentation({
+    deck, slide: { presentationArtwork: 'auto' }, variant: 'cover',
+  }).artwork.placement, 'bottom')
+  const local = config.resolvePresentation({
+    deck,
+    slide: { presentationArtwork: { src: '/slide.svg', placement: 'right', opacity: 0.8 } },
+    variant: 'cover',
+  }).artwork
+  assert.equal(local.placement, 'right')
+  assert.equal(local.src, '/slide.svg')
+  assert.equal(local.darkSrc, null)
+  assert.equal(local.opacity, 0.8)
+})
+
 test('artwork is independent of the preset, with local overrides and auto reset', () => {
   const deck = { preset: 'ucas', artwork: 'flow' }
   const resolve = slide => config.resolvePresentation({ deck, slide, variant: 'cover' })
@@ -405,18 +517,18 @@ test('artwork is independent of the preset, with local overrides and auto reset'
   assert.equal(config.resolvePresentation({ slide: { presentationPreset: 'default' } }).artwork.type, 'folds')
 })
 
-test('custom artwork retains sources and normalizes fit, position, and opacity', () => {
+test('custom artwork retains sources and normalizes fit, position, opacity, and placement', () => {
   const custom = config.normalizeArtwork({
     src: ' /artwork/light.svg ', darkSrc: '/artwork/dark.svg',
     fit: 'cover', position: 'right top', opacity: '0.45',
   })
   assert.deepEqual(custom, {
     type: 'custom', src: '/artwork/light.svg', darkSrc: '/artwork/dark.svg',
-    fit: 'cover', position: 'right top', opacity: 0.45,
+    fit: 'cover', position: 'right top', opacity: 0.45, placement: 'auto',
   })
   assert.ok(Object.isFrozen(custom))
   const deck = { artwork: custom }
-  assert.deepEqual(config.resolvePresentation({ deck }).artwork, custom)
+  assert.deepEqual(config.resolvePresentation({ deck }).artwork, { ...custom, placement: 'right' })
   // An explicit local object replaces the deck artwork rather than leaking its source.
   const local = config.resolvePresentation({ deck, slide: { presentationArtwork: { type: 'field', opacity: 0 } } }).artwork
   assert.equal(local.type, 'field')
@@ -439,8 +551,31 @@ test('app setup remains deck-only while the shared frame owns local accent scope
   assert.match(setupSource, /resolveDeckPresentation/)
   assert.doesNotMatch(
     setupSource,
-    /\$frontmatter|useSlideContext|currentPage|nav\.|afterEach|onAfterRoute/,
+    /\$frontmatter|useSlideContext|currentPage|nav\./,
   )
+  const setupAst = ts.createSourceFile('setup/main.ts', setupSource, ts.ScriptTarget.Latest, true)
+  let presentationConfigFound = false
+  const inspectSetup = (node) => {
+    if (ts.isVariableDeclaration(node) && node.name.getText(setupAst) === 'applyPresentationConfig') {
+      presentationConfigFound = true
+      const initializer = node.initializer?.getText(setupAst) ?? ''
+      assert.match(initializer, /resolveDeckPresentation\(rawPresentation\)/)
+      assert.doesNotMatch(initializer, /router|currentRoute|afterEach|onAfterRoute/)
+    }
+    if (ts.isCallExpression(node)
+      && /(?:^|\.)(?:afterEach|onAfterRoute\w*)$/.test(node.expression.getText(setupAst))) {
+      // Navigation may close the image viewer, but must not apply slide state globally.
+      for (const argument of node.arguments) {
+        assert.doesNotMatch(
+          argument.getText(setupAst),
+          /applyPresentationConfig|resolveDeckPresentation|--slidev-theme-primary|document\.documentElement/,
+        )
+      }
+    }
+    ts.forEachChild(node, inspectSetup)
+  }
+  inspectSetup(setupAst)
+  assert.ok(presentationConfigFound, 'the deck presentation application remains explicit')
   assert.match(frameSource, /slide:\s*frontmatter\.value/)
   assert.match(frameSource, /--presentation-accent/)
   assert.match(frameSource, /--slidev-theme-primary/)
@@ -505,10 +640,6 @@ test('presentation types, defaults, and normalizers have one source authority', 
       expression: /['"]default['"]\s*\|\s*['"]ucas['"]\s*\|\s*['"]ict['"]/,
     },
     {
-      label: 'density literal union',
-      expression: /['"]compact['"]\s*\|\s*['"]normal['"]\s*\|\s*['"]relaxed['"]/,
-    },
-    {
       label: 'chrome literal union',
       expression: /['"]auto['"]\s*\|\s*['"]on['"]\s*\|\s*['"]off['"]/,
     },
@@ -522,7 +653,7 @@ test('presentation types, defaults, and normalizers have one source authority', 
     },
     {
       label: 'normalizer declaration',
-      expression: /\b(?:const|function)\s+normalize(?:Preset|Density|Chrome|Boolean|Accent)\b/,
+      expression: /\b(?:const|function)\s+normalize(?:Preset|Chrome|Boolean|Accent)\b/,
     },
   ]
 
@@ -541,12 +672,10 @@ test('presentation types, defaults, and normalizers have one source authority', 
   const canonical = await readFile(canonicalPath, 'utf8')
   for (const name of [
     'PRESENTATION_PRESETS',
-    'PRESENTATION_DENSITIES',
     'PRESENTATION_CHROME_VALUES',
     'PRESENTATION_OPTIONS',
     'PRESENTATION_DEFAULTS',
     'normalizePreset',
-    'normalizeDensity',
     'normalizeChrome',
     'normalizeBoolean',
     'normalizeAccent',
@@ -580,7 +709,7 @@ test('only the shared frame resolves presentation state and owns preset attribut
     }
     assert.doesNotMatch(source, /\bresolvePresentation\s*\(/, `${name}: local resolver`)
     assert.doesNotMatch(source, /themeConfig\??\.presentation/, `${name}: deck resolution`)
-    assert.doesNotMatch(source, /data-presentation-(?:preset|density)/, `${name}: state ownership`)
+    assert.doesNotMatch(source, /data-presentation-preset/, `${name}: state ownership`)
   }
 
   for (const [path, expectedVariant] of [
@@ -599,7 +728,7 @@ test('only the shared frame resolves presentation state and owns preset attribut
   for (const file of componentFiles) {
     const source = await readFile(file, 'utf8')
     if (/\bresolvePresentation\s*\(/.test(source)) resolverOwners.push(relative(repositoryRoot, file))
-    if (/data-presentation-(?:preset|density)/.test(source)) {
+    if (/data-presentation-preset/.test(source)) {
       attributeOwners.push(relative(repositoryRoot, file))
     }
   }
@@ -648,6 +777,11 @@ test('US6 packaged sources are isolated, bounded, and converter-independent', as
   ]
   for (const file of packagedSources.sort()) {
     const source = await readFile(file, 'utf8')
+    assert.doesNotMatch(
+      source,
+      /presentationDensity|data-presentation-density|PresentationDensity|PRESENTATION_DENSITIES/,
+      `${relative(repositoryRoot, file)} restores the removed density API`,
+    )
     for (const pattern of forbiddenFixtureSelector) {
       assert.doesNotMatch(
         source,
@@ -789,7 +923,6 @@ test('follow-up source hygiene removes dead runtime paths and remote font CSS', 
     1,
   )
   assert.doesNotMatch(tokens, /#3f6f68|#77b5aa/)
-  assert.doesNotMatch(tokens, /:root\[data-presentation-density=/)
   assert.match(
     tokens,
     /--presentation-reading-width:\s*100%/,
