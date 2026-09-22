@@ -156,14 +156,14 @@
   --presentation-media-viewport-height: min(48vh, 17.5rem);
 }
 
-.presentation-image-text__figure .obsidian-slidev-media__viewport {
+.presentation-image-text__figure .presentation-media__viewport {
   width: 100%;
   height: min(48vh, 17.5rem);
   border: 0;
   background: transparent;
 }
 
-.presentation-image-text__figure .obsidian-slidev-media__viewport > .obsidian-slidev-media__image {
+.presentation-image-text__figure .presentation-media__viewport > .presentation-media__image {
   background: transparent;
 }
 
@@ -302,7 +302,7 @@ html.dark .presentation-code-layout .slidev-code-wrapper > pre.shiki
     --presentation-media-viewport-height: min(34vh, 12rem);
   }
 
-  .presentation-image-text__figure .obsidian-slidev-media__viewport {
+  .presentation-image-text__figure .presentation-media__viewport {
     height: min(34vh, 12rem);
   }
 }

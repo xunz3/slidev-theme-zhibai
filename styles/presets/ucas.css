@@ -190,7 +190,7 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
   border-left-width: 1px;
 }
 
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame :is(.obsidian-slidev-callout, .obsidian-slidev-warning) {
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame :is(.presentation-callout) {
   margin: 0.82rem 0;
   padding: 0.48rem 0 0.5rem 0.92rem;
   border: 0;
@@ -199,22 +199,17 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
   background: transparent;
 }
 
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout {
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame .presentation-callout {
   border-left-color: var(--presentation-callout-family);
   background: color-mix(in srgb, var(--presentation-callout-family) 2%, transparent);
 }
 
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout[data-callout="neutral"] {
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame .presentation-callout[data-callout="neutral"] {
   border-left-color: var(--presentation-callout-border);
   background: var(--presentation-callout-bg);
 }
 
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-warning {
-  border-left-color: var(--presentation-warning-border);
-  background: color-mix(in srgb, var(--presentation-warning-border) 2%, transparent);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout__title {
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame .presentation-callout__title {
   margin-bottom: 0.3rem;
   font-family: var(--presentation-font-sans);
   font-size: 0.76rem;
@@ -222,7 +217,7 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
   letter-spacing: 0.075em;
 }
 
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-media__caption {
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame .presentation-media__caption {
   color: var(--presentation-text-muted);
   font-family: var(--presentation-font-serif);
   font-size: var(--presentation-caption-size);

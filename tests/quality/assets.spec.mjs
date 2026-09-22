@@ -30,7 +30,7 @@ test('recursive shipped-asset policy covers unlisted files under assets and publ
 
   const discovered = await discoverThemeOwnedAssets()
   const paths = discovered.map(asset => asset.path)
-  assert.ok(paths.includes('public/obsidian-card.svg'))
+  assert.ok(paths.includes('public/lilas-card.svg'))
   assert.deepEqual(findOversizedThemeAssets(discovered), [])
 
   assert.deepEqual(findOversizedThemeAssets([

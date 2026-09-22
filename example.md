@@ -1,11 +1,8 @@
 ---
 theme: ./
-addons:
-  - slidev-pane
 title: Slidev Presentation Theme
-subtitle: Reusable presets with optional Obsidian integration
-presentationPreset: ict
-image: /obsidian-card.svg
+subtitle: Reusable presets, layouts, and components
+image: /lilas-card.svg
 imageAlt: A note card connected to a presentation canvas
 imageFit: contain
 authors:
@@ -17,6 +14,7 @@ authors:
     email: theme@example.com
 themeConfig:
   presentation:
+    preset: default
     chrome: auto
     header: false
     footerAuthors: true
@@ -32,15 +30,15 @@ subtitle: Standalone components
 
 # Notes as Slides
 
-The theme works with ordinary Slidev Markdown and also styles markup emitted by `obsidian-slidev`.
+Build presentations with ordinary Slidev Markdown and reusable Vue components.
 
-<Callout type="note" title="One rendering vocabulary">
+<Callout type="note" title="Reusable components">
 
-Write semantic content directly with theme components, or let the conversion plugin emit its compatible frontend structure.
+Use the same layouts and components with any preset.
 
 </Callout>
 
-Open a source note with <a class="obsidian-slidev-link" href="obsidian://open?vault=Vault&file=Notes%2FDeck.md">an Obsidian link</a>.
+Read the [Slidev syntax guide](https://sli.dev/guide/syntax) for Markdown, code, and slide navigation.
 
 ---
 layout: two-cols
@@ -50,7 +48,7 @@ title: Figure and authors
 # Accessible Figure
 
 <Figure
-  src="/obsidian-card.svg"
+  src="/lilas-card.svg"
   alt="A note card connected to a presentation canvas"
   caption="Figure 1. Media reserves space before it loads."
   fit="contain"
@@ -77,7 +75,7 @@ presentationPreset: ucas
 
 # UCAS Is an Override
 
-UCAS can be selected for institutional decks without changing the standalone or generated-markup contracts.
+UCAS can be selected for institutional decks while keeping the same layouts and components.
 
 <Callout type="warning" title="Visible failure">
 
@@ -87,8 +85,8 @@ Unresolved links and missing assets stay visible instead of silently disappearin
 
 | Layer | Responsibility |
 | --- | --- |
-| `obsidian-slidev` | Convert vault notes into Slidev-native markup |
-| `slidev-theme-lilas` | Render layouts, presets, components, and optional Obsidian semantics |
+| Slidev | Markdown, navigation, click reveals, and export |
+| `slidev-theme-lilas` | Provide layouts, presets, components, and visual defaults |
 
 ---
 title: Local accent
@@ -105,7 +103,7 @@ The local accent affects [links](https://example.com), focus, general callouts, 
 ---
 layout: image-left
 title: Image and text
-image: /obsidian-card.svg
+image: /lilas-card.svg
 imageAlt: A note card connected to a presentation canvas
 caption: Figure 2. Narrative stays first in document order.
 backgroundSize: contain
@@ -194,23 +192,6 @@ Compare the <mark>validated cohort</mark> with a [linked cohort](https://example
 ```md
 Literal ==highlight-like syntax== stays code.
 ```
-
----
-title: Generated compatibility
----
-
-# Existing Generated Markup Still Works
-
-<div class="obsidian-slidev-warning">
-  <strong>Compatibility:</strong> existing <code>.obsidian-slidev-*</code> structures need no migration.
-</div>
-
-<ul class="obsidian-slidev-task-list">
-  <li class="task-list-item"><input type="checkbox" checked> Generated checked task</li>
-  <li class="task-list-item"><input type="checkbox"> Generated open task</li>
-</ul>
-
-Generated <span class="obsidian-slidev-highlight">highlight markup</span> receives the same prose treatment without adding a parser.
 
 ---
 layout: end

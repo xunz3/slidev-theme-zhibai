@@ -58,7 +58,7 @@
   max-width: var(--presentation-reading-width);
 }
 
-.slidev-layout .slide-frame__content > :is(table, .obsidian-slidev-callout, .obsidian-slidev-warning) {
+.slidev-layout .slide-frame__content > :is(table, .presentation-callout) {
   width: 100%;
   max-width: var(--presentation-block-width);
 }
@@ -289,7 +289,7 @@
   font-weight: 700;
 }
 
-.slidev-layout :is(mark, .obsidian-slidev-highlight) {
+.slidev-layout mark {
   padding: 0.02em 0.14em 0.04em;
   border: 0;
   border-radius: 0;
@@ -300,7 +300,7 @@
   -webkit-box-decoration-break: clone;
 }
 
-.slidev-layout :is(pre, code) :is(mark, .obsidian-slidev-highlight) {
+.slidev-layout :is(pre, code) mark {
   padding: 0;
   border: 0;
   border-radius: 0;

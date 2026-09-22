@@ -179,8 +179,7 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
 }
 
 /* Margin notes: one accent edge and a quiet, in-flow label. */
-.slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-callout,
-.slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-warning {
+.slidev-layout[data-presentation-preset="default"] .slide-frame .presentation-callout {
   position: relative;
   margin: 0.8rem 0;
   padding: 0.62rem 0.95rem;
@@ -189,24 +188,19 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
   border-width: 0 0 0 2px;
 }
 
-.slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-callout {
+.slidev-layout[data-presentation-preset="default"] .slide-frame .presentation-callout {
   border-color: var(--presentation-callout-family);
   background: color-mix(in srgb, var(--presentation-callout-family) 2%, transparent);
 }
 
-.slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-callout[data-callout="neutral"] {
+.slidev-layout[data-presentation-preset="default"] .slide-frame .presentation-callout[data-callout="neutral"] {
   border-color: var(--presentation-callout-border);
   border-style: solid;
   background: var(--presentation-callout-bg);
 }
 
-.slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-warning {
-  border-color: var(--presentation-warning-border);
-  background: color-mix(in srgb, var(--presentation-warning-border) 2%, transparent);
-}
-
 /* Keep long note titles in flow, including bilingual titles. */
-.slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-callout__title {
+.slidev-layout[data-presentation-preset="default"] .slide-frame .presentation-callout__title {
   position: static;
   inset-block-start: 0;
   inset-inline-start: 0.62rem;
@@ -227,11 +221,11 @@ html.dark .slidev-layout[data-presentation-preset="default"] .slide-frame {
 }
 
 .slidev-layout[data-presentation-preset="default"] .slide-frame
-  .obsidian-slidev-callout[data-callout-family="quotation"] {
+  .presentation-callout[data-callout-family="quotation"] {
   font-style: italic;
 }
 
-.slidev-layout[data-presentation-preset="default"] .slide-frame .obsidian-slidev-media__caption {
+.slidev-layout[data-presentation-preset="default"] .slide-frame .presentation-media__caption {
   max-width: 56rem;
   margin-inline: auto;
   font-family: var(--presentation-font-serif);

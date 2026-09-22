@@ -1,9 +1,4 @@
 import { normalizePresentationTaskLists } from './task-lists'
-import { normalizeGeneratedCallouts } from './callouts'
-import {
-  cleanupGeneratedImageFigures,
-  normalizeGeneratedImageFigures,
-} from './media'
 
 export type PresentationRenderRoot = Document | Element
 export type PresentationNormalizer = (
@@ -11,9 +6,7 @@ export type PresentationNormalizer = (
 ) => number | void
 
 const normalizers: readonly PresentationNormalizer[] = Object.freeze([
-  normalizeGeneratedCallouts,
   normalizePresentationTaskLists,
-  normalizeGeneratedImageFigures,
   normalizeBilingualHeadings,
 ])
 
@@ -128,14 +121,11 @@ export const observePresentationRendering = (
           roots.add(node.parentElement)
         }
       }
-      for (const node of record.removedNodes) {
-        if (node instanceof Element) cleanupGeneratedImageFigures(node)
-      }
     }
     for (const addedRoot of roots) normalizePresentationSubtree(addedRoot)
   })
   observer.observe(target, {
-    attributeFilter: ['alt', 'class', 'data-callout', 'data-media-fit', 'src'],
+    attributeFilter: ['class'],
     attributes: true,
     characterData: true,
     childList: true,
@@ -143,6 +133,5 @@ export const observePresentationRendering = (
   })
   return () => {
     observer.disconnect()
-    cleanupGeneratedImageFigures(scope)
   }
 }

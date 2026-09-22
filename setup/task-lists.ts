@@ -3,8 +3,6 @@ const TASK_INPUT_SELECTOR = [
   '.slidev-layout li.task-list-item > label > input[type="checkbox"]',
   '.slidev-layout .contains-task-list > li > input[type="checkbox"]',
   '.slidev-layout .contains-task-list > li > label > input[type="checkbox"]',
-  '.slidev-layout .obsidian-slidev-task-list > li > input[type="checkbox"]',
-  '.slidev-layout .obsidian-slidev-task-list > li > label > input[type="checkbox"]',
 ].join(', ')
 
 type TaskRoot = Document | Element

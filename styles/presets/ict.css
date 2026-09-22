@@ -211,7 +211,7 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   list-style-type: square;
 }
 
-.slidev-layout[data-presentation-preset="ict"] .slide-frame :is(.obsidian-slidev-callout, .obsidian-slidev-warning) {
+.slidev-layout[data-presentation-preset="ict"] .slide-frame :is(.presentation-callout) {
   margin: 0.8rem 0;
   padding: 0.65rem 0.9rem;
   border: 1px solid;
@@ -221,25 +221,19 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   border-width: 0 0 0 2px;
 }
 
-.slidev-layout[data-presentation-preset="ict"] .slide-frame .obsidian-slidev-callout {
+.slidev-layout[data-presentation-preset="ict"] .slide-frame .presentation-callout {
   border-color: color-mix(in srgb, var(--presentation-callout-family) 48%, var(--presentation-border));
   border-left-color: var(--presentation-callout-family);
   background: color-mix(in srgb, var(--presentation-callout-family) 2%, transparent);
 }
 
-.slidev-layout[data-presentation-preset="ict"] .slide-frame .obsidian-slidev-callout[data-callout="neutral"] {
+.slidev-layout[data-presentation-preset="ict"] .slide-frame .presentation-callout[data-callout="neutral"] {
   border-color: var(--presentation-callout-border);
   border-left-color: var(--presentation-callout-family);
   background: var(--presentation-callout-bg);
 }
 
-.slidev-layout[data-presentation-preset="ict"] .slide-frame .obsidian-slidev-warning {
-  border-color: color-mix(in srgb, var(--presentation-warning-border) 48%, var(--presentation-border));
-  border-left-color: var(--presentation-warning-border);
-  background: color-mix(in srgb, var(--presentation-warning-border) 2%, transparent);
-}
-
-.slidev-layout[data-presentation-preset="ict"] .slide-frame .obsidian-slidev-callout__title {
+.slidev-layout[data-presentation-preset="ict"] .slide-frame .presentation-callout__title {
   margin-bottom: 0.3rem;
   font-family: var(--presentation-font-sans);
   font-size: 0.8rem;
@@ -247,7 +241,7 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   letter-spacing: 0.015em;
 }
 
-.slidev-layout[data-presentation-preset="ict"] .slide-frame .obsidian-slidev-media__caption {
+.slidev-layout[data-presentation-preset="ict"] .slide-frame .presentation-media__caption {
   color: var(--presentation-text-muted);
   font-family: var(--presentation-font-sans);
   font-size: var(--presentation-caption-size);

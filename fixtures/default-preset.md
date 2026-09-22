@@ -104,9 +104,9 @@ recalibrate_on: validation_only
 report: [estimate, ci95, missingness]
 ```
 
-<div class="obsidian-slidev-callout obsidian-slidev-callout--note" data-callout="note">
-  <div class="obsidian-slidev-callout__title">Decision rule · 判定规则</div>
-  <div class="obsidian-slidev-callout__content">
+<div class="presentation-callout presentation-callout--note" data-callout="note">
+  <div class="presentation-callout__title">Decision rule · 判定规则</div>
+  <div class="presentation-callout__content">
     <p>If ECE exceeds .05 or 90% coverage falls below .85, route the batch to review; never tune the threshold on test data.</p>
   </div>
 </div>
@@ -158,7 +158,7 @@ title: Evidence record and ownership
 # Accessible evidence record
 
 <Figure
-  src="/theme/public/obsidian-card.svg"
+  src="/theme/public/lilas-card.svg"
   alt="A compact research card summarizing one evidence record"
   caption="Figure A. A bounded, captioned fixture image."
   fit="contain"
@@ -235,7 +235,7 @@ assert(report.testDataUsedForFit === false)
 ---
 layout: image-left
 title: Evidence card and narrative
-image: /theme/public/obsidian-card.svg
+image: /theme/public/lilas-card.svg
 imageAlt: Research evidence card placed to the left of the narrative
 caption: Figure B. Narrative remains first in source order.
 backgroundSize: contain
@@ -249,7 +249,7 @@ preserving reading order, caption semantics, and bounded geometry.
 ---
 layout: image-right
 title: Alternative evidence orientation
-image: /theme/public/obsidian-card.svg
+image: /theme/public/lilas-card.svg
 imageAlt: Research evidence card placed to the right of the narrative
 caption: Figure C. The mirrored visual orientation uses the same source order.
 backgroundSize: contain

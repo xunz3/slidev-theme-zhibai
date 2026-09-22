@@ -47,7 +47,7 @@ presentationArtwork: none
 layout: cover
 title: Relightable Head Avatar
 subtitle: 可重光照 Gaussian 头部 Avatar
-image: /theme/public/obsidian-card.svg
+image: /theme/public/lilas-card.svg
 imageAlt: Theme example image for checking the cover's visual column
 ---
 

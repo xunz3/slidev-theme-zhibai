@@ -142,7 +142,7 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
 }
 
 .slidev-layout[data-presentation-preset] .slide-frame
-  :is(.slide-layout-quote__content :lang(zh), .obsidian-slidev-media__caption:lang(zh)) {
+  :is(.slide-layout-quote__content :lang(zh), .presentation-media__caption:lang(zh)) {
   font-style: normal;
   letter-spacing: 0;
 }

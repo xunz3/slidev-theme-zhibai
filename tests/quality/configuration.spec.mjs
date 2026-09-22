@@ -140,9 +140,9 @@ test('the option registry drives resolution instead of duplicating field logic',
   assert.doesNotMatch(source, /normalizeBoolean\(raw\.(?:header|footerAuthors|pageNumber)\)/)
 })
 
-test('generated callout CSS consumes canonical family state without a type map', async () => {
+test('component callout CSS consumes canonical family state without a type map', async () => {
   const source = await readFile(
-    resolve(repositoryRoot, 'styles/obsidian.css'),
+    resolve(repositoryRoot, 'styles/semantic.css'),
     'utf8',
   )
   for (const family of callouts.SEMANTIC_FAMILIES.filter(
@@ -161,8 +161,7 @@ test('generated callout CSS consumes canonical family state without a type map',
       `${family}: canonical family state`,
     )
   }
-  assert.doesNotMatch(source, /\.obsidian-slidev-callout--[\w-]+/)
-  assert.equal(typeof callouts.normalizeGeneratedCallouts, 'function')
+  assert.doesNotMatch(source, /\.presentation-callout--[\w-]+/)
 })
 
 test('normalizers accept only documented enum and boolean values', () => {
@@ -748,8 +747,7 @@ test('package metadata has no duplicate presentation defaults', async () => {
     ['@slidev/client'],
   )
   assert.equal(packageJson.devDependencies['@slidev/types'], '^52.15.2')
-  assert.equal(packageJson.devDependencies['slidev-pane'], '0.1.9')
-  assert.ok(packageJson.files.includes('public/obsidian-card.svg'))
+  assert.ok(packageJson.files.includes('public/lilas-card.svg'))
 })
 
 test('US6 packaged sources are isolated, bounded, and converter-independent', async () => {
@@ -809,12 +807,12 @@ test('US6 packaged sources are isolated, bounded, and converter-independent', as
     if (file.includes('/presets/')) {
       assert.doesNotMatch(
         source,
-        /\.obsidian-slidev-callout__title::before/,
+        /\.presentation-callout__title::before/,
         `${relative(repositoryRoot, file)} overrides protected marker geometry`,
       )
       const calloutTitleBlocks = [
         ...source.matchAll(
-          /[^{}]*\.obsidian-slidev-callout__title[^{}]*\{([^{}]*)\}/g,
+          /[^{}]*\.presentation-callout__title[^{}]*\{([^{}]*)\}/g,
         ),
       ].map(match => match[1])
       assert.ok(
@@ -857,7 +855,6 @@ test('US6 packaged sources are isolated, bounded, and converter-independent', as
     ['@slidev/client'],
   )
   assert.equal(packageJson.devDependencies['@slidev/types'], '^52.15.2')
-  assert.equal(packageJson.devDependencies['slidev-pane'], '0.1.9')
 
   const gateSource = await readFile(
     resolve(repositoryRoot, 'scripts/check-presentation-css.mjs'),
@@ -948,7 +945,7 @@ test('style hooks and layout passthroughs remain live contracts', async () => {
     frame,
     imageTextLayout,
     media,
-    obsidian,
+    semantic,
     tokens,
   ] = await Promise.all([
     readFile(resolve(repositoryRoot, 'styles/base.css'), 'utf8'),
@@ -957,14 +954,14 @@ test('style hooks and layout passthroughs remain live contracts', async () => {
     readFile(resolve(repositoryRoot, 'components/SlideFrame.vue'), 'utf8'),
     readFile(resolve(repositoryRoot, 'internals/ImageTextLayout.vue'), 'utf8'),
     readFile(resolve(repositoryRoot, 'setup/media.ts'), 'utf8'),
-    readFile(resolve(repositoryRoot, 'styles/obsidian.css'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'styles/semantic.css'), 'utf8'),
     readFile(resolve(repositoryRoot, 'styles/tokens.css'), 'utf8'),
   ])
 
   assert.match(base, /box-shadow:\s*var\(--presentation-shadow\)/)
   assert.match(base, /border:\s*1px solid var\(--presentation-inline-code-border\)/)
-  assert.match(obsidian, /border:\s*1px solid var\(--presentation-callout-border\)/)
-  assert.match(obsidian, /--presentation-callout-family-surface:\s*var\(--presentation-callout-bg\)/)
+  assert.match(semantic, /border:\s*1px solid var\(--presentation-callout-border\)/)
+  assert.match(semantic, /--presentation-callout-family-surface:\s*var\(--presentation-callout-bg\)/)
 
   for (const deadToken of [
     '--presentation-badge-bg',
@@ -991,19 +988,19 @@ test('style hooks and layout passthroughs remain live contracts', async () => {
     'media background-size fallback',
   )
   assert.match(
-    obsidian,
-    /\.obsidian-slidev-media--video video\s*\{[\s\S]*?height:\s*var\(--presentation-media-viewport-height\)[\s\S]*?max-height:\s*none[\s\S]*?object-fit:\s*contain/,
+    semantic,
+    /\.presentation-media--video video\s*\{[\s\S]*?height:\s*var\(--presentation-media-viewport-height\)[\s\S]*?max-height:\s*none[\s\S]*?object-fit:\s*contain/,
     'native video reserves stable contain-fit geometry',
   )
   assert.match(
-    obsidian,
-    /\.obsidian-slidev-media__viewport\[data-media-fit=["']contain["']\][\s\S]*?object-fit:\s*contain/,
+    semantic,
+    /\.presentation-media__viewport\[data-media-fit=["']contain["']\][\s\S]*?object-fit:\s*contain/,
     'public Figure contain fit is selected directly from viewport state',
   )
-  assert.match(obsidian, /object-position:\s*var\(--presentation-media-position/)
+  assert.match(semantic, /object-position:\s*var\(--presentation-media-position/)
   assert.match(
-    obsidian,
-    /\.obsidian-slidev-media__caption\s*\{[\s\S]*?width:\s*100%[\s\S]*?text-align:\s*start/,
+    semantic,
+    /\.presentation-media__caption\s*\{[\s\S]*?width:\s*100%[\s\S]*?text-align:\s*start/,
   )
   assert.match(imageTextLayout, /mediaRatio\?: number \| string/)
   assert.match(imageTextLayout, /imagePosition\?: string/)
@@ -1016,7 +1013,7 @@ test('style hooks and layout passthroughs remain live contracts', async () => {
   assert.match(figure, /:key=["']imageKey["']/)
   assert.match(figure, /variant\?: FigureVariant/)
   assert.match(figure, /normalizeFigureVariant\(props\.variant\)/)
-  assert.match(figure, /obsidian-slidev-media--figure-/)
+  assert.match(figure, /presentation-media--figure-/)
 })
 
 test('every layout-owned chrome prop accepts canonical values and booleans', async () => {
@@ -1058,7 +1055,7 @@ test('image-text media uses one authoritative reserved-height rule', async () =>
     'utf8',
   )
   const rule = source.match(
-    /\.presentation-image-text__figure \.obsidian-slidev-media__viewport\s*\{[^}]+\}/,
+    /\.presentation-image-text__figure \.presentation-media__viewport\s*\{[^}]+\}/,
   )?.[0]
   assert.ok(rule, 'image-text media viewport rule exists')
   assert.match(rule, /\bheight:/)
@@ -1071,7 +1068,7 @@ test('pre-1.0 source keeps one canonical implementation path', async () => {
     figure,
     frame,
     main,
-    obsidian,
+    semantic,
     presentationConfig,
     quote,
     renderNormalization,
@@ -1082,7 +1079,7 @@ test('pre-1.0 source keeps one canonical implementation path', async () => {
     readFile(resolve(repositoryRoot, 'components/Figure.vue'), 'utf8'),
     readFile(resolve(repositoryRoot, 'components/SlideFrame.vue'), 'utf8'),
     readFile(resolve(repositoryRoot, 'setup/main.ts'), 'utf8'),
-    readFile(resolve(repositoryRoot, 'styles/obsidian.css'), 'utf8'),
+    readFile(resolve(repositoryRoot, 'styles/semantic.css'), 'utf8'),
     readFile(resolve(repositoryRoot, 'setup/presentation-config.ts'), 'utf8'),
     readFile(resolve(repositoryRoot, 'layouts/quote.vue'), 'utf8'),
     readFile(resolve(repositoryRoot, 'setup/render-normalization.ts'), 'utf8'),
@@ -1096,7 +1093,6 @@ test('pre-1.0 source keeps one canonical implementation path', async () => {
   )
   assert.match(taskLists, /\.task-list-item/)
   assert.match(taskLists, /\.contains-task-list/)
-  assert.match(taskLists, /\.obsidian-slidev-task-list/)
 
   await assert.rejects(
     readFile(resolve(repositoryRoot, 'layouts/thanks.vue'), 'utf8'),
@@ -1122,10 +1118,10 @@ test('pre-1.0 source keeps one canonical implementation path', async () => {
   assert.doesNotMatch(frame, /data-presentation-brand-safe-zone/)
   assert.match(frame, /:style=["']frameStyle["']/)
 
-  assert.match(renderNormalization, /normalizeGeneratedCallouts/)
+  assert.match(renderNormalization, /normalizePresentationTaskLists/)
   assert.doesNotMatch(
-    obsidian,
-    /\.obsidian-slidev-callout--(?:note|info|todo|abstract|summary|tip|success|check|warning|caution|attention|danger|error|failure|question|help|faq|quote|cite)/,
+    semantic,
+    /\.presentation-callout--(?:note|info|todo|abstract|summary|tip|success|check|warning|caution|attention|danger|error|failure|question|help|faq|quote|cite)/,
   )
 
   assert.match(branding, /<template v-if="preset === 'ucas'">/)

@@ -53,9 +53,9 @@ defineExpose({ retry })
 
 <template>
   <figure
-    class="obsidian-slidev-media obsidian-slidev-media--image"
+    class="presentation-media presentation-media--image"
     :class="resolvedVariant
-      ? `obsidian-slidev-media--figure-${resolvedVariant}`
+      ? `presentation-media--figure-${resolvedVariant}`
       : undefined"
     :data-figure-variant="resolvedVariant"
     data-media-managed="vue"
@@ -66,7 +66,7 @@ defineExpose({ retry })
     :style="{ '--presentation-media-position': resolvedPosition }"
   >
     <div
-      class="obsidian-slidev-media__viewport"
+      class="presentation-media__viewport"
       :data-media-fit="resolvedFit"
       :data-media-position="resolvedPosition"
       data-stability-region="media-viewport"
@@ -74,7 +74,7 @@ defineExpose({ retry })
       <img
         v-if="showImage"
         :key="imageKey"
-        class="obsidian-slidev-media__image obsidian-slidev-media__asset"
+        class="presentation-media__image presentation-media__asset"
         :src="source"
         :alt="alternative.resolvedAlt"
         :aria-hidden="alternative.decorative ? 'true' : undefined"
@@ -85,14 +85,14 @@ defineExpose({ retry })
       >
       <div
         v-else-if="showFallback"
-        class="obsidian-slidev-media__fallback"
+        class="presentation-media__fallback"
         role="img"
         :aria-label="alternative.resolvedAlt"
       >
         {{ alternative.resolvedAlt }}
       </div>
     </div>
-    <figcaption v-if="caption" class="obsidian-slidev-media__caption">
+    <figcaption v-if="caption" class="presentation-media__caption">
       {{ caption }}
     </figcaption>
   </figure>

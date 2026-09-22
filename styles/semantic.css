@@ -1,47 +1,4 @@
-.obsidian-slidev-link {
-  border: 0;
-  border-bottom: 0;
-  color: var(--presentation-accent);
-  font-weight: 600;
-  box-shadow: none;
-  text-decoration-line: underline;
-  text-decoration-color: color-mix(in srgb, var(--presentation-accent) 46%, transparent);
-  text-decoration-style: solid;
-  text-decoration-thickness: max(1px, 0.06em);
-  text-underline-offset: 0.18em;
-  transition:
-    color 160ms ease,
-    text-decoration-color 160ms ease;
-}
-
-.obsidian-slidev-link:hover {
-  color: color-mix(in srgb, var(--presentation-accent) 84%, var(--presentation-text));
-  text-decoration-color: var(--presentation-accent);
-}
-
-.obsidian-slidev-link:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--presentation-accent) 44%, transparent);
-  outline-offset: 0.18em;
-  border-radius: 0.18em;
-}
-
-.obsidian-slidev-warning {
-  margin: 1rem 0;
-  padding: 0.78rem 0.95rem;
-  border: 1px solid color-mix(in srgb, var(--presentation-warning-border) 36%, transparent);
-  border-left: 3px solid var(--presentation-warning-border);
-  border-radius: 10px;
-  color: var(--presentation-warning-text);
-  background: var(--presentation-warning-bg);
-  box-shadow: var(--presentation-shadow);
-}
-
-.obsidian-slidev-warning strong {
-  color: inherit;
-  font-weight: 700;
-}
-
-.obsidian-slidev-callout {
+.presentation-callout {
   --presentation-callout-family: var(--presentation-family-neutral);
   --presentation-callout-family-surface: var(--presentation-callout-bg);
   margin: 1rem 0;
@@ -53,7 +10,7 @@
   box-shadow: var(--presentation-callout-shadow);
 }
 
-.obsidian-slidev-callout__title {
+.presentation-callout__title {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -65,7 +22,7 @@
   text-transform: none;
 }
 
-.obsidian-slidev-callout__title::before {
+.presentation-callout__title::before {
   flex: 0 0 auto;
   width: 0.48rem;
   height: 0.48rem;
@@ -77,81 +34,81 @@
   transform: none;
 }
 
-.obsidian-slidev-callout[data-callout="neutral"] {
+.presentation-callout[data-callout="neutral"] {
   border-left-style: dashed;
 }
 
-.obsidian-slidev-callout[data-callout-family="info"] {
+.presentation-callout[data-callout-family="info"] {
   --presentation-callout-family: var(--presentation-family-info);
   --presentation-callout-family-surface: var(--presentation-family-info-surface);
 }
 
-.obsidian-slidev-callout[data-callout-family="positive"] {
+.presentation-callout[data-callout-family="positive"] {
   --presentation-callout-family: var(--presentation-family-positive);
   --presentation-callout-family-surface: var(--presentation-family-positive-surface);
 }
 
-.obsidian-slidev-callout[data-callout-family="caution"] {
+.presentation-callout[data-callout-family="caution"] {
   --presentation-callout-family: var(--presentation-family-caution);
   --presentation-callout-family-surface: var(--presentation-family-caution-surface);
 }
 
-.obsidian-slidev-callout[data-callout-family="danger"] {
+.presentation-callout[data-callout-family="danger"] {
   --presentation-callout-family: var(--presentation-family-danger);
   --presentation-callout-family-surface: var(--presentation-family-danger-surface);
 }
 
-.obsidian-slidev-callout[data-callout-family="question"] {
+.presentation-callout[data-callout-family="question"] {
   --presentation-callout-family: var(--presentation-family-question);
   --presentation-callout-family-surface: var(--presentation-family-question-surface);
 }
 
-.obsidian-slidev-callout[data-callout-family="quotation"] {
+.presentation-callout[data-callout-family="quotation"] {
   --presentation-callout-family: var(--presentation-family-quotation);
   --presentation-callout-family-surface: var(--presentation-family-quotation-surface);
 }
 
-.obsidian-slidev-callout[data-callout-family="positive"]
-  .obsidian-slidev-callout__title::before {
+.presentation-callout[data-callout-family="positive"]
+  .presentation-callout__title::before {
   border-radius: 0.08rem;
   transform: rotate(45deg);
 }
 
-.obsidian-slidev-callout[data-callout-family="caution"]
-  .obsidian-slidev-callout__title::before {
+.presentation-callout[data-callout-family="caution"]
+  .presentation-callout__title::before {
   border-radius: 0;
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
-.obsidian-slidev-callout[data-callout-family="danger"]
-  .obsidian-slidev-callout__title::before {
+.presentation-callout[data-callout-family="danger"]
+  .presentation-callout__title::before {
   border-radius: 0.08rem;
   transform: none;
 }
 
-.obsidian-slidev-callout[data-callout-family="question"]
-  .obsidian-slidev-callout__title::before {
+.presentation-callout[data-callout-family="question"]
+  .presentation-callout__title::before {
   border: 2px solid currentColor;
   background: transparent;
   transform: none;
 }
 
-.obsidian-slidev-callout[data-callout-family="quotation"]
-  .obsidian-slidev-callout__title::before {
+.presentation-callout[data-callout-family="quotation"]
+  .presentation-callout__title::before {
   width: 0.18rem;
   border-radius: 0;
   transform: none;
 }
 
-.obsidian-slidev-callout__content {
+.presentation-callout__content {
   color: color-mix(in srgb, var(--presentation-text) 88%, var(--presentation-text-muted));
 }
 
-.obsidian-slidev-callout__content > :last-child {
+.presentation-callout__content > :last-child {
   margin-bottom: 0;
 }
 
-.obsidian-slidev-media {
+.presentation-media {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -160,16 +117,16 @@
   gap: 0.5rem;
 }
 
-.obsidian-slidev-media__asset,
-.obsidian-slidev-media img,
-.obsidian-slidev-media video,
-.obsidian-slidev-media audio,
-.obsidian-slidev-media iframe {
+.presentation-media__asset,
+.presentation-media img,
+.presentation-media video,
+.presentation-media audio,
+.presentation-media iframe {
   display: block;
   max-width: 100%;
 }
 
-.obsidian-slidev-media__viewport {
+.presentation-media__viewport {
   position: relative;
   display: grid;
   place-items: center;
@@ -182,7 +139,7 @@
   background: var(--presentation-media-viewport-bg);
 }
 
-.obsidian-slidev-media__viewport > .obsidian-slidev-media__image {
+.presentation-media__viewport > .presentation-media__image {
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -196,30 +153,30 @@
   object-position: var(--presentation-media-position, center);
 }
 
-.obsidian-slidev-media__viewport[data-media-fit="contain"]
-  > .obsidian-slidev-media__image {
+.presentation-media__viewport[data-media-fit="contain"]
+  > .presentation-media__image {
   object-fit: contain;
 }
 
-.obsidian-slidev-media__viewport[data-media-fit="cover"]
-  > .obsidian-slidev-media__image {
+.presentation-media__viewport[data-media-fit="cover"]
+  > .presentation-media__image {
   object-fit: cover;
 }
 
-.obsidian-slidev-media[data-media-rendering="background"]
-  .obsidian-slidev-media__viewport {
+.presentation-media[data-media-rendering="background"]
+  .presentation-media__viewport {
   background-position: var(--presentation-media-position, center);
   background-repeat: no-repeat;
   background-size: var(--presentation-media-background-size, cover);
 }
 
-.obsidian-slidev-media[data-media-rendering="background"][data-media-state="ready"]
-  .obsidian-slidev-media__viewport {
+.presentation-media[data-media-rendering="background"][data-media-state="ready"]
+  .presentation-media__viewport {
   background-image: var(--presentation-media-background-image);
 }
 
-.obsidian-slidev-media[data-media-rendering="background"]
-  .obsidian-slidev-media__viewport > .obsidian-slidev-media__image {
+.presentation-media[data-media-rendering="background"]
+  .presentation-media__viewport > .presentation-media__image {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -231,7 +188,7 @@
   white-space: nowrap;
 }
 
-.obsidian-slidev-media__fallback {
+.presentation-media__fallback {
   display: grid;
   place-items: center;
   width: 100%;
@@ -247,8 +204,8 @@
   overflow-wrap: anywhere;
 }
 
-.obsidian-slidev-media img,
-.obsidian-slidev-media video {
+.presentation-media img,
+.presentation-media video {
   width: auto;
   max-height: var(--presentation-media-max-height);
   margin-inline: auto;
@@ -259,49 +216,14 @@
   object-fit: contain;
 }
 
-.obsidian-slidev-media--image[data-media-managed="generated"]
-  > img.obsidian-slidev-media__image,
-.obsidian-slidev-media--image[data-media-managed="generated"]
-  > .obsidian-slidev-media__fallback {
-  box-sizing: border-box;
-  width: 100%;
-  height: var(--presentation-media-viewport-height);
-  max-height: none;
-  margin: 0;
-  border-radius: var(--presentation-media-radius);
-}
-
-.obsidian-slidev-media--image[data-media-managed="generated"]
-  > img.obsidian-slidev-media__image {
-  border: 1px solid color-mix(
-    in srgb,
-    var(--presentation-border) 72%,
-    transparent
-  );
-  background: var(--presentation-media-viewport-bg);
-  box-shadow: none;
-  object-fit: var(--presentation-media-fit, contain);
-  object-position: var(--presentation-media-position, center);
-}
-
-.obsidian-slidev-media--image[data-media-managed="generated"][data-media-fit="contain"]
-  > img.obsidian-slidev-media__image {
-  object-fit: contain;
-}
-
-.obsidian-slidev-media--image[data-media-managed="generated"][data-media-fit="cover"]
-  > img.obsidian-slidev-media__image {
-  object-fit: cover;
-}
-
-.obsidian-slidev-media--video,
-.obsidian-slidev-media--youtube,
-.obsidian-slidev-media--audio {
+.presentation-media--video,
+.presentation-media--youtube,
+.presentation-media--audio {
   width: min(100%, 64rem);
 }
 
-.obsidian-slidev-media--video video,
-.obsidian-slidev-media--youtube iframe {
+.presentation-media--video video,
+.presentation-media--youtube iframe {
   width: 100%;
   border: 1px solid color-mix(in srgb, var(--presentation-border) 78%, transparent);
   border-radius: var(--presentation-media-radius);
@@ -309,23 +231,23 @@
   box-shadow: var(--presentation-media-shadow);
 }
 
-.obsidian-slidev-media--video video {
+.presentation-media--video video {
   box-sizing: border-box;
   height: var(--presentation-media-viewport-height);
   max-height: none;
   object-fit: contain;
 }
 
-.obsidian-slidev-media--youtube iframe {
+.presentation-media--youtube iframe {
   aspect-ratio: 16 / 9;
   height: auto;
 }
 
-.obsidian-slidev-media--audio audio {
+.presentation-media--audio audio {
   width: 100%;
 }
 
-.obsidian-slidev-media__caption {
+.presentation-media__caption {
   width: 100%;
   color: var(--presentation-text-muted);
   font-size: var(--presentation-caption-size);
@@ -337,31 +259,23 @@
 }
 
 @media (max-width: 720px) {
-  .obsidian-slidev-callout,
-  .obsidian-slidev-warning {
+  .presentation-callout {
     margin: 0.75rem 0;
     padding: 0.72rem 0.82rem;
     border-radius: 10px;
   }
 
-  .obsidian-slidev-media {
+  .presentation-media {
     width: 100%;
     margin: 0.8rem auto;
   }
 
-  .obsidian-slidev-media img,
-  .obsidian-slidev-media video {
+  .presentation-media img,
+  .presentation-media video {
     max-height: 48vh;
   }
 
-  .obsidian-slidev-media--video video {
-    max-height: none;
-  }
-
-  .obsidian-slidev-media--image[data-media-managed="generated"]
-    > img.obsidian-slidev-media__image,
-  .obsidian-slidev-media--image[data-media-managed="generated"]
-    > .obsidian-slidev-media__fallback {
+  .presentation-media--video video {
     max-height: none;
   }
 }

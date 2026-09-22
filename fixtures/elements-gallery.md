@@ -120,8 +120,8 @@ Good research deserves a clear explanation.
 ---
 layout: image-right
 presentationPreset: default
-image: /theme/public/obsidian-card.svg
-imageAlt: An Obsidian note connected to a presentation
+image: /theme/public/lilas-card.svg
+imageAlt: A sample card for a presentation
 caption: "Figure 1 · From research notes to a presentation. Theme source illustration."
 ---
 
@@ -301,8 +301,8 @@ Good research deserves a clear explanation.
 ---
 layout: image-right
 presentationPreset: ucas
-image: /theme/public/obsidian-card.svg
-imageAlt: An Obsidian note connected to a presentation
+image: /theme/public/lilas-card.svg
+imageAlt: A sample card for a presentation
 caption: "Figure 1 · From research notes to a presentation. Theme source illustration."
 ---
 
@@ -482,8 +482,8 @@ Good research deserves a clear explanation.
 ---
 layout: image-right
 presentationPreset: ict
-image: /theme/public/obsidian-card.svg
-imageAlt: An Obsidian note connected to a presentation
+image: /theme/public/lilas-card.svg
+imageAlt: A sample card for a presentation
 caption: "Figure 1 · From research notes to a presentation. Theme source illustration."
 ---
 

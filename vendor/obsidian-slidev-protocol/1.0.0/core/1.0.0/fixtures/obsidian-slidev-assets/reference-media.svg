@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title description">
-  <title id="title">Core protocol reference media</title>
-  <desc id="description">A blue circle, amber square, and green triangle on a pale background.</desc>
-  <rect width="640" height="360" rx="24" fill="#f7f8fa"/>
-  <circle cx="205" cy="180" r="84" fill="#2864a8"/>
-  <rect x="290" y="96" width="168" height="168" rx="18" fill="#b86d13"/>
-  <path d="M470 270 548 110l78 160Z" fill="#26734d"/>
-</svg>

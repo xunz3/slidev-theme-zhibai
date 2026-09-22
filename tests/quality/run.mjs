@@ -322,15 +322,6 @@ const executeQuality = async () => {
       return { root: relativePath(qualityArtifactRoot) }
     })
 
-    await runPhase(
-      'protocol-conformance',
-      () => runCommandPhase(
-        'protocol-conformance',
-        ['--test', 'tests/quality/protocol-conformance.spec.mjs'],
-        30_000,
-      ),
-    )
-
     let buildDefinitions
     await runPhase('prepare-builds', async () => {
       const [matrixDefinitions, expandedDefinitions] = await Promise.all([
@@ -348,9 +339,6 @@ const executeQuality = async () => {
         { id: 'artwork-gallery', source: 'fixtures/artwork-gallery.md' },
         { id: 'cover-alignment', source: 'fixtures/cover-alignment.md' },
         { id: 'elements-gallery', source: 'fixtures/elements-gallery.md' },
-        { id: 'protocol', source: 'fixtures/obsidian-protocol.md' },
-        { id: 'protocol-core', source: 'fixtures/protocol-core.md' },
-        { id: 'protocol-profile', source: 'fixtures/protocol-profile.md' },
       ].map(definition => ({
         ...definition,
         outDir: resolve(maintainedRoot, definition.id),
@@ -364,7 +352,7 @@ const executeQuality = async () => {
         })),
         ...expandedDefinitions,
       ]
-      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 16)
+      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 13)
       for (const build of buildDefinitions) {
         assert.ok(resolve(build.outDir) === build.outDir, `${build.id}: absolute output`)
       }
@@ -453,7 +441,7 @@ const executeQuality = async () => {
       'content-contracts',
       () => runCommandPhase(
         'content-contracts',
-        ['--test', 'tests/quality/content-contracts.spec.mjs', 'tests/quality/image-viewer.spec.mjs'],
+        ['--test', 'tests/quality/content-contracts.spec.mjs'],
       ),
     )
     await runPhase(

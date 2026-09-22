@@ -49,7 +49,7 @@ const expectedStyleImports = [
   './tokens.css',
   './base.css',
   './layouts.css',
-  './obsidian.css',
+  './semantic.css',
   './components.css',
   './content-layouts.css',
   './presets.css',
@@ -92,10 +92,10 @@ for (const preset of presetNames) {
   if (/^\s*(?::root|body)\b[^{]*data-presentation-preset/m.test(source)) {
     errors.push(`${path} contains root-authoritative preset state`)
   }
-  if (/\.obsidian-slidev-callout__title::before/.test(source)) {
+  if (/\.presentation-callout__title::before/.test(source)) {
     errors.push(`${path} overrides protected callout marker geometry`)
   }
-  if (/\.obsidian-slidev-callout__title[^{}]*\{[^{}]*text-transform\s*:/s.test(source)) {
+  if (/\.presentation-callout__title[^{}]*\{[^{}]*text-transform\s*:/s.test(source)) {
     errors.push(`${path} transforms authored callout titles`)
   }
   for (const match of source.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
@@ -108,12 +108,15 @@ for (const preset of presetNames) {
 }
 
 const packageJson = JSON.parse(sourceAt('package.json'))
+if ('obsidianSlidev' in packageJson) {
+  errors.push('package.json must not publish a producer-specific compatibility manifest')
+}
 const runtimeDependencies = Object.keys(packageJson.dependencies ?? {}).sort()
 if (runtimeDependencies.join(',') !== '@slidev/client') {
   errors.push('package.json runtime dependencies must contain only @slidev/client')
 }
-if (!packageJson.files?.includes('public/obsidian-card.svg')) {
-  errors.push('package.json must ship public/obsidian-card.svg')
+if (!packageJson.files?.includes('public/lilas-card.svg')) {
+  errors.push('package.json must ship public/lilas-card.svg')
 }
 if (existsSync(resolve(repositoryRoot, '.npmignore'))) {
   errors.push('package.json.files is authoritative; redundant .npmignore must be absent')
@@ -132,6 +135,9 @@ const converterDependencyPattern = /markdown-it|remark|rehype|unified|obsidian(?
 for (const absolutePath of packagedSourcePaths) {
   const path = relative(repositoryRoot, absolutePath)
   const source = readFileSync(absolutePath, 'utf8')
+  if (/obsidian-slidev|obsidianSlidev|normalizeGenerated|installImageViewer/.test(source)) {
+    errors.push(`${path} contains integration or addon behavior outside the theme boundary`)
+  }
   if (fixtureOnlyPattern.test(source)) {
     errors.push(`${path} contains fixture-only data-quality, gallery, or probe behavior`)
   }
@@ -143,13 +149,13 @@ for (const absolutePath of packagedSourcePaths) {
   }
 }
 
-const obsidianCss = sourceAt('styles/obsidian.css')
-if (/\.obsidian-slidev-callout--[\w-]+/.test(obsidianCss)) {
-  errors.push('styles/obsidian.css duplicates the TypeScript callout type-to-family registry')
+const semanticCss = sourceAt('styles/semantic.css')
+if (/\.presentation-callout--[\w-]+/.test(semanticCss)) {
+  errors.push('styles/semantic.css duplicates the TypeScript callout type-to-family registry')
 }
 for (const family of ['info', 'positive', 'caution', 'danger', 'question', 'quotation']) {
-  if (!obsidianCss.includes(`[data-callout-family="${family}"]`)) {
-    errors.push(`styles/obsidian.css is missing ${family} family state`)
+  if (!semanticCss.includes(`[data-callout-family="${family}"]`)) {
+    errors.push(`styles/semantic.css is missing ${family} family state`)
   }
 }
 

@@ -1,6 +1,6 @@
 export type AuthorPrimarySource = 'name' | 'email' | 'institution'
 
-export type ObsidianAuthor = {
+export type PresentationAuthor = {
   primary: string
   primarySource: AuthorPrimarySource
   primaryHref?: string
@@ -21,7 +21,7 @@ export const isActionableEmail = (value: unknown): value is string => {
 export const normalizeAuthor = (
   value: unknown,
   sourceIndex = 0,
-): ObsidianAuthor | null => {
+): PresentationAuthor | null => {
   if (typeof value === 'string') {
     const primary = normalizeText(value)
     return primary
@@ -71,11 +71,11 @@ export const normalizeAuthor = (
   }
 }
 
-export const normalizeAuthors = (value: unknown): ObsidianAuthor[] => {
+export const normalizeAuthors = (value: unknown): PresentationAuthor[] => {
   if (Array.isArray(value)) {
     return value
       .map((author, index) => normalizeAuthor(author, index))
-      .filter((author): author is ObsidianAuthor => author !== null)
+      .filter((author): author is PresentationAuthor => author !== null)
   }
 
   const author = normalizeAuthor(value, 0)
@@ -84,13 +84,13 @@ export const normalizeAuthors = (value: unknown): ObsidianAuthor[] => {
 
 export const resolveDeckAuthors = (
   configs: unknown,
-): ObsidianAuthor[] => {
+): PresentationAuthor[] => {
   if (!configs || typeof configs !== 'object' || Array.isArray(configs)) return []
   const record = configs as Record<string, unknown>
   const plural = normalizeAuthors(record.authors)
   return plural.length > 0 ? plural : normalizeAuthors(record.author)
 }
 
-export const formatAuthorNames = (authors: ObsidianAuthor[]): string => {
+export const formatAuthorNames = (authors: PresentationAuthor[]): string => {
   return authors.map(author => author.primary).filter(Boolean).join(', ')
 }

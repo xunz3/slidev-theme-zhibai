@@ -10,9 +10,9 @@ const props = defineProps<{
 const resolved = computed(() => resolveCallout(props.type, props.title))
 const titleId = `presentation-callout-${useId().replaceAll(':', '')}`
 const classes = computed(() => [
-  'obsidian-slidev-callout',
+  'presentation-callout',
   resolved.value.type
-    ? `obsidian-slidev-callout--${resolved.value.type}`
+    ? `presentation-callout--${resolved.value.type}`
     : null,
 ])
 </script>
@@ -25,10 +25,10 @@ const classes = computed(() => [
     role="note"
     :aria-labelledby="titleId"
   >
-    <div :id="titleId" class="obsidian-slidev-callout__title">
+    <div :id="titleId" class="presentation-callout__title">
       {{ resolved.title }}
     </div>
-    <div class="obsidian-slidev-callout__content">
+    <div class="presentation-callout__content">
       <slot />
     </div>
   </aside>

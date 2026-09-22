@@ -61,32 +61,18 @@ test('delayed media state transitions preserve reserved geometry', {
 }, async (t) => {
   const external = readQualityBuildContext()
   let server
-  let protocolServer
   let builds = external
 
   if (!builds) {
     const expandedDefinitions = await generateExpandedContentDefinitions()
     const build = expandedDefinitions.find(definition => definition.preset === 'default')
     assert.ok(build)
-    const protocolBuild = {
-      id: 'protocol',
-      outDir: resolve(qualityArtifactRoot, 'build/layout-stability/protocol'),
-      source: resolve(repositoryRoot, 'fixtures/obsidian-protocol.md'),
-    }
-    await Promise.all([buildDeck(build), buildDeck(protocolBuild)])
-    ;[server, protocolServer] = await Promise.all([
-      startStaticServer(build.outDir),
-      startStaticServer(protocolBuild.outDir),
-    ])
+    await buildDeck(build)
+    server = await startStaticServer(build.outDir)
     builds = {
       'expanded-default': {
         ...build,
         baseUrl: server.baseUrl,
-        preset: 'default',
-      },
-      protocol: {
-        ...protocolBuild,
-        baseUrl: protocolServer.baseUrl,
         preset: 'default',
       },
     }
@@ -167,7 +153,7 @@ test('delayed media state transitions preserve reserved geometry', {
           const regions = [
             root,
             ...root.querySelectorAll(
-              'figure, figcaption, .obsidian-slidev-media__viewport, .presentation-closing-logo, .presentation-closing__message',
+              'figure, figcaption, .presentation-media__viewport, .presentation-closing-logo, .presentation-closing__message',
             ),
           ]
           const shifts = []
@@ -218,7 +204,7 @@ test('delayed media state transitions preserve reserved geometry', {
           const regions = [
             root,
             ...root.querySelectorAll(
-              'figure, figcaption, .obsidian-slidev-media__viewport, .presentation-closing-logo, .presentation-closing__message',
+              'figure, figcaption, .presentation-media__viewport, .presentation-closing-logo, .presentation-closing__message',
             ),
           ]
           window.__delayedMediaShiftObserver?.disconnect()
@@ -259,23 +245,10 @@ test('delayed media state transitions preserve reserved geometry', {
         targetSelector: '.presentation-closing',
         targetSlide: 50,
       })
-      await verifyDelayedMedia({
-        asset: 'media-portrait.svg',
-        buildId: 'protocol',
-        expectedStateAttribute: 'data-media-state',
-        expectedStateValue: outcome,
-        fromSlide: 25,
-        id: `delayed-generated-image-${outcome}`,
-        outcome,
-        stateSelector: '[data-generated-state-case="delayed"]',
-        targetSelector: '[data-quality-case="protocol-generated-image-states"]',
-        targetSlide: 26,
-      })
     }
   } finally {
     await context.close()
     await browser.close()
     await server?.close()
-    await protocolServer?.close()
   }
 })

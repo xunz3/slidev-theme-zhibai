@@ -115,7 +115,7 @@ const snapshotPage = async (page, caseId) => {
         },
       },
       fingerprint: {
-        callout: style('.obsidian-slidev-callout', [
+        callout: style('.presentation-callout', [
           'background-color',
           'border-color',
           'border-radius',
@@ -129,7 +129,7 @@ const snapshotPage = async (page, caseId) => {
           'line-height',
           'padding',
         ]),
-        caption: style('.obsidian-slidev-media__caption', [
+        caption: style('.presentation-media__caption', [
           'color',
           'font-family',
           'font-size',
@@ -179,7 +179,7 @@ const snapshotPage = async (page, caseId) => {
           'color',
           'font-weight',
         ]),
-        warning: style('.obsidian-slidev-warning', [
+        warning: style('.presentation-callout[data-callout="warning"]', [
           'background-color',
           'border-color',
           'color',
