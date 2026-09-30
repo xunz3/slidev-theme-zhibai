@@ -12,10 +12,12 @@ import {
   waitForSlide,
 } from './helpers.mjs'
 
-const presets = ['default', 'ucas', 'ict']
+const presets = ['zhubai', 'qingdai', 'songmo', 'ucas', 'ict']
 const modes = ['light', 'dark']
 const localSlideNumber = {
-  default: 3,
+  zhubai: 3,
+  qingdai: 18,
+  songmo: 19,
   ucas: 4,
   ict: 5,
 }
@@ -115,10 +117,11 @@ const snapshotPage = async (page, caseId) => {
         },
       },
       fingerprint: {
-        callout: style('.obsidian-slidev-callout', [
+        callout: style('.presentation-callout', [
           'background-color',
           'border-color',
           'border-radius',
+          'border-width',
           'color',
         ]),
         canvas: style('.slidev-layout', [
@@ -129,7 +132,7 @@ const snapshotPage = async (page, caseId) => {
           'line-height',
           'padding',
         ]),
-        caption: style('.obsidian-slidev-media__caption', [
+        caption: style('.presentation-media__caption', [
           'color',
           'font-family',
           'font-size',
@@ -145,6 +148,7 @@ const snapshotPage = async (page, caseId) => {
         ]),
         footer: style('.slide-frame__footer', [
           'border-color',
+          'border-top-style',
           'color',
           'font-family',
           'font-size',
@@ -179,7 +183,7 @@ const snapshotPage = async (page, caseId) => {
           'color',
           'font-weight',
         ]),
-        warning: style('.obsidian-slidev-warning', [
+        warning: style('.presentation-callout[data-callout="warning"]', [
           'background-color',
           'border-color',
           'color',
@@ -217,7 +221,7 @@ const assertNoOverflow = (name, bounds) => {
 const assertBrandBoundary = (preset, brandClasses) => {
   const ucas = brandClasses.filter(className => className.includes('__ucas'))
   const ict = brandClasses.filter(className => className.includes('__ict'))
-  if (preset === 'default') {
+  if (['zhubai', 'qingdai', 'songmo'].includes(preset)) {
     assert.equal(ucas.length, 0)
     assert.equal(ict.length, 0)
   } else if (preset === 'ucas') {
@@ -285,7 +289,7 @@ const compareScreenshotPixels = async (page, actual, expected) => {
   })
 }
 
-test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 }, async (t) => {
+test('5 × 5 × 2 public preset API is visually isolated', { timeout: 240_000 }, async (t) => {
   const externalContext = readQualityBuildContext()
   const builds = externalContext
     ? presets.map(preset => ({
@@ -342,6 +346,18 @@ test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 },
         await page.close()
       }
     }
+
+    await t.test('preset papers stay distinct while content chrome stays quiet', async () => {
+      for (const mode of modes) {
+        const styles = presets.map(preset => expectedSnapshots.get(`${preset}:${mode}`).state.fingerprint)
+        assert.equal(new Set(styles.map(style => style.canvas['background-color'])).size, 5,
+          `${mode}: the preset paper and ink palettes remain distinct`)
+        assert.ok(styles.every(style => style.callout['border-width'] === '0px 0px 0px 2px'),
+          `${mode}: shared tonal callouts have only a 2px semantic family edge`)
+        assert.deepEqual(styles.map(style => style.footer['border-top-style']), presets.map(() => 'none'),
+          `${mode}: footer information is separated by space, without a rule`)
+      }
+    })
 
     for (const globalPreset of presets) {
       for (const localPreset of presets) {
@@ -484,10 +500,8 @@ test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 },
             ).evaluate(element => Number.parseFloat(
               getComputedStyle(element).fontSize,
             ))
-            assert.ok(
-              introTitleSize >= contentTitleSize * 1.75,
-              `${preset}/${mode}: intro ${introTitleSize}px, content ${contentTitleSize}px`,
-            )
+            assert.equal(contentTitleSize, 40, `${preset}/${mode}: reading title size`)
+            assert.equal(introTitleSize, 64, `${preset}/${mode}: opening display size`)
           } finally {
             await page.close()
           }
@@ -531,11 +545,11 @@ test('3 × 3 × 2 public preset API is visually isolated', { timeout: 240_000 },
 
     await t.test('keyboard navigation and TOC activation remain operable', async () => {
       const page = await context.newPage()
-      const baseUrl = serverByPreset.default.baseUrl
+      const baseUrl = serverByPreset.zhubai.baseUrl
 
-      await waitForSlide(page, baseUrl, 2, 'light', 'baseline-default')
+      await waitForSlide(page, baseUrl, 2, 'light', 'baseline-zhubai')
       await page.keyboard.press('ArrowRight')
-      await page.locator('[data-quality-case="local-default"]').waitFor({ state: 'attached' })
+      await page.locator('[data-quality-case="local-zhubai"]').waitFor({ state: 'attached' })
 
       await waitForSlide(page, baseUrl, 11, 'light', 'layout-toc')
       const buttons = page.locator('.slide-layout-toc__button:not(.slide-layout-toc__button--static)')
@@ -580,7 +594,7 @@ test('US3 content stays unbranded and section identity stays protected across ac
         preset,
       }))
     : (await generateExpandedContentBuilds())
-        .filter(build => build.preset !== 'default')
+        .filter(build => build.preset !== 'zhubai')
   const servers = externalContext
     ? []
     : await Promise.all(definitions.map(build => startStaticServer(build.outDir)))
@@ -640,11 +654,8 @@ test('US3 content stays unbranded and section identity stays protected across ac
     const lockupSelector = preset === 'ucas'
       ? '.slide-frame__ucas-wordmark'
       : '.slide-frame__ict-lockup--section'
-    const artworkSelector = '.preset-artwork'
     const lockup = page.locator(`.slidev-page-${slide} ${lockupSelector}`)
-    const artwork = page.locator(`.slidev-page-${slide} ${artworkSelector}`)
     await lockup.waitFor({ state: 'visible' })
-    await artwork.waitFor({ state: 'visible' })
 
     return {
       lockupPixels: await lockup.screenshot({ type: 'png' }),
@@ -673,12 +684,10 @@ test('US3 content stays unbranded and section identity stays protected across ac
               'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
             ).length,
             lockup: inspect(selectors.lockupSelector),
-            artwork: inspect(selectors.artworkSelector),
           }
         },
-        { lockupSelector, artworkSelector },
+        { lockupSelector },
       ),
-      artworkPixels: await artwork.screenshot({ type: 'png' }),
     }
   }
 
@@ -736,23 +745,9 @@ test('US3 content stays unbranded and section identity stays protected across ac
               sectionLocal.state.lockup,
               sectionFallback.state.lockup,
             )
-            assert.deepEqual(
-              sectionLocal.state.artwork,
-              sectionFallback.state.artwork,
-            )
-            assert.equal(
-              sectionLocal.state.artwork.opacity,
-              preset === 'ucas' ? '0.6' : '1',
-            )
             assert.ok(
               sectionLocal.lockupPixels.equals(sectionFallback.lockupPixels),
               `${preset}/${mode}: protected section lockup pixels changed`,
-            )
-            assert.ok(
-              sectionLocal.artworkPixels.equals(
-                sectionFallback.artworkPixels,
-              ),
-              `${preset}/${mode}: protected section artwork pixels changed`,
             )
           } finally {
             await page.close()

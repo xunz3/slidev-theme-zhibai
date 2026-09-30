@@ -16,7 +16,10 @@ const style = computed(() => {
   if (!props.background) return undefined
 
   return {
-    background: `center / cover no-repeat url("${props.background}")`,
+    backgroundImage: `url(${JSON.stringify(props.background)})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
   }
 })
 </script>

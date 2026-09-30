@@ -24,13 +24,14 @@ const intrinsicDimensions = async (path) => {
   return { width: Math.round(width), height: Math.round(height) }
 }
 
-test('recursive shipped-asset policy covers unlisted files under assets and public', async () => {
+test('repository asset policy covers unlisted files under assets and public', async () => {
   assert.equal(themeOwnedAssetPolicy.maximumBytes, 256_000)
   assert.deepEqual(themeOwnedAssetPolicy.roots, ['assets', 'public'])
 
   const discovered = await discoverThemeOwnedAssets()
   const paths = discovered.map(asset => asset.path)
-  assert.ok(paths.includes('public/obsidian-card.svg'))
+  assert.ok(paths.includes('assets/ICT/signature-official.png'))
+  assert.ok(paths.includes('assets/UCAS/emblem-name-bilingual-hz.svg'))
   assert.deepEqual(findOversizedThemeAssets(discovered), [])
 
   assert.deepEqual(findOversizedThemeAssets([
@@ -87,4 +88,19 @@ test('theme-owned image elements reserve their intrinsic geometry', async () => 
       )
     }
   }
+})
+
+
+test('published assets contain only the institution signatures used by the theme', async () => {
+  const manifest = JSON.parse(await readFile(resolve(repositoryRoot, 'package.json'), 'utf8'))
+  const assets = manifest.files.filter(path => /^(assets|public)(\/|$)/.test(path))
+  assert.deepEqual(assets.sort(), [
+    'assets/ICT/SOURCES.md',
+    'assets/ICT/signature-official.png',
+    'assets/UCAS/emblem-name-bilingual-hz.svg',
+  ])
+  assert.equal(manifest.name, 'slidev-theme-zhubai')
+  assert.equal(manifest.slidev.defaults.colorSchema, 'light')
+  assert.equal(manifest.slidev.colorSchema, 'both')
+  assert.ok(manifest.engines.slidev, 'declare the supported Slidev version')
 })

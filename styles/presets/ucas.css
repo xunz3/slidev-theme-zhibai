@@ -1,522 +1,116 @@
-/* UCAS — a quiet academic identity: institutional blue, serif hierarchy, and paper-like space. */
-.slidev-layout[data-presentation-preset="ucas"],
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame {
-  --slidev-theme-primary: #0c4994;
-  --presentation-accent: var(--slidev-theme-primary);
-  --presentation-bg: #faf9f5;
-  --presentation-bg-elevated: #fbfcfd;
-  --presentation-bg-muted: #edf1f5;
-  --presentation-frame-bg: transparent;
-  --presentation-text: #253344;
-  --presentation-text-muted: #687681;
-  --presentation-border: rgba(18, 58, 96, 0.13);
-  --presentation-border-strong: rgba(18, 58, 96, 0.38);
-  --presentation-brand-title: #183553;
-  --presentation-brand-ink: #183553;
-  --presentation-brand-muted: #42698f;
-  --presentation-shadow: none;
-  --presentation-scrollbar-thumb: rgba(12, 73, 148, 0.26);
-  --presentation-scrollbar-track: transparent;
-  --presentation-font-sans: "Source Sans 3", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", ui-sans-serif, system-ui, sans-serif;
-  --presentation-font-serif: "Source Serif 4", "Noto Serif SC", "Songti SC", "Source Han Serif SC", STSong, ui-serif, Georgia, serif;
-  --presentation-font-body: var(--presentation-font-sans);
-  --presentation-font-display: var(--presentation-font-serif);
-  --presentation-font-quote: var(--presentation-font-serif);
-  --presentation-font-label: var(--presentation-font-sans);
-  --presentation-font-mono: "JetBrains Mono", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-monospace, monospace;
-  --presentation-slide-padding: 2.6rem 3rem 1.3rem;
-  --presentation-content-gap: 0.88rem;
-  --presentation-body-size: 1.02rem;
-  --presentation-body-line-height: 1.56;
-  --presentation-list-spacing: 0.18em;
-  --presentation-heading-scale: 0.96;
-  --presentation-heading-weight: 500;
-  --presentation-heading-letter-spacing: -0.025em;
-  --presentation-heading-line-height: 1.15;
-  --presentation-table-header-bg: transparent;
-  --presentation-table-row-alt-bg: transparent;
-  --presentation-code-bg: #f0f3f6;
-  --presentation-code-border: rgba(12, 73, 148, 0.16);
-  --presentation-inline-code-bg: rgba(12, 73, 148, 0.07);
-  --presentation-inline-code-border: rgba(12, 73, 148, 0.17);
-  --presentation-inline-code-shadow: none;
-  --presentation-blockquote-bg: transparent;
-  --presentation-blockquote-border: #5e7fa1;
-  --presentation-blockquote-font-style: normal;
-  --presentation-callout-bg: transparent;
-  --presentation-callout-border: #4b75a0;
-  --presentation-callout-radius: 0;
-  --presentation-callout-shadow: var(--presentation-shadow);
-  --presentation-warning-bg: transparent;
-  --presentation-warning-border: #9a6b31;
-  --presentation-warning-text: #715028;
-  --presentation-caption-font-style: normal;
-  --presentation-caption-letter-spacing: 0.01em;
-  --presentation-media-max-height: 70vh;
-  --presentation-media-radius: 0.16rem;
-  --presentation-media-shadow: var(--presentation-shadow);
-  --presentation-author-card-bg: transparent;
-  --presentation-author-card-border: var(--presentation-border);
-  --presentation-author-card-shadow: var(--presentation-shadow);
-  --presentation-statement-size: 3.1rem;
-  --presentation-quote-size: 1.78rem;
-  --presentation-quote-line-height: 1.5;
-  --presentation-reference-size: 0.87rem;
-  --presentation-motion-duration: 700ms;
-  --presentation-motion-distance: 8px;
-  --presentation-motion-x: 0px;
+/* Folio: institutional blue and the unchanged official signature. */
+.slidev-layout[data-presentation-preset="ucas"] {
+  --zhubai-paper: #f9fafc;
+  --zhubai-ink: #1d2126;
+  --zhubai-accent: #1d4e8e;
+  --zhubai-highlight: #b3352c;
+  --presentation-brand-muted: color-mix(in srgb, var(--presentation-accent) 75%, var(--presentation-text));
 }
 
-html.dark .slidev-layout[data-presentation-preset="ucas"],
-html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
-  --slidev-theme-primary: #86afe0;
-  --presentation-bg: #101923;
-  --presentation-bg-elevated: #162331;
-  --presentation-bg-muted: #1c2b3a;
-  --presentation-text: #e7edf3;
-  --presentation-text-muted: #a7b5c2;
-  --presentation-border: rgba(200, 219, 238, 0.14);
-  --presentation-border-strong: rgba(200, 219, 238, 0.38);
-  --presentation-code-bg: #162331;
-  --presentation-code-border: rgba(134, 175, 224, 0.18);
-  --presentation-inline-code-bg: rgba(134, 175, 224, 0.12);
-  --presentation-inline-code-border: rgba(134, 175, 224, 0.22);
-  --presentation-blockquote-border: #7999b9;
-  --presentation-callout-border: #86afe0;
-  --presentation-warning-border: #c39a68;
-  --presentation-warning-text: #dec29f;
-  --presentation-brand-title: #e2edf7;
-  --presentation-brand-ink: #c7dbed;
-  --presentation-brand-muted: #91b3d1;
+html.dark .slidev-layout[data-presentation-preset="ucas"] {
+  --zhubai-paper: #11151b;
+  --zhubai-ink: #f1f2f3;
+  --zhubai-accent: #7aa5e0;
+  --zhubai-highlight: #d4756e;
+  --zhubai-surface: #1d2530;
 }
 
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame {
-  isolation: isolate;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame > :is(.slide-frame__header, .slide-frame__content, .slide-frame__footer) {
-  position: relative;
+/* The official UCAS signature remains unchanged and centered above the folio. */
+.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame__ucas-rail {
+  position: absolute;
   z-index: 2;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-wordmark,
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-watermark {
-  position: absolute;
-  pointer-events: none;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-wordmark {
-  z-index: 3;
-  top: 1.12rem;
-  right: 2.65rem;
-  width: 7.35rem;
-  height: auto;
-  opacity: 0.9;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-watermark {
-  z-index: 0;
-  right: 2.5rem;
-  bottom: 1.8rem;
-  width: 10rem;
-  height: auto;
-  opacity: 0.016;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__header {
-  padding: 0 0 0.48rem;
-  border-bottom: 1px solid var(--presentation-chrome-accent);
-  color: var(--presentation-text-muted);
-  font-size: var(--presentation-chrome-size);
-  letter-spacing: 0.025em;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__footer {
-  padding: 0.7rem 0 0.05rem;
-  border-top: 0;
-  color: var(--presentation-text-muted);
-  font-size: var(--presentation-chrome-size);
-  font-weight: 500;
-  letter-spacing: 0.015em;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__page {
-  color: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame :is(h1, h2, h3, h4) {
-  color: var(--presentation-brand-ink);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame h1 {
-  margin-bottom: 0.42em;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame h2 {
-  color: color-mix(in srgb, var(--presentation-accent) 66%, var(--presentation-text));
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame table {
-  border-top: 1px solid var(--presentation-brand-muted);
-  border-bottom: 1px solid var(--presentation-border-strong);
-  background: transparent;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame th {
-  border-bottom: 1px solid var(--presentation-chrome-accent);
-  color: var(--presentation-brand-ink);
-  background: color-mix(in srgb, var(--presentation-accent) 3%, transparent);
-  font-weight: 600;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame td {
-  border-bottom-color: color-mix(in srgb, var(--presentation-border) 68%, transparent);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame pre {
-  padding: 0.78rem 0.86rem;
-  border-radius: 0.14rem;
-  box-shadow: var(--presentation-shadow);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame :not(pre) > code {
-  border-radius: 0.16rem;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame blockquote {
-  padding: 0.2rem 0 0.2rem 1.05rem;
-  border-left-width: 1px;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame :is(.obsidian-slidev-callout, .obsidian-slidev-warning) {
-  margin: 0.82rem 0;
-  padding: 0.48rem 0 0.5rem 0.92rem;
-  border: 0;
-  border-left: 1px solid;
-  border-radius: 0;
-  background: transparent;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout {
-  border-left-color: var(--presentation-callout-family);
-  background: color-mix(in srgb, var(--presentation-callout-family) 2%, transparent);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout[data-callout="neutral"] {
-  border-left-color: var(--presentation-callout-border);
-  background: var(--presentation-callout-bg);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-warning {
-  border-left-color: var(--presentation-warning-border);
-  background: color-mix(in srgb, var(--presentation-warning-border) 2%, transparent);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-callout__title {
-  margin-bottom: 0.3rem;
-  font-family: var(--presentation-font-sans);
-  font-size: 0.76rem;
-  font-weight: 600;
-  letter-spacing: 0.075em;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame .obsidian-slidev-media__caption {
-  color: var(--presentation-text-muted);
-  font-family: var(--presentation-font-serif);
-  font-size: var(--presentation-caption-size);
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame :is(.presentation-tag, .presentation-badge) {
-  border-radius: 0.12rem;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .slide-frame :is(.presentation-kbd, .presentation-kbd-key) {
-  border-radius: 0.16rem;
-  box-shadow: none;
-}
-
-.slidev-layout.quote[data-presentation-preset="ucas"] .slide-frame .slide-layout-quote {
-  max-width: 49rem;
-  justify-items: start;
-  text-align: left;
-}
-
-.slidev-layout.quote[data-presentation-preset="ucas"] .slide-frame .slide-layout-quote__content {
-  padding: 0 0 0 1.3rem;
-  border-left: 1px solid var(--presentation-brand-muted);
-  color: var(--presentation-text);
-  font-style: normal;
-  font-weight: 400;
-}
-
-.slidev-layout.quote[data-presentation-preset="ucas"] .slide-frame .slide-layout-quote__content > blockquote {
+  top: 1.7rem;
+  left: 50%;
+  width: 13.5rem;
   margin: 0;
-  padding: 0;
-  border: 0;
-  color: inherit;
-  background: transparent;
-  font: inherit;
+  transform: translateX(-50%);
 }
 
-.slidev-layout.quote[data-presentation-preset="ucas"] .slide-frame .slide-layout-quote__meta {
-  margin-left: 1.31rem;
-  border-top-color: var(--presentation-border);
-  justify-items: start;
-}
-
-.slidev-layout.statement[data-presentation-preset="ucas"] .slide-frame .slide-layout-statement {
-  width: min(100%, 58rem);
-  text-align: left;
-}
-
-.slidev-layout.statement[data-presentation-preset="ucas"] .slide-frame .slide-layout-statement::before {
-  display: block;
-  width: 4.6rem;
-  height: 1px;
-  margin-bottom: 1rem;
-  background: var(--presentation-brand-muted);
-  content: "";
-}
-
-.slidev-layout.statement[data-presentation-preset="ucas"] .slide-frame .slide-layout-statement h1 {
-  color: var(--presentation-brand-ink);
-  font-weight: 500;
-}
-
-.slidev-layout.statement[data-presentation-preset="ucas"] .slide-frame .slide-layout-statement p {
-  margin-inline: 0;
-  color: var(--presentation-text-muted);
-}
-
-/* Light dividers and statements stay on paper; institutional blue is an accent. */
-.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame,
-.slidev-layout.statement[data-presentation-preset="ucas"] .slide-frame {
-  --presentation-frame-bg: #edf2f6;
-  --presentation-bg: #edf2f6;
-  --presentation-text-muted: #5d6b77;
-}
-
-html.dark .slidev-layout:is(.section, .statement)[data-presentation-preset="ucas"] .slide-frame {
-  --presentation-frame-bg: #123d69;
-  --presentation-bg: #123d69;
-  --presentation-text: #f7f5ed;
-  --presentation-text-muted: #c4d2e0;
-  --presentation-brand-title: #f7f5ed;
-  --presentation-brand-ink: #f7f5ed;
-  --presentation-brand-muted: #e0c48e;
-  --presentation-accent: #e0c48e;
-  --presentation-border: rgba(255, 255, 255, 0.26);
-  --presentation-border-strong: rgba(255, 255, 255, 0.38);
-}
-
-.slidev-layout.toc[data-presentation-preset="ucas"] .slide-frame .slide-layout-toc {
-  width: min(100%, 51rem);
-}
-
-.slidev-layout.toc[data-presentation-preset="ucas"] .slide-frame .slide-layout-toc__extra {
-  order: -1;
-}
-
-.slidev-layout.toc[data-presentation-preset="ucas"] .slide-frame .slide-layout-toc__button {
-  grid-template-columns: 3rem minmax(0, 1fr);
-  padding: 0.74rem 0;
-  border-bottom-color: var(--presentation-border);
-}
-
-.slidev-layout.toc[data-presentation-preset="ucas"] .slide-frame .slide-layout-toc__number {
-  color: var(--presentation-brand-muted);
-  font-family: var(--presentation-font-serif);
-  font-size: 1.28rem;
-  font-weight: 500;
-}
-
-.slidev-layout.references[data-presentation-preset="ucas"] .slide-frame .slide-layout-references li {
-  padding-left: 0.18rem;
-}
-
-/* UCAS — the university signature on ivory, with a pale astronomical field. */
-.slidev-layout:is(.cover, .section, .closing)[data-presentation-preset="ucas"] .slide-frame {
-  --presentation-slide-padding: 4rem 4rem 2.7rem;
-}
-
-.slidev-layout[data-presentation-preset="ucas"] .preset-artwork {
-  color: #91a9bf;
-  background: #edf2f6;
-  --presentation-artwork-point: #b29767;
-}
-
-html.dark .slidev-layout[data-presentation-preset="ucas"] .preset-artwork {
-  color: #7197be;
-  background: #123d69;
-  --presentation-artwork-point: #d5b77c;
-}
-
-.slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-rail {
-  position: absolute;
-  z-index: 3;
-  inset: 2.3rem auto auto 4rem;
-  width: 15rem;
-  pointer-events: none;
-}
-
-.slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-rail-brand {
+.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame__ucas-rail-brand,
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame__ucas-wordmark,
+.slidev-layout.closing[data-presentation-preset="ucas"] .slide-frame__ucas-rail-brand {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-watermark {
-  z-index: 1;
-  width: 7.5rem;
-  right: 5.4%;
-  top: calc(50% - 3.75rem);
-  bottom: auto;
-  opacity: 0.94;
-}
-
-.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame .slide-cover {
-  margin-top: 2.6rem;
-}
-
-.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame .slide-cover__main::before {
-  width: 2.5rem;
-  height: 2px;
-  margin-bottom: 0.9rem;
-  background: #b29767;
-  content: "";
-}
-
-.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame h1 {
-  color: var(--presentation-brand-title);
-  font-weight: 400;
-  letter-spacing: -0.045em;
-}
-
-.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame .slide-cover__subtitle {
-  color: var(--presentation-brand-muted);
-}
-
-.slidev-layout.cover[data-presentation-preset="ucas"] .slide-cover__subtitle::before {
-  display: none;
-}
-
-.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame .slide-cover__body {
-  color: var(--presentation-text-muted);
-}
-
-.slidev-layout.section[data-presentation-preset="ucas"] .preset-artwork {
-  background: transparent;
-  --presentation-artwork-opacity: 0.6;
-}
-
-.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-wordmark {
-  top: 2.3rem;
-  left: 4rem;
-  right: auto;
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame__ucas-wordmark,
+.slidev-layout.closing[data-presentation-preset="ucas"] .slide-frame__ucas-rail {
+  position: absolute;
+  z-index: 2;
+  top: 1.6rem;
+  left: 3rem;
   width: 12rem;
-  opacity: 0.9;
+  pointer-events: none;
 }
 
-.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame .slide-layout-section {
-  width: 100%;
-  padding-right: 25%;
-  padding-top: 2rem;
-  text-align: left;
+/* Keep balanced headings; compact full-width CJK punctuation at display size. */
+.slidev-layout.cover[data-presentation-preset="ucas"] :is(.slide-cover__title, .slide-cover__body > h1) {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "halt" 1;
 }
 
-.slidev-layout.section[data-presentation-preset="ucas"] .slide-layout-section::before {
-  display: none;
+html.dark .slidev-layout[data-presentation-preset="ucas"] :is(.slide-frame__ucas-rail-brand, .slide-frame__ucas-wordmark) {
+  /* Preserve the emblem’s white cutouts in dark mode. */
+  filter: grayscale(1) invert(1);
+  mix-blend-mode: screen;
 }
 
-.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame .slide-layout-section__kicker {
-  display: block;
+.slidev-layout.cover[data-presentation-preset="ucas"] .slide-cover__eyebrow,
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-layout-section__kicker {
   color: var(--presentation-brand-muted);
+  font-family: var(--presentation-font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
-.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame h1 {
-  max-width: 16ch;
-  margin-bottom: 1.2rem;
-  color: var(--presentation-brand-title);
-  font-size: calc(4.05rem * var(--presentation-heading-scale));
-  font-weight: 400;
-  letter-spacing: -0.035em;
-  line-height: 1.08;
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-layout-section {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  text-align: center;
 }
 
-.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame p {
-  max-width: 33rem;
-  color: var(--presentation-text-muted);
-  font-size: 1.05rem;
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-layout-section__index {
+  color: var(--presentation-section-index-color);
+  font-family: var(--presentation-font-serif);
+  font-size: var(--presentation-section-index-size);
+  font-variant-numeric: oldstyle-nums;
+  font-weight: 600;
+  line-height: 0.82;
 }
 
-.slidev-layout.closing[data-presentation-preset="ucas"] .slide-frame .presentation-closing--minimal {
-  width: 100%;
-  padding-right: 30%;
-  justify-items: start;
-  text-align: left;
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-layout-section h1 {
+  max-width: 19ch;
+  margin-inline: auto;
+  color: var(--presentation-text);
+  font-family: var(--presentation-font-display);
+  font-size: var(--presentation-section-size);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.04;
 }
 
-.slidev-layout.closing[data-presentation-preset="ucas"] .slide-frame .presentation-closing--minimal h1 {
-  max-width: 15ch;
-  color: var(--presentation-brand-title);
-  font-size: calc(4.15rem * var(--presentation-heading-scale));
-  font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 1.08;
+.slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right)[data-presentation-preset="ucas"] .slide-frame h1 {
+  color: var(--presentation-text);
+  font-family: var(--presentation-font-sans);
+  font-size: var(--presentation-slide-title-size);
+  font-weight: 600;
 }
 
-.slidev-layout.closing[data-presentation-preset="ucas"] .presentation-closing--minimal .presentation-closing__message::before {
-  display: block;
-  width: 2.5rem;
-  height: 2px;
-  margin-bottom: 1.7rem;
-  background: #b29767;
-  content: "";
+.slidev-layout.cover[data-presentation-preset="ucas"][data-presentation-cover-align="left"] .slide-frame__ucas-rail {
+  left: 4rem;
+  transform: none;
 }
 
-/* Supplied white artwork preserves the detail of the original seal. */
-html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-rail-brand,
-html.dark .slidev-layout[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-wordmark {
-  content: url("../../assets/UCAS/emblem-name-bilingual-hz-white.png");
+.slidev-layout.closing[data-presentation-preset="ucas"] .presentation-closing--minimal {
+  justify-items: center;
+  text-align: center;
 }
 
-html.dark .slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-watermark {
-  content: url("../../assets/UCAS/emblem-white.png");
-}
-
-.slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame:has(.slide-cover--has-visual) .slide-frame__ucas-watermark,
-.slidev-layout.closing[data-presentation-preset="ucas"] .slide-frame:has(.presentation-closing--rich) :is(.preset-artwork, .slide-frame__ucas-watermark) {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  .slidev-layout:is(.cover, .section, .closing)[data-presentation-preset="ucas"] .slide-frame {
-    --presentation-slide-padding: 3.8rem 2.5rem 1.8rem;
-  }
-
-  .slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-rail,
-  .slidev-layout.section[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-wordmark {
-    top: 1.8rem;
-    left: 2.5rem;
-    width: 12rem;
-  }
-
-  .slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-watermark {
-    width: 6rem;
-    right: 4.5%;
-    top: calc(50% - 3rem);
-  }
-
-  .slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame .slide-cover {
-    gap: 1.2rem;
-    margin-top: 2.1rem;
-  }
-
-  .slidev-layout.cover[data-presentation-preset="ucas"] .slide-frame h1,
-  .slidev-layout.section[data-presentation-preset="ucas"] .slide-frame h1,
-  .slidev-layout.closing[data-presentation-preset="ucas"] .slide-frame .presentation-closing--minimal h1 {
-    font-size: calc(3.05rem * var(--presentation-heading-scale));
-  }
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame {
+  --presentation-brand-muted: color-mix(in srgb, var(--presentation-accent) 75%, var(--presentation-text));
+  --presentation-cover-padding: 5.8rem 4rem 2rem;
+  --presentation-cover-padding-mobile: 5rem 1.5rem 1.25rem;
+  --presentation-cover-width: 68rem;
 }

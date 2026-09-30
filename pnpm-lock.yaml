@@ -24,9 +24,6 @@ importers:
       playwright-chromium:
         specifier: ^1.61.1
         version: 1.61.1
-      slidev-pane:
-        specifier: 0.1.9
-        version: 0.1.9(@slidev/client@52.15.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@nuxt/kit@3.21.6)(@vue/compiler-sfc@3.5.34)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)))(@slidev/types@52.15.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@nuxt/kit@3.21.6)(@vue/compiler-sfc@3.5.34)(typescript@5.9.3)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3))
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -2487,14 +2484,6 @@ packages:
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
-
-  slidev-pane@0.1.9:
-    resolution: {integrity: sha512-Qk0uoiV6ecF7c1TtWhj3hxF8Dr8NyGQBD4za4fDgxgvhA8FHY4y1DS9s60L0n1jP7oaHjs7IkdESER4t3urZHw==}
-    engines: {node: '>=18.0.0', slidev: '>=0.51.0-beta.4'}
-    peerDependencies:
-      '@slidev/client': '>=0.51.0-beta.4'
-      '@slidev/types': '>=0.51.0-beta.4'
-      vue: '>=3.3.0 <4'
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -5784,12 +5773,6 @@ snapshots:
       totalist: 3.0.1
 
   sisteransi@1.0.5: {}
-
-  slidev-pane@0.1.9(@slidev/client@52.15.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@nuxt/kit@3.21.6)(@vue/compiler-sfc@3.5.34)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)))(@slidev/types@52.15.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@nuxt/kit@3.21.6)(@vue/compiler-sfc@3.5.34)(typescript@5.9.3)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3)):
-    dependencies:
-      '@slidev/client': 52.15.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@nuxt/kit@3.21.6)(@vue/compiler-sfc@3.5.34)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      '@slidev/types': 52.15.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@nuxt/kit@3.21.6)(@vue/compiler-sfc@3.5.34)(typescript@5.9.3)(vite@8.0.13(@types/node@22.19.19)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      vue: 3.5.34(typescript@5.9.3)
 
   source-map-js@1.2.1: {}
 

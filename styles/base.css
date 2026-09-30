@@ -27,11 +27,11 @@
   text-wrap: balance;
 }
 
-/* Slide titles keep the editorial display face without reading like section dividers. */
+/* Content titles use the shared sans hierarchy; preset chapters may opt into serif. */
 .slidev-layout h1 {
-  font-family: var(--presentation-font-display, var(--presentation-font-serif));
+  font-family: var(--presentation-font-sans);
   font-size: calc(var(--presentation-slide-title-size) * var(--presentation-heading-scale));
-  font-weight: var(--presentation-heading-weight);
+  font-weight: 600;
   letter-spacing: var(--presentation-heading-letter-spacing);
   line-height: var(--presentation-heading-line-height);
 }
@@ -48,17 +48,54 @@
   text-wrap: pretty;
 }
 
-.slidev-layout:lang(zh) :is(h1, h2, h3, h4, figcaption, .slide-layout-quote__content),
-.slidev-layout :lang(zh):is(h1, h2, h3, h4, figcaption, .slide-layout-quote__content) {
+/* Slidev's utility classes set fixed paragraph/list leading, so restate the
+   preset rhythm on prose elements while leaving component-specific lines intact. */
+.slidev-layout p,
+.slidev-layout li {
+  line-height: var(--presentation-body-line-height);
+}
+
+.slidev-layout figcaption {
+  color: var(--presentation-text-muted);
+  font-family: var(--presentation-font-sans);
+  font-size: var(--presentation-caption-size);
+  line-height: 1.4;
+}
+
+/* Language is intentional author metadata. Do not infer a CJK run from the
+   surrounding document language: mixed Latin/CJK text needs explicit spans. */
+.slidev-layout [lang|="zh"] {
   font-style: normal;
   letter-spacing: 0;
+  hanging-punctuation: first allow-end;
+}
+
+.slidev-layout :is(p, li, blockquote, figcaption)[lang|="zh"]:not([lang|="zh"] [lang|="zh"]),
+.slidev-layout :is(p, li, blockquote, figcaption) [lang|="zh"]:not([lang|="zh"] [lang|="zh"]) {
+  font-size: 1.02em;
+  line-height: 1.6;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__title[lang|="zh"],
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__body > h1[lang|="zh"],
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--dense-title .slide-cover__title[lang|="zh"],
+.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--dense-title .slide-cover__body > h1[lang|="zh"],
+.slidev-layout.section[data-presentation-preset] .slide-layout-section__main > h1[lang|="zh"] {
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+@supports (text-autospace: normal) {
+  .slidev-layout [lang|="zh"] {
+    text-autospace: normal;
+  }
 }
 
 .slidev-layout .slide-frame__content > :is(p, ul, ol, blockquote) {
   max-width: var(--presentation-reading-width);
 }
 
-.slidev-layout .slide-frame__content > :is(table, .obsidian-slidev-callout, .obsidian-slidev-warning) {
+.slidev-layout .slide-frame__content > :is(table, .presentation-callout) {
   width: 100%;
   max-width: var(--presentation-block-width);
 }
@@ -82,11 +119,11 @@
 }
 
 .slidev-layout h3 {
-  font-size: calc(var(--presentation-local-title-size) * 0.84 * var(--presentation-heading-scale));
+  font-size: calc(var(--presentation-size-21) * var(--presentation-heading-scale));
 }
 
 .slidev-layout h4 {
-  font-size: calc(var(--presentation-local-title-size) * 0.72 * var(--presentation-heading-scale));
+  font-size: calc(var(--presentation-size-18) * var(--presentation-heading-scale));
 }
 
 .slidev-layout p,
@@ -146,34 +183,58 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: var(--presentation-table-size);
+  font-family: var(--presentation-font-sans);
   font-variant-numeric: tabular-nums;
+}
+
+.slidev-layout .presentation-callout,
+.slidev-layout :is(.presentation-sequence, .presentation-timeline, .presentation-steps),
+.slidev-layout :is(.presentation-task-list, .presentation-task-item),
+.slidev-layout :is(.presentation-tag, .presentation-badge, .presentation-kbd-sequence),
+.slidev-layout :is(.presentation-authors, .presentation-author, .presentation-media) {
+  font-family: var(--presentation-font-sans);
+  font-size: 1rem;
 }
 
 .slidev-layout th,
 .slidev-layout td {
   padding: 0.55rem 0.7rem;
-  border-bottom: 1px solid var(--presentation-border);
+  border: 0;
   vertical-align: top;
 }
 
 .slidev-layout th {
-  border-bottom-color: var(--presentation-chrome-accent);
+  border-bottom: 1px solid var(--presentation-border-strong);
   color: var(--presentation-text);
-  background: var(--presentation-table-header-bg);
+  background: transparent;
   font-weight: 600;
-}
-
-.slidev-layout tbody tr:nth-child(even) {
-  background: var(--presentation-table-row-alt-bg);
 }
 
 .slidev-layout pre {
   overflow-x: auto;
   padding: 0.95rem 1rem;
-  border: 1px solid var(--presentation-code-border);
-  border-radius: 12px;
+  border: 0;
+  border-radius: 8px;
   background: var(--presentation-code-bg);
-  box-shadow: var(--presentation-shadow);
+  box-shadow: none;
+}
+
+.slidev-layout pre[data-language]::before {
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  height: 28px;
+  margin: -0.95rem -1rem 0.75rem;
+  padding: 0 3.5rem 0 1rem;
+  color: var(--presentation-text-muted);
+  background: color-mix(in srgb, var(--presentation-accent) 4%, transparent);
+  content: attr(data-language);
+  font-family: var(--presentation-font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
 }
 
 .slidev-layout pre code {
@@ -202,11 +263,27 @@
 }
 
 .slidev-layout blockquote {
-  padding: 0.55rem 0 0.55rem 1.2rem;
-  border-left: 2px solid var(--presentation-blockquote-border);
-  color: var(--presentation-text-muted);
-  background: var(--presentation-blockquote-bg);
-  font-style: var(--presentation-blockquote-font-style);
+  position: relative;
+  padding: 0.35rem 0 0.35rem 4rem;
+  border: 0;
+  color: var(--presentation-text);
+  background: transparent;
+  font-family: var(--presentation-font-quote);
+  font-size: var(--presentation-quote-size, 28px);
+  font-style: italic;
+}
+
+.slidev-layout blockquote::before {
+  position: absolute;
+  top: -0.18em;
+  left: 0;
+  color: color-mix(in srgb, var(--presentation-accent) 20%, transparent);
+  content: "“";
+  font-family: var(--presentation-font-display, var(--presentation-font-quote));
+  font-size: 64px;
+  font-style: normal;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .slidev-layout blockquote p {
@@ -289,24 +366,44 @@
   font-weight: 700;
 }
 
-.slidev-layout :is(mark, .obsidian-slidev-highlight) {
+.slidev-layout mark {
   padding: 0.02em 0.14em 0.04em;
   border: 0;
-  border-radius: 0;
+  border-radius: 2px;
   color: var(--presentation-highlight-text);
   background: var(--presentation-highlight-bg);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--presentation-focus) 45%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.12em;
   box-decoration-break: clone;
   box-shadow: none;
   -webkit-box-decoration-break: clone;
 }
 
-.slidev-layout :is(pre, code) :is(mark, .obsidian-slidev-highlight) {
+.slidev-layout .presentation-focus {
+  color: var(--presentation-focus);
+}
+
+.slidev-layout :is(mark, .presentation-focus) :is(strong, em) {
+  color: inherit;
+}
+
+.slidev-layout:is(.cover, .statement) :is(h1, .slide-cover__title) mark {
+  padding: 0;
+  color: var(--presentation-focus);
+  background: transparent;
+  text-decoration: none;
+}
+
+.slidev-layout :is(pre, code) mark {
   padding: 0;
   border: 0;
   border-radius: 0;
   color: inherit;
   background: transparent;
   box-shadow: none;
+  text-decoration: none;
 }
 
 .slidev-layout .presentation-task-list {
@@ -402,7 +499,7 @@
   border-radius: 0.28rem;
   color: var(--presentation-text);
   background: var(--presentation-bg-elevated);
-  box-shadow: 0 1px 0 var(--presentation-border-strong);
+  box-shadow: none;
   font-family: var(--presentation-font-mono);
   font-size: 0.76em;
 }
@@ -414,4 +511,34 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Explicit language metadata selects the Chinese display weight and quote face. */
+.slidev-layout:is(.cover, .intro, .section, .statement, .closing)[data-presentation-preset] .slide-frame :is(h1, .slide-cover__title)[lang|="zh"],
+.slidev-layout:is(.cover, .intro, .section, .statement, .closing)[data-presentation-preset] .slide-frame :is(h1, .slide-cover__title) [lang|="zh"] {
+  font-weight: 700;
+}
+
+.slidev-layout blockquote[lang|="zh"],
+.slidev-layout blockquote [lang|="zh"],
+.slidev-layout .slide-layout-quote__content[lang|="zh"],
+.slidev-layout .slide-layout-quote__content [lang|="zh"] {
+  font-family: var(--presentation-font-quote-cjk);
+  font-style: normal;
+}
+
+/* Opt-in academic three-rule tables; the ordinary table contract stays intact. */
+.slidev-layout[data-presentation-preset] .slide-frame table.presentation-table--booktabs {
+  border-collapse: collapse;
+  border-top: 1.5px solid var(--presentation-text);
+  border-bottom: 1.5px solid var(--presentation-text);
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame table.presentation-table--booktabs :is(tr, th, td) {
+  border: 0;
+  background: transparent;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame table.presentation-table--booktabs thead {
+  border-bottom: 1px solid var(--presentation-text);
 }

@@ -14,7 +14,7 @@ import {
   waitForSlide,
 } from './helpers.mjs'
 
-export const expandedPresets = Object.freeze(['default', 'ucas', 'ict'])
+export const expandedPresets = Object.freeze(['zhubai', 'ucas', 'ict'])
 export const expandedModes = Object.freeze(['light', 'dark'])
 export const calloutFamilies = Object.freeze([
   {
@@ -229,6 +229,40 @@ const sampleLocatorPixels = async (page, locator) => {
 }
 
 describe('content contracts', { concurrency: 2 }, () => {
+test('theme leaves producer-owned markup and image interactions untouched', async () => {
+  const buildContext = await createExpandedContentContext()
+  const browser = await chromium.launch({ headless: true })
+  try {
+    const page = await browser.newPage()
+    await waitForSlide(page, buildContext.builds['expanded-zhubai'].baseUrl, 2, 'light')
+    const result = await page.evaluate(async () => {
+      const host = document.createElement('div')
+      host.innerHTML = `
+        <aside class="obsidian-slidev-callout obsidian-slidev-callout--warning">
+          <div class="obsidian-slidev-callout__title">Producer title</div>
+        </aside>
+        <figure class="obsidian-slidev-media obsidian-slidev-media--image">
+          <img class="obsidian-slidev-media__image" alt="Producer image">
+        </figure>
+        <ul class="obsidian-slidev-task-list"><li><input type="checkbox">Producer task</li></ul>
+      `
+      const before = host.innerHTML
+      document.querySelector('.slidev-page-2 .slide-frame__content').append(host)
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      host.querySelector('img').click()
+      const after = host.innerHTML
+      const dialogs = document.querySelectorAll('.presentation-image-viewer').length
+      host.remove()
+      return { before, after, dialogs }
+    })
+    assert.equal(result.after, result.before)
+    assert.equal(result.dialogs, 0)
+  } finally {
+    await browser.close()
+    await buildContext.close()
+  }
+})
+
 test('expanded-content production harness', async (t) => {
   const fixture = await readFile(
     resolve(repositoryRoot, 'fixtures/expanded-content.md'),
@@ -249,6 +283,15 @@ test('expanded-content production harness', async (t) => {
     deviceScaleFactor: 2,
     viewport: { height: 552, width: 980 },
   })
+  // This shell check validates local bundles and navigation. Keep optional font
+  // and favicon services out of its runtime-error assertion; visual tests below
+  // continue using the deck's typography.
+  await context.route('https://fonts.googleapis.com/**', route => route.fulfill({
+    contentType: 'text/css',
+    body: '',
+  }))
+  await context.route('https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png',
+    route => route.fulfill({ status: 204 }))
   try {
     for (const preset of expandedPresets) {
       await t.test(`${preset} standalone shell`, async () => {
@@ -375,7 +418,7 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
           const geometry = await figures.evaluateAll(elements => elements.map(
             (figure) => {
               const viewport = figure.querySelector(
-                '.obsidian-slidev-media__viewport',
+                '.presentation-media__viewport',
               )
               const image = figure.querySelector('img')
               const caption = figure.querySelector('figcaption')
@@ -432,7 +475,7 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
           for (let index = 0; index < 4; index += 1) {
             probes.push(await sampleLocatorPixels(
               page,
-              figures.nth(index).locator('.obsidian-slidev-media__viewport'),
+              figures.nth(index).locator('.presentation-media__viewport'),
             ))
           }
           assert.notEqual(
@@ -500,7 +543,7 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
                 '.presentation-image-text__figure',
               )
               const viewport = figure?.querySelector(
-                '.obsidian-slidev-media__viewport',
+                '.presentation-media__viewport',
               )
               const image = figure?.querySelector('img')
               const caption = figure?.querySelector('figcaption')
@@ -533,7 +576,7 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
             const layout = layoutGeometry[index]
             assert.deepEqual(layout.childClasses, [
               'presentation-image-text__narrative',
-              'obsidian-slidev-media obsidian-slidev-media--image presentation-image-text__figure',
+              'presentation-media presentation-media--image presentation-media--treatment-plain presentation-image-text__figure',
             ])
             assert.equal(layout.orientation, definition.orientation)
             assert.equal(layout.rootFit, definition.fit)
@@ -586,7 +629,7 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
             )
             assert.equal(await logo.count(), 1)
             assert.equal(
-              await logo.locator('.obsidian-slidev-media').count(),
+              await logo.locator('.presentation-media').count(),
               0,
             )
             const logoState = await logo.evaluate((element) => {
@@ -649,9 +692,9 @@ test('Figure layout variants preserve media semantics and expose distinct compos
           results.push(await page.locator(
             `.slidev-page-${definition.slide} .slide-layout-figure`,
           ).evaluate((layout) => {
-            const figure = layout.querySelector('.obsidian-slidev-media')
+            const figure = layout.querySelector('.presentation-media')
             const viewport = figure?.querySelector(
-              '.obsidian-slidev-media__viewport',
+              '.presentation-media__viewport',
             )
             const image = figure?.querySelector('img')
             const caption = figure?.querySelector('figcaption')
@@ -692,7 +735,7 @@ test('Figure layout variants preserve media semantics and expose distinct compos
         assert.equal(results[1].trayBackground, 'rgba(0, 0, 0, 0)')
         assert.equal(results[1].imageBackground, 'rgba(0, 0, 0, 0)')
         assert.equal(results[2].figureDisplay, 'grid')
-        assert.equal(results[2].captionBorderTopWidth, '2px')
+        assert.equal(results[2].captionBorderTopWidth, '0px')
         assert.ok(results[2].caption.left >= results[2].viewport.right)
         assert.ok(results[0].viewport.width > results[1].viewport.width)
 
@@ -707,9 +750,9 @@ test('Figure layout variants preserve media semantics and expose distinct compos
         const compactEditorial = await page.locator(
           '.slidev-page-64 .slide-layout-figure--editorial',
         ).evaluate((layout) => {
-          const figure = layout.querySelector('.obsidian-slidev-media')
+          const figure = layout.querySelector('.presentation-media')
           const viewport = figure?.querySelector(
-            '.obsidian-slidev-media__viewport',
+            '.presentation-media__viewport',
           )
           const caption = figure?.querySelector('figcaption')
           const viewportRect = viewport?.getBoundingClientRect()
@@ -735,7 +778,7 @@ test('Figure layout variants preserve media semantics and expose distinct compos
   }
 })
 
-test('ordinary Figure variants stay local, compact, and generated-markup compatible', {
+test('ordinary Figure variants stay local and compact', {
   timeout: 240_000,
 }, async () => {
   const build = {
@@ -771,11 +814,11 @@ test('ordinary Figure variants stay local, compact, and generated-markup compati
         definition.marker,
       )
       results.push(await page.locator(
-        `.slidev-page-${definition.slide} .obsidian-slidev-media`,
+        `.slidev-page-${definition.slide} .presentation-media`,
       ).evaluate((figure) => {
         const canvas = figure.closest('.slidev-layout')
         const viewport = figure.querySelector(
-          '.obsidian-slidev-media__viewport',
+          '.presentation-media__viewport',
         )
         const image = figure.querySelector('img')
         const caption = figure.querySelector('figcaption')
@@ -819,7 +862,7 @@ test('ordinary Figure variants stay local, compact, and generated-markup compati
       assert.doesNotMatch(results[index].canvasClass, /(?:^|\s)figure(?:\s|$)/)
       assert.match(
         results[index].modifier,
-        new RegExp(`(?:^|\\s)obsidian-slidev-media--figure-${variant}(?:\\s|$)`),
+        new RegExp(`(?:^|\\s)presentation-media--figure-${variant}(?:\\s|$)`),
       )
       assert.ok(results[index].viewport.height > 0)
     }
@@ -829,31 +872,8 @@ test('ordinary Figure variants stay local, compact, and generated-markup compati
     assert.equal(results[2].trayBackground, 'rgba(0, 0, 0, 0)')
     assert.equal(results[2].imageBackground, 'rgba(0, 0, 0, 0)')
     assert.equal(results[3].display, 'grid')
-    assert.equal(results[3].captionBorder, '2px')
+    assert.equal(results[3].captionBorder, '0px')
     assert.ok(results[3].caption.left >= results[3].viewport.right)
-
-    await waitForSlide(
-      page,
-      server.baseUrl,
-      5,
-      'light',
-      'figure-generated-minimal',
-    )
-    const generated = await page.locator(
-      '.slidev-page-5 .obsidian-slidev-media--figure-minimal',
-    ).evaluate((figure) => {
-      const image = figure.querySelector('img')
-      return {
-        border: image ? getComputedStyle(image).borderTopWidth : null,
-        imageBackground: image
-          ? getComputedStyle(image).backgroundColor
-          : null,
-        managed: figure.getAttribute('data-media-managed'),
-      }
-    })
-    assert.equal(generated.managed, 'generated')
-    assert.equal(generated.border, '0px')
-    assert.equal(generated.imageBackground, 'rgba(0, 0, 0, 0)')
 
     await page.setViewportSize({ height: 720, width: 640 })
     await waitForSlide(
@@ -864,10 +884,10 @@ test('ordinary Figure variants stay local, compact, and generated-markup compati
       'figure-component-editorial',
     )
     const responsive = await page.locator(
-      '.slidev-page-4 .obsidian-slidev-media--figure-editorial',
+      '.slidev-page-4 .presentation-media--figure-editorial',
     ).evaluate((figure) => {
       const viewport = figure.querySelector(
-        '.obsidian-slidev-media__viewport',
+        '.presentation-media__viewport',
       )
       const caption = figure.querySelector('figcaption')
       const viewportRect = viewport?.getBoundingClientRect()
@@ -908,7 +928,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
           for (const family of calloutFamilies) {
             await waitForSlide(page, baseUrl, family.slide, mode, family.marker)
             const callouts = page.locator(
-              `[data-quality-case="${family.marker}"] > .obsidian-slidev-callout`,
+              `[data-quality-case="${family.marker}"] > .presentation-callout`,
             )
             assert.equal(await callouts.count(), family.types.length)
             for (const [index, type] of family.types.entries()) {
@@ -922,17 +942,17 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
               assert.ok(
                 await callout.evaluate((element, modifier) => (
                   element.classList.contains(modifier)
-                ), `obsidian-slidev-callout--${type}`),
+                ), `presentation-callout--${type}`),
               )
               assert.equal(
-                (await callout.locator('.obsidian-slidev-callout__title')
+                (await callout.locator('.presentation-callout__title')
                   .textContent())?.trim(),
                 calloutTitles[type],
               )
               const style = await callout.evaluate((element) => {
                 const computed = getComputedStyle(element)
                 const title = element.querySelector(
-                  '.obsidian-slidev-callout__title',
+                  '.presentation-callout__title',
                 )
                 const titleStyle = getComputedStyle(title)
                 const cue = getComputedStyle(title, '::before')
@@ -963,6 +983,8 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
                   backgroundColor: computed.backgroundColor,
                   borderLeftColor: computed.borderLeftColor,
                   borderLeftWidth: computed.borderLeftWidth,
+                  borderTopColor: computed.borderTopColor,
+                  borderTopWidth: computed.borderTopWidth,
                   cueBackground: cue.backgroundColor,
                   cueBorderWidth: cue.borderTopWidth,
                   cueColor: family === 'question'
@@ -983,9 +1005,10 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
                 question: 'ring',
                 quotation: 'bar',
               }[family.family]
-              assert.notEqual(style.backgroundColor, 'rgba(0, 0, 0, 0)')
-              assert.notEqual(style.borderLeftWidth, '0px')
-              assert.notEqual(style.borderLeftColor, 'rgba(0, 0, 0, 0)')
+              assert.notEqual(style.backgroundColor, 'rgba(0, 0, 0, 0)',
+                'notes use a visible semantic tonal surface')
+              assert.equal(style.borderLeftWidth, '2px', 'the tonal surface carries a visible semantic family edge')
+              assert.equal(style.borderTopWidth, '0px')
               assert.ok(
                 style.cueBackground !== 'rgba(0, 0, 0, 0)'
                 || style.cueBorderWidth !== '0px',
@@ -994,7 +1017,6 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
               assert.equal(style.cueShape, expectedShape)
               assert.equal(style.titleTransform, 'none')
               const styleContext = `${preset}/${mode}/${type}: ${JSON.stringify(style)}`
-              assert.equal(style.borderLeftColor, style.roleColor, styleContext)
               assert.equal(style.cueColor, style.roleColor, styleContext)
               assert.equal(style.titleColor, style.roleColor, styleContext)
               canonicalCases += 1
@@ -1012,7 +1034,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
             '[data-quality-case="visual-callout-authored-compact"]',
           )
           const authoredTitles = compact.locator(
-            ':scope > .obsidian-slidev-callout > .obsidian-slidev-callout__title',
+            ':scope > .presentation-callout > .presentation-callout__title',
           )
           assert.deepEqual(
             (await authoredTitles.allTextContents()).map(title => title.trim()),
@@ -1041,7 +1063,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
       }
       assert.equal(canonicalCases, 114)
 
-      const defaultUrl = buildContext.builds['expanded-default'].baseUrl
+      const defaultUrl = buildContext.builds['expanded-zhubai'].baseUrl
       await waitForSlide(
         page,
         defaultUrl,
@@ -1050,7 +1072,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
         'us1-callout-fallbacks',
       )
       const fallbacks = page.locator(
-        '[data-quality-case="us1-callout-fallbacks"] > .obsidian-slidev-callout',
+        '[data-quality-case="us1-callout-fallbacks"] > .presentation-callout',
       )
       assert.equal(await fallbacks.count(), 4)
       for (const index of [0, 1, 2]) {
@@ -1058,16 +1080,16 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
         assert.equal(await callout.getAttribute('data-callout'), 'neutral')
         assert.doesNotMatch(
           await callout.getAttribute('class') ?? '',
-          /obsidian-slidev-callout--/,
+          /presentation-callout--/,
         )
       }
       assert.equal(
-        (await fallbacks.nth(0).locator('.obsidian-slidev-callout__title')
+        (await fallbacks.nth(0).locator('.presentation-callout__title')
           .textContent())?.trim(),
         'Callout',
       )
       assert.equal(
-        (await fallbacks.nth(1).locator('.obsidian-slidev-callout__title')
+        (await fallbacks.nth(1).locator('.presentation-callout__title')
           .textContent())?.trim(),
         'Authored neutral',
       )
@@ -1078,41 +1100,6 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
       assert.ok(await normalized.locator('a[href]').count())
       assert.equal(await normalized.locator('ol > li').count(), 2)
 
-      await page.evaluate(() => {
-        const content = document.querySelector(
-          '.slidev-page-9 .slide-frame__content',
-        )
-        const callout = document.createElement('aside')
-        callout.dataset.qualityDynamicCallout = 'true'
-        callout.className = [
-          'obsidian-slidev-callout',
-          'obsidian-slidev-callout--warning',
-        ].join(' ')
-        callout.innerHTML = `
-          <div class="obsidian-slidev-callout__title">Dynamic warning</div>
-          <div class="obsidian-slidev-callout__content">Generated body.</div>
-        `
-        content?.append(callout)
-      })
-      await page.waitForFunction(() => {
-        const callout = document.querySelector(
-          '[data-quality-dynamic-callout]',
-        )
-        return callout?.getAttribute('data-callout') === 'warning'
-          && callout?.getAttribute('data-callout-family') === 'caution'
-      })
-      const generatedCallout = page.locator(
-        '[data-quality-dynamic-callout]',
-      )
-      assert.equal(
-        await generatedCallout.getAttribute('data-callout'),
-        'warning',
-      )
-      assert.equal(
-        await generatedCallout.getAttribute('data-callout-family'),
-        'caution',
-      )
-
       await waitForSlide(
         page,
         defaultUrl,
@@ -1121,7 +1108,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
         'us1-callout-equivalence',
       )
       const fingerprints = await page.locator(
-        '[data-quality-case="us1-callout-equivalence"] > .obsidian-slidev-callout',
+        '[data-quality-case="us1-callout-equivalence"] > .presentation-callout',
       ).evaluateAll(elements => elements.map((element) => {
         const style = getComputedStyle(element)
         return {
@@ -1148,7 +1135,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
       assert.equal(await figures.count(), 5)
       assert.equal(
         await figures.nth(0).locator('img').getAttribute('alt'),
-        'Obsidian card connected to a presentation',
+        'Zhubai card connected to a presentation',
       )
       assert.equal(
         await figures.nth(1).locator('img').getAttribute('alt'),
@@ -1159,7 +1146,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
         assert.equal(await figures.nth(index).locator('img').count(), 0)
         assert.ok(
           (await figures.nth(index)
-            .locator('.obsidian-slidev-media__fallback').textContent())?.trim(),
+            .locator('.presentation-media__fallback').textContent())?.trim(),
         )
       }
 
@@ -1226,16 +1213,6 @@ test('US3 link decoration and distinct author value, action, and order contract'
   timeout: 240_000,
 }, async () => {
   const buildContext = await createExpandedContentContext()
-  const protocolBuild = {
-    id: 'content-contracts-protocol-links',
-    outDir: resolve(
-      qualityArtifactRoot,
-      'build/content-contracts/protocol-links',
-    ),
-    source: resolve(repositoryRoot, 'fixtures/obsidian-protocol.md'),
-  }
-  await buildDeck(protocolBuild)
-  const protocolServer = await startStaticServer(protocolBuild.outDir)
   const browser = await chromium.launch({ headless: true })
   const context = await browser.newContext({
     deviceScaleFactor: 2,
@@ -1429,7 +1406,7 @@ test('US3 link decoration and distinct author value, action, and order contract'
             (await page.locator(
               '.slidev-page-2 .slide-frame__footer-left',
             ).textContent())?.trim(),
-            expectedAuthors.map(author => author.primary).join(', '),
+            `Expanded content quality fixture · ${expectedAuthors.map(author => author.primary).join(', ')}`,
           )
         }
       } finally {
@@ -1437,37 +1414,9 @@ test('US3 link decoration and distinct author value, action, and order contract'
       }
     }
 
-    const protocolPage = await context.newPage()
-    try {
-      for (const mode of expandedModes) {
-        await waitForSlide(
-          protocolPage,
-          protocolServer.baseUrl,
-          28,
-          mode,
-          'protocol-link-forms',
-        )
-        const links = await inspectLinks(protocolPage.locator(
-          '[data-quality-case="protocol-link-forms"] a',
-        ))
-        assert.equal(links.length, 3)
-        assert.ok(links.every(link => (
-          link.underlineCount === 1
-          && link.borderBottomWidth === '0px'
-          && link.boxShadow === 'none'
-        )))
-        assert.deepEqual(
-          links.map(link => link.display),
-          ['inline', 'inline', 'block'],
-        )
-      }
-    } finally {
-      await protocolPage.close()
-    }
   } finally {
     await context.close()
     await browser.close()
-    await protocolServer.close()
     await buildContext.close()
   }
 })
@@ -1709,12 +1658,12 @@ test('US4 42-case Badge, task-weight, and flat-highlight contract', {
             'rgba(0, 0, 0, 0)',
           )
           assert.equal(highlightStyles[0].borderWidth, '0px')
-          assert.equal(highlightStyles[0].borderRadius, '0px')
+          assert.equal(highlightStyles[0].borderRadius, '2px')
           assert.equal(highlightStyles[0].boxShadow, 'none')
           assert.equal(highlightStyles[0].boxDecorationBreak, 'clone')
           assert.notEqual(highlightStyles[0].padding, '0px')
           assert.ok(await page.locator(
-            '.slidev-page-44 [data-highlight-code-scope] :is(mark, .obsidian-slidev-highlight)',
+            '.slidev-page-44 [data-highlight-code-scope] mark',
           ).evaluateAll(elements => elements.every((element) => {
             const style = getComputedStyle(element)
             return style.backgroundColor === 'rgba(0, 0, 0, 0)'
@@ -1746,7 +1695,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
   })
   try {
     const page = await context.newPage()
-    const baseUrl = buildContext.builds['expanded-default'].baseUrl
+    const baseUrl = buildContext.builds['expanded-zhubai'].baseUrl
     try {
       const onSlide = (slide, selector) => (
         page.locator(`.slidev-page-${slide} ${selector}`)
@@ -1788,7 +1737,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
       ).count(), 9)
       assert.equal(
         await onSlide(16, '.presentation-closing__logo img').getAttribute('alt'),
-        'Obsidian presentation research mark',
+        'Zhubai presentation research mark',
       )
 
       await waitForSlide(
@@ -1845,7 +1794,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
       const right = await inspectImageLayout(21, 'us2-image-right')
       assert.deepEqual(left.childClasses, [
         'presentation-image-text__narrative',
-        'obsidian-slidev-media obsidian-slidev-media--image presentation-image-text__figure',
+        'presentation-media presentation-media--image presentation-media--treatment-plain presentation-image-text__figure',
       ])
       assert.deepEqual(right.childClasses, left.childClasses)
       assert.equal(left.orientation, 'left')
@@ -1873,7 +1822,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
         'background',
       )
       assert.equal(
-        await onSlide(21, '.obsidian-slidev-media__viewport')
+        await onSlide(21, '.presentation-media__viewport')
           .evaluate(element => getComputedStyle(element).backgroundSize),
         'auto 72%',
       )
@@ -1896,7 +1845,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
         '80%',
       )
       assert.equal(
-        await onSlide(22, '.obsidian-slidev-media__viewport')
+        await onSlide(22, '.presentation-media__viewport')
           .evaluate(element => getComputedStyle(element).backgroundSize),
         '80%',
       )
@@ -1914,7 +1863,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
       )
       assert.match(
         await onSlide(24,
-          '.presentation-image-text__figure .obsidian-slidev-media__fallback',
+          '.presentation-image-text__figure .presentation-media__fallback',
         ).textContent(),
         /Failed experimental figure/,
       )
@@ -1973,7 +1922,7 @@ test('US3 slide accents are local, first-valid, consumer-complete, and protected
       )
       const calloutStyle = (type) => {
         const callout = canvas.querySelector(`[data-callout="${type}"]`)
-        const title = callout?.querySelector('.obsidian-slidev-callout__title')
+        const title = callout?.querySelector('.presentation-callout__title')
         return callout
           ? {
               background: style(callout, 'background-color'),
@@ -2066,20 +2015,18 @@ test('US3 slide accents are local, first-valid, consumer-complete, and protected
           const local = states[0]
           const fallback = states[1]
           for (const role of [
-            'footerBorder',
-            'headerBorder',
             'inlineCodeBackground',
             'inlineCodeColor',
             'linkColor',
-            'listMarkerColor',
-            'tableHeaderBackground',
-            'tableHeaderBorder',
           ]) {
             assert.notEqual(
               local.consumers[role],
               fallback.consumers[role],
               `${preset}/${mode}: ${role} ignored the local accent`,
             )
+          }
+          for (const role of ['footerBorder', 'headerBorder', 'listMarkerColor', 'tableHeaderBackground', 'tableHeaderBorder']) {
+            assert.equal(local.consumers[role], fallback.consumers[role], `${preset}/${mode}: ${role} stays neutral`)
           }
           assert.notDeepEqual(local.consumers.info, fallback.consumers.info)
           assert.deepEqual(
@@ -2457,7 +2404,7 @@ test('US4 code, sequence, status, and keyboard contracts preserve native meaning
   })
   try {
     const page = await context.newPage()
-    const baseUrl = buildContext.builds['expanded-default'].baseUrl
+    const baseUrl = buildContext.builds['expanded-zhubai'].baseUrl
     const onSlide = (slide, selector) => (
       page.locator(`.slidev-page-${slide} ${selector}`)
     )
@@ -2637,7 +2584,7 @@ test('US4 code, sequence, status, and keyboard contracts preserve native meaning
       ])
       assert.ok(labels.every(label => label.role === null))
       assert.ok(labels.every(label => label.tabIndex === null))
-      assert.notEqual(labels[0].borderRadius, labels[2].borderRadius)
+      assert.equal(labels[0].borderRadius, labels[2].borderRadius, 'tags and badges share the pill geometry')
       assert.notEqual(labels[0].background, labels[2].background)
       assert.equal(labels[0].pseudo, 'none')
       assert.equal(labels[2].pseudo, 'none')
@@ -2717,7 +2664,7 @@ test('US5 tasks stay presentation-only and prose highlights stay code-scoped', {
   })
   try {
     const page = await context.newPage()
-    const baseUrl = buildContext.builds['expanded-default'].baseUrl
+    const baseUrl = buildContext.builds['expanded-zhubai'].baseUrl
     const onSlide = (slide, selector) => (
       page.locator(`.slidev-page-${slide} ${selector}`)
     )
@@ -2820,9 +2767,9 @@ test('US5 tasks stay presentation-only and prose highlights stay code-scoped', {
         )
         const list = document.createElement('ul')
         list.dataset.qualityDynamicTasks = 'true'
-        list.className = 'obsidian-slidev-task-list contains-task-list'
+        list.className = 'contains-task-list'
         list.innerHTML = `
-          <li class="obsidian-slidev-task-list-item task-list-item">
+          <li class="task-list-item">
             <input type="checkbox" checked>
             Later-added checked task.
           </li>
@@ -2933,7 +2880,7 @@ test('US5 tasks stay presentation-only and prose highlights stay code-scoped', {
 
       const codeScope = await onSlide(
         44,
-        '[data-highlight-code-scope] :is(mark, .obsidian-slidev-highlight)',
+        '[data-highlight-code-scope] mark',
       ).evaluateAll(elements => elements.map((element) => {
         const style = getComputedStyle(element)
         return {
@@ -2953,7 +2900,7 @@ test('US5 tasks stay presentation-only and prose highlights stay code-scoped', {
       assert.equal(
         await onSlide(
           44,
-          'pre:not([data-highlight-code-scope]) :is(mark, .obsidian-slidev-highlight)',
+          'pre:not([data-highlight-code-scope]) mark',
         ).count(),
         0,
       )
@@ -2977,26 +2924,10 @@ test('US5 tasks stay presentation-only and prose highlights stay code-scoped', {
   }
 })
 
-test('US6 closing, generated media, chrome, section branding, and bilingual text converge', {
+test('US6 closing, chrome, section branding, and bilingual text converge', {
   timeout: 240_000,
 }, async () => {
   const buildContext = await createExpandedContentContext()
-  let protocolServer
-  let protocolBaseUrl = buildContext.builds.protocol?.baseUrl
-  if (!protocolBaseUrl) {
-    const protocolBuild = {
-      id: 'content-contracts-protocol-coherence',
-      outDir: resolve(
-        qualityArtifactRoot,
-        'build/content-contracts/protocol-coherence',
-      ),
-      source: resolve(repositoryRoot, 'fixtures/obsidian-protocol.md'),
-    }
-    await buildDeck(protocolBuild)
-    protocolServer = await startStaticServer(protocolBuild.outDir)
-    protocolBaseUrl = protocolServer.baseUrl
-  }
-
   const browser = await chromium.launch({ headless: true })
   const context = await browser.newContext({
     deviceScaleFactor: 2,
@@ -3008,8 +2939,20 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
   ).evaluate((root) => {
     const content = root.closest('.slide-frame__content')
     const message = root.querySelector('.presentation-closing__message')
-    const rect = (element) => {
-      const bounds = element.getBoundingClientRect()
+    const rect = (element, inner = false) => {
+      const bounds = element.getBoundingClientRect().toJSON()
+      if (inner) {
+        // The institutional signature reserves padding above the reading area.
+        // Center the message in that usable content box, not over the masthead.
+        const style = getComputedStyle(element)
+        const scale = bounds.width / element.offsetWidth
+        bounds.left += Number.parseFloat(style.paddingLeft) * scale
+        bounds.right -= Number.parseFloat(style.paddingRight) * scale
+        bounds.top += Number.parseFloat(style.paddingTop) * scale
+        bounds.bottom -= Number.parseFloat(style.paddingBottom) * scale
+        bounds.width = bounds.right - bounds.left
+        bounds.height = bounds.bottom - bounds.top
+      }
       return {
         bottom: bounds.bottom,
         centerX: bounds.left + bounds.width / 2,
@@ -3024,7 +2967,7 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
     return {
       childClasses: [...root.children].map(element => element.className),
       className: root.className,
-      content: rect(content),
+      content: rect(content, true),
       message: rect(message),
       messageTextAlign: getComputedStyle(message).textAlign,
       root: rect(root),
@@ -3053,9 +2996,11 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
             minimal.childClasses,
             ['presentation-closing__message'],
           )
-          assert.equal(minimal.messageTextAlign, 'left')
+          assert.equal(minimal.messageTextAlign, preset === 'ucas' ? 'center' : 'left')
           assert.ok(Math.abs(
-            minimal.message.left - minimal.content.left,
+            preset === 'ucas'
+              ? minimal.message.centerX - minimal.content.centerX
+              : minimal.message.left - minimal.content.left,
           ) <= 1, JSON.stringify(minimal))
           assert.ok(Math.abs(
             minimal.message.centerY - minimal.content.centerY,
@@ -3135,16 +3080,17 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
                   footer,
                   '::before',
                 ).backgroundColor,
-                footerRule: getComputedStyle(footer).borderTopColor,
+                footerRuleWidth: getComputedStyle(footer).borderTopWidth,
                 headerAccent: headerStyle.getPropertyValue(
                   '--presentation-accent',
                 ),
                 headerChrome: headerStyle.getPropertyValue(
                   '--presentation-chrome-accent',
                 ),
-                headerRule: getComputedStyle(header).borderBottomColor,
+                headerRuleWidth: getComputedStyle(header).borderBottomWidth,
                 marker: getComputedStyle(item, '::marker').color,
                 roleColor,
+                mutedColor: frameStyle.getPropertyValue('--presentation-text-muted').trim(),
                 tableHeaderRule: getComputedStyle(
                   headerCell,
                 ).borderBottomColor,
@@ -3157,19 +3103,13 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
             return { changed, initial }
           })
           for (const state of [chrome.initial, chrome.changed]) {
-            assert.equal(
-              state.headerRule,
-              state.roleColor,
-              JSON.stringify(chrome, null, 2),
-            )
-            assert.equal(state.footerRule, state.roleColor)
+            assert.equal(state.headerRuleWidth, '0px', 'the header is separated by space')
+            assert.equal(state.footerRuleWidth, '0px', 'the footer is separated by space')
             assert.equal(state.tableHeaderRule, state.roleColor)
-            assert.equal(state.marker, state.roleColor)
-            if (preset === 'ict') {
-              assert.equal(state.footerCap, state.roleColor)
-            }
+            assert.equal(state.footerCap, 'rgba(0, 0, 0, 0)', 'footer has no accent ornament')
           }
-          assert.notEqual(chrome.changed.roleColor, chrome.initial.roleColor)
+          assert.equal(chrome.changed.roleColor, chrome.initial.roleColor, 'chrome stays neutral when the accent changes')
+          assert.equal(chrome.changed.marker, chrome.initial.marker, 'list markers stay neutral when the accent changes')
 
           await waitForSlide(
             page,
@@ -3210,7 +3150,9 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
               ),
             ].filter(visible)
             return {
-              backgroundColor: getComputedStyle(frame).backgroundColor,
+              backgroundColor: getComputedStyle(frame).backgroundColor === 'rgba(0, 0, 0, 0)'
+                ? getComputedStyle(frame.closest('.slidev-layout')).backgroundColor
+                : getComputedStyle(frame).backgroundColor,
               identityImageCount: frame.querySelectorAll(
                 'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
               ).length,
@@ -3226,15 +3168,15 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
           })
           assert.equal(safeZone.isSection, true)
           assert.ok(safeZone.probes.length >= 5, JSON.stringify(safeZone))
-          if (preset === 'default') {
+          if (preset === 'zhubai') {
             assert.equal(safeZone.identityImageCount, 0)
             assert.equal(safeZone.mark, null)
           } else {
             assert.equal(
               safeZone.backgroundColor,
-              mode === 'dark'
-                ? (preset === 'ucas' ? 'rgb(18, 61, 105)' : 'rgb(16, 31, 43)')
-                : (preset === 'ucas' ? 'rgb(237, 242, 246)' : 'rgb(245, 249, 250)'),
+              mode === 'light'
+                ? ({ ucas: 'rgb(249, 250, 252)', ict: 'rgb(247, 249, 251)' })[preset]
+                : ({ ucas: 'rgb(17, 21, 27)', ict: 'rgb(16, 22, 29)' })[preset],
             )
             assert.equal(safeZone.identityImageCount, 1)
             assert.ok(safeZone.mark, JSON.stringify(safeZone))
@@ -3369,190 +3311,9 @@ test('US6 closing, generated media, chrome, section branding, and bilingual text
       }
     }
 
-    const protocolPage = await context.newPage()
-    try {
-      for (const mode of expandedModes) {
-        await waitForSlide(
-          protocolPage,
-          protocolBaseUrl,
-          6,
-          mode,
-          'protocol-video-viewport',
-        )
-        const videoViewport = await protocolPage.locator(
-          '[data-quality-case="protocol-video-viewport"] video',
-        ).evaluate((video) => {
-          const figure = video.closest('.obsidian-slidev-media--video')
-          const figureRect = figure.getBoundingClientRect()
-          const rect = video.getBoundingClientRect()
-          const style = getComputedStyle(video)
-          return {
-            figureWidth: figureRect.width,
-            height: rect.height,
-            maxHeight: style.maxHeight,
-            objectFit: style.objectFit,
-            width: rect.width,
-          }
-        })
-        assert.ok(videoViewport.height > 0)
-        assert.ok(Math.abs(
-          videoViewport.width - videoViewport.figureWidth,
-        ) <= 1, JSON.stringify(videoViewport))
-        assert.equal(videoViewport.maxHeight, 'none')
-        assert.equal(videoViewport.objectFit, 'contain')
-
-        await waitForSlide(
-          protocolPage,
-          protocolBaseUrl,
-          26,
-          mode,
-          'protocol-generated-image-states',
-        )
-        const generatedStates = await protocolPage.locator(
-          '[data-quality-case="protocol-generated-image-states"] > figure',
-        ).evaluateAll(figures => figures.map((figure) => ({
-          caseId: figure.getAttribute('data-generated-state-case'),
-          decorative: figure.getAttribute('data-media-decorative'),
-          fallbackAria: figure.querySelector(
-            '.obsidian-slidev-media__fallback',
-          )?.getAttribute('aria-label') ?? null,
-          fallbackCount: figure.querySelectorAll(
-            '.obsidian-slidev-media__fallback',
-          ).length,
-          fit: figure.getAttribute('data-media-fit'),
-          imageCount: figure.querySelectorAll(
-            ':scope > img.obsidian-slidev-media__image',
-          ).length,
-          managed: figure.getAttribute('data-media-managed'),
-          state: figure.getAttribute('data-media-state'),
-          viewportCount: figure.querySelectorAll(
-            ':scope > .obsidian-slidev-media__viewport',
-          ).length,
-        })))
-        assert.deepEqual(
-          generatedStates.map(state => ({
-            caseId: state.caseId,
-            decorative: state.decorative,
-            fit: state.fit,
-            state: state.state,
-          })),
-          [
-            {
-              caseId: 'ready',
-              decorative: 'false',
-              fit: 'contain',
-              state: 'ready',
-            },
-            {
-              caseId: 'delayed',
-              decorative: 'false',
-              fit: 'contain',
-              state: 'ready',
-            },
-            {
-              caseId: 'decorative',
-              decorative: 'true',
-              fit: 'contain',
-              state: 'ready',
-            },
-            {
-              caseId: 'failed',
-              decorative: 'false',
-              fit: 'contain',
-              state: 'failed',
-            },
-          ],
-        )
-        assert.ok(generatedStates.every(state => (
-          state.managed === 'generated'
-          && state.viewportCount === 0
-        )))
-        assert.equal(generatedStates[2].fallbackCount, 0)
-        assert.equal(generatedStates[3].imageCount, 0)
-        assert.equal(generatedStates[3].fallbackCount, 1)
-        assert.equal(
-          generatedStates[3].fallbackAria,
-          'Generated image unavailable',
-        )
-
-        await waitForSlide(
-          protocolPage,
-          protocolBaseUrl,
-          27,
-          mode,
-          'protocol-image-equivalence',
-        )
-        const equivalence = await protocolPage.locator(
-          '[data-quality-case="protocol-image-equivalence"]',
-        ).evaluate((root) => {
-          const [authored, generated] = root.querySelectorAll(':scope > figure')
-          const authoredRegion = authored.querySelector(
-            '.obsidian-slidev-media__viewport',
-          )
-          const generatedRegion = generated.querySelector(
-            ':scope > img.obsidian-slidev-media__image',
-          )
-          const authoredCaption = authored.querySelector('figcaption')
-          const generatedCaption = generated.querySelector('figcaption')
-          const rect = element => {
-            const bounds = element.getBoundingClientRect()
-            return {
-              height: bounds.height,
-              width: bounds.width,
-            }
-          }
-          const captionFingerprint = element => {
-            const style = getComputedStyle(element)
-            return {
-              color: style.color,
-              fontSize: style.fontSize,
-              fontStyle: style.fontStyle,
-              fontWeight: style.fontWeight,
-              lineHeight: style.lineHeight,
-              textAlign: style.textAlign,
-            }
-          }
-          return {
-            authored: {
-              fit: authored.getAttribute('data-media-fit'),
-              region: rect(authoredRegion),
-              state: authored.getAttribute('data-media-state'),
-            },
-            captionsEqual: JSON.stringify(
-              captionFingerprint(authoredCaption),
-            ) === JSON.stringify(captionFingerprint(generatedCaption)),
-            generated: {
-              directImage: generatedRegion?.parentElement === generated,
-              fit: generated.getAttribute('data-media-fit'),
-              objectFit: getComputedStyle(generatedRegion).objectFit,
-              region: rect(generatedRegion),
-              state: generated.getAttribute('data-media-state'),
-            },
-          }
-        })
-        assert.equal(equivalence.authored.fit, 'contain')
-        assert.equal(equivalence.generated.fit, 'contain')
-        assert.equal(equivalence.authored.state, 'ready')
-        assert.equal(equivalence.generated.state, 'ready')
-        assert.equal(equivalence.generated.directImage, true)
-        assert.equal(equivalence.generated.objectFit, 'contain')
-        assert.ok(Math.abs(
-          equivalence.authored.region.width
-            - equivalence.generated.region.width,
-        ) <= 1, JSON.stringify(equivalence))
-        assert.ok(Math.abs(
-          equivalence.authored.region.height
-            - equivalence.generated.region.height,
-        ) <= 1, JSON.stringify(equivalence))
-        assert.equal(equivalence.captionsEqual, true)
-      }
-    } finally {
-      await protocolPage.close()
-    }
   } finally {
     await context.close()
     await browser.close()
-    await protocolServer?.close()
     await buildContext.close()
   }
 })

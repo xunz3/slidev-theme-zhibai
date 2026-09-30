@@ -8,8 +8,9 @@ dist-*/
 fixtures/dist-*/
 build/
 coverage/
-.artifacts/quality/
-.artifacts/design-review-*/
+.artifacts/
+.pi/
+*.tgz
 *.log
 .env*
 *.tmp

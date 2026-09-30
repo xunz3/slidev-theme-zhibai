@@ -101,10 +101,10 @@ export const runSelfChecks = async ({ writeSummary = false } = {}) => {
       expectedExitCode: 1,
       record: {
         gate: 'visual',
-        caseId: 'default-to-ucas-dark',
+        caseId: 'zhubai-to-ucas-dark',
         status: 'fail',
-        deck: 'matrix-default',
-        globalPreset: 'default',
+        deck: 'matrix-zhubai',
+        globalPreset: 'zhubai',
         localPreset: 'ucas',
         mode: 'dark',
         slide: 4,
@@ -322,15 +322,6 @@ const executeQuality = async () => {
       return { root: relativePath(qualityArtifactRoot) }
     })
 
-    await runPhase(
-      'protocol-conformance',
-      () => runCommandPhase(
-        'protocol-conformance',
-        ['--test', 'tests/quality/protocol-conformance.spec.mjs'],
-        30_000,
-      ),
-    )
-
     let buildDefinitions
     await runPhase('prepare-builds', async () => {
       const [matrixDefinitions, expandedDefinitions] = await Promise.all([
@@ -343,14 +334,13 @@ const executeQuality = async () => {
       const maintained = [
         { id: 'example', source: 'example.md' },
         { id: 'default-only', source: 'fixtures/default-preset.md' },
+        { id: 'qingdai', source: 'fixtures/qingdai-preset.md' },
+        { id: 'songmo', source: 'fixtures/songmo-preset.md' },
         { id: 'ucas', source: 'fixtures/ucas-preset.md' },
         { id: 'ict', source: 'fixtures/ict-preset.md' },
-        { id: 'artwork-gallery', source: 'fixtures/artwork-gallery.md' },
+        { id: 'cover-composition', source: 'fixtures/cover-composition.md' },
         { id: 'cover-alignment', source: 'fixtures/cover-alignment.md' },
         { id: 'elements-gallery', source: 'fixtures/elements-gallery.md' },
-        { id: 'protocol', source: 'fixtures/obsidian-protocol.md' },
-        { id: 'protocol-core', source: 'fixtures/protocol-core.md' },
-        { id: 'protocol-profile', source: 'fixtures/protocol-profile.md' },
       ].map(definition => ({
         ...definition,
         outDir: resolve(maintainedRoot, definition.id),
@@ -364,7 +354,7 @@ const executeQuality = async () => {
         })),
         ...expandedDefinitions,
       ]
-      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 16)
+      assert.equal(new Set(buildDefinitions.map(build => build.id)).size, 17)
       for (const build of buildDefinitions) {
         assert.ok(resolve(build.outDir) === build.outDir, `${build.id}: absolute output`)
       }
@@ -453,7 +443,7 @@ const executeQuality = async () => {
       'content-contracts',
       () => runCommandPhase(
         'content-contracts',
-        ['--test', 'tests/quality/content-contracts.spec.mjs', 'tests/quality/image-viewer.spec.mjs'],
+        ['--test', 'tests/quality/content-contracts.spec.mjs'],
       ),
     )
     await runPhase(
@@ -486,10 +476,10 @@ const executeQuality = async () => {
       ),
     )
     await runPhase(
-      'artwork',
+      'cover-composition',
       () => runCommandPhase(
-        'artwork',
-        ['--test', 'tests/quality/artwork.spec.mjs'],
+        'cover-composition',
+        ['--test', 'tests/quality/cover-composition.spec.mjs'],
       ),
     )
     await runPhase(
@@ -504,6 +494,25 @@ const executeQuality = async () => {
       () => runCommandPhase(
         'elements',
         ['--test', 'tests/quality/elements.spec.mjs'],
+      ),
+    )
+    await runPhase('native-layouts', () => runCommandPhase(
+      'native-layouts', ['--test', 'tests/quality/native-layouts.spec.mjs'], 180_000,
+    ))
+    await runPhase('veil-surfaces', () => runCommandPhase(
+      'veil-surfaces', ['--test', 'tests/quality/veil-surfaces.spec.mjs'], 240_000,
+    ))
+    await runPhase('typography', () => runCommandPhase(
+      'typography', ['--test', 'tests/quality/typography.spec.mjs'], 240_000,
+    ))
+    await runPhase('zhubai-design', () => runCommandPhase(
+      'zhubai-design', ['--test', 'tests/quality/zhubai-design.spec.mjs'], 240_000,
+    ))
+    await runPhase(
+      'veil-design',
+      () => runCommandPhase(
+        'veil-design',
+        ['--test', 'tests/quality/veil-design.spec.mjs'],
       ),
     )
   }

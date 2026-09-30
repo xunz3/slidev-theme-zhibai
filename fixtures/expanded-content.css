@@ -11,22 +11,22 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.presentation-callout-gallery > .obsidian-slidev-callout {
+.presentation-callout-gallery > .presentation-callout {
   min-width: 0;
   margin: 0;
   padding: 0.58rem 0.72rem 0.64rem;
 }
 
-.presentation-callout-gallery .obsidian-slidev-callout__title {
+.presentation-callout-gallery .presentation-callout__title {
   margin-bottom: 0.22rem;
 }
 
-.presentation-callout-gallery .obsidian-slidev-callout__content {
+.presentation-callout-gallery .presentation-callout__content {
   font-size: 0.9em;
   line-height: 1.38;
 }
 
-.presentation-callout-gallery .obsidian-slidev-callout__content > :is(p, ol, ul) {
+.presentation-callout-gallery .presentation-callout__content > :is(p, ol, ul) {
   margin-bottom: 0.38rem;
 }
 
@@ -35,11 +35,11 @@
   gap: 0.38rem;
 }
 
-.presentation-accent-probe .presentation-callout-gallery > .obsidian-slidev-callout {
+.presentation-accent-probe .presentation-callout-gallery > .presentation-callout {
   padding: 0.42rem 0.58rem 0.46rem;
 }
 
-.presentation-accent-probe .presentation-callout-gallery .obsidian-slidev-callout__content {
+.presentation-accent-probe .presentation-callout-gallery .presentation-callout__content {
   font-size: 0.82em;
   line-height: 1.28;
 }
@@ -60,14 +60,14 @@
   align-items: start;
 }
 
-.presentation-figure-gallery > .obsidian-slidev-media {
+.presentation-figure-gallery > .presentation-media {
   width: 100%;
   min-width: 0;
   margin: 0;
   --presentation-media-viewport-height: 7.4rem;
 }
 
-.presentation-figure-gallery .obsidian-slidev-media__caption {
+.presentation-figure-gallery .presentation-media__caption {
   font-size: 0.68rem;
 }
 
@@ -87,7 +87,7 @@
   gap: 0.6rem;
 }
 
-.presentation-media-fit-gallery > .obsidian-slidev-media {
+.presentation-media-fit-gallery > .presentation-media {
   width: 100%;
   min-width: 0;
   margin: 0;
@@ -121,13 +121,12 @@
   gap: 1rem;
 }
 
-.presentation-safe-zone-probe .obsidian-slidev-media {
+.presentation-safe-zone-probe .presentation-media {
   margin: 0;
 }
 
 @media (max-width: 720px) {
-  .presentation-callout-gallery,
-  .presentation-safe-zone-probe {
+  .presentation-callout-gallery {
     grid-template-columns: 1fr;
   }
 

@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title description">
-  <title id="title">Geometric protocol figure</title>
-  <desc id="description">Three connected shapes representing producer, publication, and consumer.</desc>
-  <rect width="640" height="360" fill="#f7f5fb"/>
-  <path d="M180 180H300M340 180H460" fill="none" stroke="#5c4b73" stroke-width="12" stroke-linecap="round"/>
-  <circle cx="120" cy="180" r="60" fill="#345f8f"/>
-  <rect x="280" y="120" width="80" height="120" rx="16" fill="#8a4f7d"/>
-  <path d="M520 112 592 236H448Z" fill="#477a64"/>
-</svg>

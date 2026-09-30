@@ -11,9 +11,9 @@ authors:
     email: lin@example.org
 themeConfig:
   presentation:
-    preset: default
+    preset: zhubai
     footerAuthors: false
-presentationPreset: default
+presentationPreset: zhubai
 title: A clearer research story
 sections:
   - title: The question · 研究问题
@@ -34,7 +34,7 @@ sections:
 
 ---
 layout: default
-presentationPreset: default
+presentationPreset: zhubai
 ---
 
 # Start with a clear question.
@@ -55,7 +55,7 @@ A useful result should make its limits visible.
 
 ---
 layout: two-cols
-presentationPreset: default
+presentationPreset: zhubai
 ---
 
 # Evidence, made legible.
@@ -86,7 +86,7 @@ Use <Kbd :keys="['Ctrl', 'Enter']" /> to run the notebook.
 
 ---
 layout: code
-presentationPreset: default
+presentationPreset: zhubai
 ---
 
 # Make the method visible.
@@ -108,7 +108,7 @@ console.log(result)
 
 ---
 layout: quote
-presentationPreset: default
+presentationPreset: zhubai
 author: Research notes
 source: 关于表达的一点思考
 ---
@@ -119,9 +119,9 @@ Good research deserves a clear explanation.
 
 ---
 layout: image-right
-presentationPreset: default
-image: /theme/public/obsidian-card.svg
-imageAlt: An Obsidian note connected to a presentation
+presentationPreset: zhubai
+image: /theme/public/zhubai-card.svg
+imageAlt: A sample card for a presentation
 caption: "Figure 1 · From research notes to a presentation. Theme source illustration."
 ---
 
@@ -138,7 +138,7 @@ Use a complete caption and a meaningful alternative description.
 
 ---
 layout: references
-presentationPreset: default
+presentationPreset: zhubai
 ---
 
 # Sources & acknowledgements
@@ -155,7 +155,7 @@ Thank you to everyone who questioned, measured, and refined the work.
 
 ---
 layout: default
-presentationPreset: default
+presentationPreset: zhubai
 ---
 
 # A little structure, a lot of clarity.
@@ -174,7 +174,7 @@ A simple `config` value, a <Tag>research note</Tag>, and a <Badge tone="info" ma
 
 ---
 layout: section
-presentationPreset: default
+presentationPreset: zhubai
 ---
 
 # From evidence to insight.
@@ -183,7 +183,7 @@ presentationPreset: default
 
 ---
 layout: end
-presentationPreset: default
+presentationPreset: zhubai
 contact: xun@example.org
 showAuthors: true
 ---
@@ -301,8 +301,8 @@ Good research deserves a clear explanation.
 ---
 layout: image-right
 presentationPreset: ucas
-image: /theme/public/obsidian-card.svg
-imageAlt: An Obsidian note connected to a presentation
+image: /theme/public/zhubai-card.svg
+imageAlt: A sample card for a presentation
 caption: "Figure 1 · From research notes to a presentation. Theme source illustration."
 ---
 
@@ -482,8 +482,8 @@ Good research deserves a clear explanation.
 ---
 layout: image-right
 presentationPreset: ict
-image: /theme/public/obsidian-card.svg
-imageAlt: An Obsidian note connected to a presentation
+image: /theme/public/zhubai-card.svg
+imageAlt: A sample card for a presentation
 caption: "Figure 1 · From research notes to a presentation. Theme source illustration."
 ---
 
@@ -556,7 +556,7 @@ showAuthors: true
 
 ---
 layout: toc
-presentationPreset: default
+presentationPreset: zhubai
 title: An outline without numbers
 showNumbers: false
 sections:
@@ -595,7 +595,7 @@ sections:
 
 ---
 layout: two-cols
-presentationPreset: default
+presentationPreset: zhubai
 reverse: true
 gap: 4rem
 ---

@@ -1,0 +1,27 @@
+/* 松墨: monochrome structure leaves the seal and annotations as the only color. */
+.slidev-layout[data-presentation-preset="songmo"] {
+  --zhubai-paper: #fbfaf7;
+  --zhubai-ink: var(--zhubai-mo);
+  --zhubai-accent: var(--zhubai-mo);
+  --presentation-section-index-color: color-mix(in srgb, var(--presentation-text) 12%, transparent);
+}
+
+html.dark .slidev-layout[data-presentation-preset="songmo"] {
+  --zhubai-paper: #141414;
+  --zhubai-ink: #e8e6e1;
+  --zhubai-surface: #222222;
+}
+
+.slidev-layout[data-presentation-preset="songmo"] .slide-frame {
+  --presentation-family-info: var(--presentation-text);
+  --presentation-family-positive: var(--presentation-text);
+  --presentation-family-caution: var(--presentation-text);
+  --presentation-family-danger: var(--presentation-text);
+  --presentation-family-question: var(--presentation-text);
+}
+
+.slidev-layout[data-presentation-preset="songmo"] a:not(.slide-layout-toc__button) {
+  color: var(--presentation-text);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+}

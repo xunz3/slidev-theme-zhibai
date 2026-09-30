@@ -6,7 +6,7 @@ subtitle: Identical bilingual content · 相同双语内容
 footer: Theme architecture regression
 authors:
   - name: Quality Gate
-    institution: Obsidian Theme Lilas
+    institution: Zhubai Theme
 themeConfig:
   presentation:
     preset: __GLOBAL_PRESET__
@@ -53,26 +53,23 @@ const resolved = localPreset ?? deckPreset
 
 > Shared quotations keep their hierarchy across visual identities.
 
-<div class="obsidian-slidev-callout obsidian-slidev-callout--note" data-callout="note">
-  <div class="obsidian-slidev-callout__title">Generated callout · 生成标注</div>
-  <div class="obsidian-slidev-callout__content"><p>Semantic content remains preset-neutral.</p></div>
-</div>
+<Callout type="note" title="Preset-neutral callout"><p>Semantic content remains preset-neutral.</p></Callout>
 
-<div class="obsidian-slidev-warning"><strong>Warning:</strong> root preset leakage must fail this case.</div>
+<Callout type="warning" title="Preset isolation"><strong>Warning:</strong> root preset leakage must fail this case.</Callout>
 
-<figure class="obsidian-slidev-media"><figcaption class="obsidian-slidev-media__caption">Stable generated caption · 稳定图注</figcaption></figure>
+<figure class="presentation-media"><figcaption class="presentation-media__caption">Stable caption · 稳定图注</figcaption></figure>
 
 ---
 layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
-presentationPreset: default
+presentationPreset: zhubai
 presentationHeader: true
 footerAuthors: false
 pageNumber: false
 ---
 
-<span hidden data-quality-case="local-default"></span>
+<span hidden data-quality-case="local-zhubai"></span>
 
 # Preset isolation · 预设隔离
 
@@ -94,14 +91,11 @@ const resolved = localPreset ?? deckPreset
 
 > Shared quotations keep their hierarchy across visual identities.
 
-<div class="obsidian-slidev-callout obsidian-slidev-callout--note" data-callout="note">
-  <div class="obsidian-slidev-callout__title">Generated callout · 生成标注</div>
-  <div class="obsidian-slidev-callout__content"><p>Semantic content remains preset-neutral.</p></div>
-</div>
+<Callout type="note" title="Preset-neutral callout"><p>Semantic content remains preset-neutral.</p></Callout>
 
-<div class="obsidian-slidev-warning"><strong>Warning:</strong> root preset leakage must fail this case.</div>
+<Callout type="warning" title="Preset isolation"><strong>Warning:</strong> root preset leakage must fail this case.</Callout>
 
-<figure class="obsidian-slidev-media"><figcaption class="obsidian-slidev-media__caption">Stable generated caption · 稳定图注</figcaption></figure>
+<figure class="presentation-media"><figcaption class="presentation-media__caption">Stable caption · 稳定图注</figcaption></figure>
 
 ---
 layout: two-cols
@@ -135,14 +129,11 @@ const resolved = localPreset ?? deckPreset
 
 > Shared quotations keep their hierarchy across visual identities.
 
-<div class="obsidian-slidev-callout obsidian-slidev-callout--note" data-callout="note">
-  <div class="obsidian-slidev-callout__title">Generated callout · 生成标注</div>
-  <div class="obsidian-slidev-callout__content"><p>Semantic content remains preset-neutral.</p></div>
-</div>
+<Callout type="note" title="Preset-neutral callout"><p>Semantic content remains preset-neutral.</p></Callout>
 
-<div class="obsidian-slidev-warning"><strong>Warning:</strong> root preset leakage must fail this case.</div>
+<Callout type="warning" title="Preset isolation"><strong>Warning:</strong> root preset leakage must fail this case.</Callout>
 
-<figure class="obsidian-slidev-media"><figcaption class="obsidian-slidev-media__caption">Stable generated caption · 稳定图注</figcaption></figure>
+<figure class="presentation-media"><figcaption class="presentation-media__caption">Stable caption · 稳定图注</figcaption></figure>
 
 ---
 layout: two-cols
@@ -176,14 +167,11 @@ const resolved = localPreset ?? deckPreset
 
 > Shared quotations keep their hierarchy across visual identities.
 
-<div class="obsidian-slidev-callout obsidian-slidev-callout--note" data-callout="note">
-  <div class="obsidian-slidev-callout__title">Generated callout · 生成标注</div>
-  <div class="obsidian-slidev-callout__content"><p>Semantic content remains preset-neutral.</p></div>
-</div>
+<Callout type="note" title="Preset-neutral callout"><p>Semantic content remains preset-neutral.</p></Callout>
 
-<div class="obsidian-slidev-warning"><strong>Warning:</strong> root preset leakage must fail this case.</div>
+<Callout type="warning" title="Preset isolation"><strong>Warning:</strong> root preset leakage must fail this case.</Callout>
 
-<figure class="obsidian-slidev-media"><figcaption class="obsidian-slidev-media__caption">Stable generated caption · 稳定图注</figcaption></figure>
+<figure class="presentation-media"><figcaption class="presentation-media__caption">Stable caption · 稳定图注</figcaption></figure>
 
 ---
 title: Invalid local values inherit
@@ -324,9 +312,9 @@ subtitle: Stable caption geometry
 
 <span hidden data-quality-case="layout-figure"></span>
 
-<figure class="obsidian-slidev-media">
+<figure class="presentation-media">
   <div role="img" aria-label="Abstract regression figure">▰ ▱ ▰</div>
-  <figcaption class="obsidian-slidev-media__caption">Representative figure · 代表图形</figcaption>
+  <figcaption class="presentation-media__caption">Representative figure · 代表图形</figcaption>
 </figure>
 
 ---
@@ -341,3 +329,82 @@ title: References layout
 1. Presentation configuration contract.
 2. Resolved preset canvas and shared frame contract.
 3. Quality-gate evidence contract.
+
+
+
+---
+layout: two-cols
+title: Preset isolation contract
+subtitle: Identical bilingual content · 相同双语内容
+presentationPreset: qingdai
+presentationHeader: true
+footerAuthors: false
+pageNumber: false
+---
+
+<span hidden data-quality-case="local-qingdai"></span>
+
+# Preset isolation · 预设隔离
+
+Identical content must depend only on the **resolved preset**, including `inline code`.
+
+- Valid deck values are inherited.
+- 标题、列表与表格在局部覆盖时保持一致。
+
+| Surface | Expected behavior |
+| --- | --- |
+| Canvas | Target background and typography |
+| Chrome | Target header and footer treatment |
+
+::right::
+
+```text
+const resolved = localPreset ?? deckPreset
+```
+
+> Shared quotations keep their hierarchy across visual identities.
+
+<Callout type="note" title="Preset-neutral callout"><p>Semantic content remains preset-neutral.</p></Callout>
+
+<Callout type="warning" title="Preset isolation"><strong>Warning:</strong> root preset leakage must fail this case.</Callout>
+
+<figure class="presentation-media"><figcaption class="presentation-media__caption">Stable caption · 稳定图注</figcaption></figure>
+
+
+---
+layout: two-cols
+title: Preset isolation contract
+subtitle: Identical bilingual content · 相同双语内容
+presentationPreset: songmo
+presentationHeader: true
+footerAuthors: false
+pageNumber: false
+---
+
+<span hidden data-quality-case="local-songmo"></span>
+
+# Preset isolation · 预设隔离
+
+Identical content must depend only on the **resolved preset**, including `inline code`.
+
+- Valid deck values are inherited.
+- 标题、列表与表格在局部覆盖时保持一致。
+
+| Surface | Expected behavior |
+| --- | --- |
+| Canvas | Target background and typography |
+| Chrome | Target header and footer treatment |
+
+::right::
+
+```text
+const resolved = localPreset ?? deckPreset
+```
+
+> Shared quotations keep their hierarchy across visual identities.
+
+<Callout type="note" title="Preset-neutral callout"><p>Semantic content remains preset-neutral.</p></Callout>
+
+<Callout type="warning" title="Preset isolation"><strong>Warning:</strong> root preset leakage must fail this case.</Callout>
+
+<figure class="presentation-media"><figcaption class="presentation-media__caption">Stable caption · 稳定图注</figcaption></figure>

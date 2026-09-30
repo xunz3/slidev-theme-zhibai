@@ -1,6 +1,6 @@
 /*
- * Public component styling lives here. Generated Obsidian callout/media compatibility remains
- * in obsidian.css so standalone components can reuse that semantic contract without moving it.
+ * Public component styling lives here. Shared Callout and Figure styles are
+ * in semantic.css.
  */
 
 .presentation-authors,
@@ -29,19 +29,18 @@
   list-style: none;
 }
 
+.slidev-layout .presentation-authors:last-child {
+  margin-bottom: 0;
+}
+
 .slidev-layout .presentation-author {
   min-width: 0;
   margin: 0;
   padding: 0.72rem 0 0.6rem;
   border: 0;
-  border-top: 1px solid color-mix(
-    in srgb,
-    var(--presentation-accent) 14%,
-    var(--presentation-author-card-border)
-  );
   border-radius: 0;
-  background: var(--presentation-author-card-bg);
-  box-shadow: var(--presentation-author-card-shadow);
+  background: transparent;
+  box-shadow: none;
   overflow-wrap: anywhere;
 }
 
@@ -126,18 +125,10 @@
   width: var(--presentation-sequence-node-size);
   height: var(--presentation-sequence-node-size);
   place-items: center;
-  border: 1px solid color-mix(
-    in srgb,
-    var(--presentation-sequence-node-bg) 58%,
-    var(--presentation-border)
-  );
+  border: 0;
   border-radius: 999px;
-  color: color-mix(
-    in srgb,
-    var(--presentation-sequence-node-bg) 82%,
-    var(--presentation-text)
-  );
-  background: var(--presentation-bg);
+  color: #fff;
+  background: var(--presentation-sequence-node-bg);
   font-family: var(--presentation-font-label);
   font-size: 0.64em;
   font-variant-numeric: tabular-nums;
@@ -196,13 +187,18 @@
 }
 
 .presentation-timeline > ol > li::before {
-  border-color: color-mix(
-    in srgb,
-    var(--presentation-sequence-node-bg) 76%,
-    var(--presentation-border)
-  );
-  background: var(--presentation-bg);
+  border: 0;
+  background: var(--presentation-sequence-node-bg);
   content: "";
+}
+
+html.dark .slidev-layout[data-presentation-preset] .presentation-sequence > ol > li::before,
+html.dark .slidev-layout[data-presentation-preset] .presentation-timeline > ol > li::before {
+  background: color-mix(
+    in srgb,
+    var(--presentation-sequence-node-bg) 70%,
+    var(--presentation-bg)
+  );
 }
 
 .presentation-timeline > ol > li > :is(time, strong):first-child,
@@ -241,27 +237,33 @@
   gap: 0.36em;
   color: var(--presentation-text);
   font-family: var(--presentation-font-label);
-  font-size: 0.78em;
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.25;
   vertical-align: middle;
 }
 
 .presentation-tag {
+  --presentation-tag-family: var(--presentation-family-neutral);
   border: 1px solid color-mix(
     in srgb,
-    var(--presentation-accent) 16%,
-    var(--presentation-border)
+    var(--presentation-tag-family) 30%,
+    transparent
   );
-  border-radius: 0.28rem;
+  border-radius: 999px;
   background: transparent;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
+}
+
+.slidev-layout .presentation-tag,
+.slidev-layout .presentation-badge {
+  font-size: 13px;
 }
 
 .presentation-badge {
   --presentation-badge-family: var(--presentation-family-neutral);
   --presentation-badge-family-surface: var(--presentation-family-neutral-surface);
-  border: 1px solid color-mix(in srgb, var(--presentation-badge-family) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--presentation-badge-family) 30%, transparent);
   border-radius: 999px;
   color: var(--presentation-badge-family);
   background: var(--presentation-badge-family-surface);
@@ -353,11 +355,7 @@
   border-radius: 0.3rem;
   color: var(--presentation-text);
   background: var(--presentation-bg-elevated);
-  box-shadow: 0 0.14em 0 color-mix(
-    in srgb,
-    var(--presentation-accent) 24%,
-    var(--presentation-border-strong)
-  );
+  box-shadow: none;
   font-family: var(--presentation-font-mono);
   font-size: 0.76em;
   font-weight: 700;
@@ -401,114 +399,4 @@
   clip-path: inset(50%);
   border: 0;
   white-space: nowrap;
-}
-
-.slidev-layout [data-image-viewer-trigger] {
-  cursor: zoom-in;
-}
-
-.slidev-layout [data-image-viewer-trigger]:focus-visible {
-  outline: 2px solid var(--presentation-accent);
-  outline-offset: 3px;
-}
-
-body.presentation-image-viewer-open {
-  overflow: hidden;
-}
-
-.presentation-image-viewer {
-  position: fixed;
-  inset: 0;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  padding: 56px 24px 24px;
-  border: 0;
-  color: #f8fafc;
-  background: rgb(10 14 22 / 94%);
-  font-family: var(--presentation-font-sans, sans-serif);
-  overscroll-behavior: contain;
-}
-
-.presentation-image-viewer[open] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.presentation-image-viewer::backdrop {
-  background: rgb(10 14 22 / 75%);
-}
-
-.presentation-image-viewer__image {
-  display: block;
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: center;
-}
-
-.presentation-image-viewer__close {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 1px solid rgb(255 255 255 / 35%);
-  border-radius: 50%;
-  color: inherit;
-  background: rgb(255 255 255 / 10%);
-  font: 32px / 1 sans-serif;
-  cursor: pointer;
-}
-
-.presentation-image-viewer__close:hover {
-  background: rgb(255 255 255 / 22%);
-}
-
-.presentation-image-viewer__close:focus-visible,
-.presentation-image-viewer__caption:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 3px;
-}
-
-.presentation-image-viewer__caption {
-  flex: 0 0 auto;
-  max-width: 80ch;
-  max-height: 20%;
-  margin: 0;
-  overflow: auto;
-  font-size: 16px;
-  line-height: 1.5;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
-@media print {
-  .presentation-image-viewer {
-    display: none;
-  }
-
-  .slidev-layout [data-image-viewer-trigger] {
-    cursor: auto;
-  }
-}
-
-@media (max-width: 720px) {
-  .presentation-authors {
-    grid-template-columns: 1fr;
-  }
-
-  .presentation-sequence > ol {
-    padding-left: var(--presentation-sequence-node-offset);
-  }
 }

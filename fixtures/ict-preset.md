@@ -3,7 +3,7 @@ theme: ../
 layout: cover
 title: Systems That Learn at Scale
 subtitle: Efficient architectures for reliable intelligent computing
-image: /theme/public/obsidian-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: A note card connected to a presentation canvas
 imageFit: contain
 footer: Institute of Computing Technology, Chinese Academy of Sciences
@@ -157,7 +157,7 @@ title: Benchmark record and ownership
 # Accessible benchmark record
 
 <Figure
-  src="/theme/public/obsidian-card.svg"
+  src="/theme/public/zhubai-card.svg"
   alt="A compact card recording one model and system benchmark"
   caption="Figure A. A bounded benchmark record with an authored alternative."
   fit="contain"
@@ -235,7 +235,7 @@ await result.writeArtifact()
 ---
 layout: image-left
 title: Benchmark evidence and narrative
-image: /theme/public/obsidian-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Systems benchmark card placed to the left of the narrative
 caption: Figure B. The figure moves visually, not structurally.
 backgroundSize: contain
@@ -249,7 +249,7 @@ placing the benchmark record beside it.
 ---
 layout: image-right
 title: Alternative benchmark orientation
-image: /theme/public/obsidian-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Systems benchmark card placed to the right of the narrative
 caption: Figure C. The mirrored layout preserves the same authoring contract.
 backgroundSize: contain

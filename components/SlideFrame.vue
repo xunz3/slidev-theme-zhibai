@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useIsSlideActive, useSlideContext } from '@slidev/client'
-import { computed } from 'vue'
-import type { CSSProperties } from 'vue'
+import { cloneVNode, computed, h, isVNode, useSlots } from 'vue'
+import type { CSSProperties, VNode } from 'vue'
 import { formatAuthorNames, resolveDeckAuthors } from '../setup/authors'
 import {
   resolvePresentation,
@@ -13,7 +13,6 @@ import type {
 import PresetBranding from '../internals/PresetBranding.vue'
 
 const props = withDefaults(defineProps<{
-  artwork?: unknown
   canvasStyle?: CSSProperties
   chrome?: PresentationChrome | boolean
   subtitle?: string
@@ -26,6 +25,7 @@ const props = withDefaults(defineProps<{
 
 const { $slidev, $frontmatter, $renderContext, $page } = useSlideContext()
 const isActive = useIsSlideActive()
+const slots = useSlots()
 // Only the live slide animates. Overview, next-slide previews and exports stay still.
 const motionActive = computed(() => isActive.value
   && ['slide', 'presenter'].includes($renderContext.value)
@@ -37,7 +37,6 @@ const frontmatter = computed(() => ($frontmatter as Record<string, any>))
 const presentationConfig = computed(() => configs.value.themeConfig?.presentation)
 
 const resolved = computed(() => resolvePresentation({
-  artwork: props.artwork,
   chrome: props.chrome,
   deck: presentationConfig.value,
   slide: frontmatter.value,
@@ -68,21 +67,53 @@ const headerSubtitle = computed(() => {
   return typeof value === 'string' ? value.trim() : ''
 })
 
-const footerLeft = computed(() => {
-  if (!resolved.value.footerAuthors) return ''
-
-  return formatAuthorNames(resolveDeckAuthors(configs.value))
-})
-
-const footerMiddle = computed(() => {
+const footerLabel = computed(() => {
   const slideFooter = frontmatter.value.footer
   if (slideFooter === false) return ''
-  if (slideFooter != null) return slideFooter
+  if (slideFooter != null) return String(slideFooter)
 
   const deckFooter = configs.value.footer
   if (deckFooter === false) return ''
-  return deckFooter ?? configs.value.title ?? ''
+  const value = deckFooter ?? configs.value.title ?? ''
+  return typeof value === 'string' ? value.trim() : String(value)
 })
+
+const footerLeft = computed(() => {
+  const authors = resolved.value.footerAuthors
+    ? formatAuthorNames(resolveDeckAuthors(configs.value))
+    : ''
+  return [footerLabel.value, authors].filter(Boolean).join(' · ')
+})
+
+const contentKicker = computed(() => {
+  if (!['default', 'intro', 'toc', 'center', 'two-cols', 'figure', 'references', 'image-text', 'code'].includes(resolved.value.variant)) return ''
+  const value = frontmatter.value.kicker
+  return typeof value === 'string' ? value.trim() : ''
+})
+
+// Insert into the authored heading's own flow, preserving nested grids, slots,
+// and interactive heading VNodes. Layouts without an H1 have no title kicker.
+const FrameContent = () => {
+  const nodes = slots.default?.({ presentation: resolved.value }) ?? []
+  if (!contentKicker.value) return nodes
+  let inserted = false
+  const visit = (children: unknown[]): unknown[] => children.flatMap(child => {
+    if (!isVNode(child)) return [child]
+    if (!inserted && child.type === 'h1') {
+      inserted = true
+      return [h('div', { class: 'slide-frame__kicker' }, contentKicker.value), child]
+    }
+    if (!inserted && Array.isArray(child.children)) {
+      const copy = cloneVNode(child)
+      copy.children = visit(child.children) as typeof child.children
+      copy.dynamicChildren = null
+      copy.patchFlag = 0
+      return [copy]
+    }
+    return [child]
+  })
+  return visit(nodes) as VNode[]
+}
 
 // Let keyboard readers scroll a focused content region without advancing the deck.
 const onContentKeydown = (event: KeyboardEvent) => {
@@ -100,10 +131,8 @@ const onContentKeydown = (event: KeyboardEvent) => {
 <template>
   <div
     class="slidev-layout"
-    :class="[resolved.variant, { 'slidev-layout--custom-background': canvasStyle?.background }]"
+    :class="[resolved.variant, { 'slidev-layout--custom-background': canvasStyle?.background || canvasStyle?.backgroundImage }]"
     :data-presentation-preset="resolved.preset"
-    :data-presentation-artwork="resolved.artwork.type"
-    :data-presentation-artwork-placement="resolved.artwork.placement"
     :data-presentation-cover-align="resolved.variant === 'cover' ? resolved.coverAlign : undefined"
     :style="outerStyle"
   >
@@ -117,15 +146,11 @@ const onContentKeydown = (event: KeyboardEvent) => {
         },
       ]"
       :data-presentation-preset="resolved.preset"
-      :data-presentation-artwork="resolved.artwork.type"
-      :data-presentation-artwork-placement="resolved.artwork.placement"
       :data-presentation-cover-align="resolved.variant === 'cover' ? resolved.coverAlign : undefined"
       :data-presentation-motion="motionActive ? 'active' : undefined"
       :style="frameStyle"
     >
       <PresetBranding
-        :artwork="resolved.artwork"
-        :cover-align="resolved.coverAlign"
         :preset="resolved.preset"
         :show-header="resolved.showHeader"
         :variant="resolved.variant"
@@ -143,12 +168,15 @@ const onContentKeydown = (event: KeyboardEvent) => {
         :tabindex="isActive ? 0 : -1"
         @keydown="onContentKeydown"
       >
-        <slot />
+        <FrameContent />
       </main>
 
-      <footer v-if="resolved.showChrome" class="slide-frame__footer">
-        <div class="slide-frame__footer-left">{{ footerLeft }}</div>
-        <div class="slide-frame__footer-middle">{{ footerMiddle }}</div>
+      <footer
+        v-if="resolved.showChrome"
+        class="slide-frame__footer"
+        :class="{ 'slide-frame__footer--page-only': !footerLeft }"
+      >
+        <div v-if="footerLeft" class="slide-frame__footer-left">{{ footerLeft }}</div>
         <div v-if="resolved.pageNumber" class="slide-frame__page">
           <span class="slide-frame__page-current">{{ String($page).padStart(2, '0') }}</span>
           <span class="slide-frame__page-divider">/</span>

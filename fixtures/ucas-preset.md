@@ -118,7 +118,7 @@ title: Experiment record and ownership
 # Accessible experiment record
 
 <Figure
-  src="/theme/public/obsidian-card.svg"
+  src="/theme/public/zhubai-card.svg"
   alt="A compact research card representing a geometric experiment record"
   caption="Figure A. Caption and alternative text are authored separately."
   fit="contain"
@@ -193,7 +193,7 @@ assert equivariance_error(model, rotation, x) < 1e-4
 ---
 layout: image-left
 title: Geometric evidence and narrative
-image: /theme/public/obsidian-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Geometric experiment card placed to the left of the narrative
 caption: Figure B. The narrative remains first in source order.
 backgroundSize: contain
@@ -207,7 +207,7 @@ logical narrative-first DOM order.
 ---
 layout: image-right
 title: Alternative evidence orientation
-image: /theme/public/obsidian-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Geometric experiment card placed to the right of the narrative
 caption: Figure C. Visual orientation changes without changing reading order.
 backgroundSize: contain

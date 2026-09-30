@@ -3,7 +3,7 @@ theme: ../
 title: Ordinary Figure variants
 themeConfig:
   presentation:
-    preset: default
+    preset: zhubai
     chrome: auto
 ---
 
@@ -71,18 +71,3 @@ The annotation stays attached to the evidence without displacing the heading.
   caption="Evidence note · Retrieval accounts for most of the measured improvement."
   fit="cover"
 />
-
----
-title: Generated minimal modifier
----
-
-<span hidden data-quality-case="figure-generated-minimal"></span>
-
-# Native Obsidian embed equivalent
-
-The existing producer `class=` option emits this modifier on generated markup.
-
-<figure class="obsidian-slidev-media obsidian-slidev-media--image obsidian-slidev-media--figure-minimal">
-  <img class="obsidian-slidev-media__image obsidian-slidev-media__asset" :src="'/author-fixtures/media-portrait.svg'" alt="Generated minimal portrait diagram" />
-  <figcaption class="obsidian-slidev-media__caption">Generated minimal uses the same local composition.</figcaption>
-</figure>

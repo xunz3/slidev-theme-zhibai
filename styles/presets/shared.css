@@ -1,736 +1,705 @@
-/* Shared derived roles resolve from each frame's preset or inline accent. */
+/* Preset roles follow the frame so deck and slide accents stay isolated. */
 .slidev-layout[data-presentation-preset] .slide-frame {
-  --presentation-scrollbar-thumb: color-mix(
-    in srgb,
-    var(--presentation-accent) 34%,
-    transparent
-  );
-  --presentation-chrome-accent: color-mix(
-    in srgb,
-    var(--presentation-accent) 34%,
-    var(--presentation-border-strong)
-  );
-  --presentation-family-info: color-mix(
-    in srgb,
-    var(--presentation-accent) 84%,
-    var(--presentation-text)
-  );
-  --presentation-family-info-surface: color-mix(
-    in srgb,
-    var(--presentation-accent) 10%,
-    transparent
-  );
+  --presentation-chrome-accent: var(--presentation-border-strong);
+  --presentation-family-info: color-mix(in srgb, var(--presentation-accent) 84%, var(--presentation-text));
+  --presentation-family-info-surface: color-mix(in srgb, var(--presentation-accent) 6%, transparent);
   --presentation-sequence-node-bg: var(--presentation-accent);
   --presentation-sequence-rail: var(--presentation-chrome-accent);
-  --presentation-table-header-bg: color-mix(
-    in srgb,
-    var(--presentation-accent) 3%,
-    transparent
-  );
-  --presentation-code-border: color-mix(
-    in srgb,
-    var(--presentation-accent) 24%,
-    var(--presentation-border)
-  );
-  --presentation-code-copy-color: color-mix(
-    in srgb,
-    var(--presentation-accent) 74%,
-    var(--presentation-text)
-  );
-  --presentation-inline-code-bg: color-mix(
-    in srgb,
-    var(--presentation-accent) 9%,
-    transparent
-  );
-  --presentation-inline-code-border: color-mix(
-    in srgb,
-    var(--presentation-accent) 24%,
-    var(--presentation-border)
-  );
-  --presentation-blockquote-border: color-mix(
-    in srgb,
-    var(--presentation-accent) 72%,
-    var(--presentation-border)
-  );
-  --presentation-callout-bg: color-mix(
-    in srgb,
-    var(--presentation-accent) 7%,
-    transparent
-  );
-  --presentation-callout-border: color-mix(
-    in srgb,
-    var(--presentation-accent) 58%,
-    transparent
-  );
-}
-
-html.dark .slidev-layout[data-presentation-preset] .slide-frame {
-  --presentation-table-header-bg: color-mix(
-    in srgb,
-    var(--presentation-accent) 12%,
-    transparent
-  );
-  --presentation-inline-code-bg: color-mix(
-    in srgb,
-    var(--presentation-accent) 14%,
-    transparent
-  );
-  --presentation-callout-bg: color-mix(
-    in srgb,
-    var(--presentation-accent) 11%,
-    transparent
-  );
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame
-  :is(.slide-frame__header, .slide-frame__footer) {
-  border-color: var(--presentation-chrome-accent);
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame th {
-  border-bottom-color: var(--presentation-chrome-accent);
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame li::marker {
-  color: var(--presentation-chrome-accent);
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame {
+  --presentation-table-header-bg: color-mix(in srgb, var(--presentation-accent) 3%, transparent);
+  --presentation-code-border: color-mix(in srgb, var(--presentation-accent) 22%, var(--presentation-border));
+  --presentation-code-copy-color: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
+  --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 8%, transparent);
+  --presentation-inline-code-border: color-mix(in srgb, var(--presentation-accent) 22%, var(--presentation-border));
+  --presentation-blockquote-border: transparent;
+  --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 6%, transparent);
+  --presentation-callout-border: color-mix(in srgb, var(--presentation-accent) 54%, transparent);
   --slidev-code-font-family: var(--presentation-font-mono);
   --slidev-code-font-size: var(--presentation-code-size);
   --slidev-code-line-height: var(--presentation-code-line-height);
   --slidev-code-padding: 1rem 1.1rem;
-  --slidev-code-radius: 0.25rem;
+  --slidev-code-radius: 4px;
   --slidev-code-margin: 0 0 var(--presentation-content-gap);
+  isolation: isolate;
+  color: var(--presentation-text);
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame .presentation-code-layout {
-  --slidev-code-margin: 0;
+.slidev-layout[data-presentation-preset] {
+  background: var(--presentation-bg);
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
-  background: color-mix(in srgb, var(--presentation-code-bg) 45%, var(--shiki-light-bg, var(--presentation-bg)));
+html.dark .slidev-layout[data-presentation-preset] .slide-frame {
+  --presentation-table-header-bg: color-mix(in srgb, var(--presentation-accent) 11%, transparent);
+  --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 13%, transparent);
+  --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 10%, transparent);
 }
 
-html.dark .slidev-layout[data-presentation-preset] .slide-frame pre.shiki {
-  background: color-mix(in srgb, var(--presentation-code-bg) 45%, var(--shiki-dark-bg, var(--presentation-bg)));
+.slidev-layout[data-presentation-preset] .slide-frame > :is(.slide-frame__header, .slide-frame__content, .slide-frame__footer) {
+  position: relative;
+  z-index: 1;
 }
 
-/* Give content the same considered spacing as the opening and closing slides. */
-.slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right)[data-presentation-preset]
-  .slide-frame h1 {
-  margin-bottom: 0.62em;
+.slidev-layout[data-presentation-preset] .slide-frame__header,
+.slidev-layout[data-presentation-preset] .slide-frame__footer {
+  border: 0;
+  color: var(--presentation-text-muted);
+  font-family: var(--presentation-font-label);
+  font-size: var(--presentation-chrome-size);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame__footer {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding: 0;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame__footer--page-only .slide-frame__page {
+  grid-column: 2;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame__page {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  color: var(--presentation-text-muted);
+  font-family: var(--presentation-font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame__page-divider,
+.slidev-layout[data-presentation-preset] .slide-frame__page-total {
+  color: var(--presentation-text-faint);
+  font-weight: 400;
 }
 
 .slidev-layout[data-presentation-preset] .slide-frame table {
-  border-top-color: var(--presentation-chrome-accent);
-  border-bottom-color: var(--presentation-border);
+  border: 0;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame th {
+  border-bottom: 1px solid var(--presentation-border-strong);
 }
 
 .slidev-layout[data-presentation-preset] .slide-frame tbody tr:last-child td {
   border-bottom: 0;
 }
 
-.slidev-layout.toc[data-presentation-preset] .slide-frame .slide-layout-toc__button--unnumbered {
-  grid-template-columns: minmax(0, 1fr);
+.slidev-layout[data-presentation-preset] .slide-frame pre {
+  border-radius: 4px;
+  box-shadow: none;
 }
 
-.slidev-layout.quote[data-presentation-preset="default"] .slide-frame .slide-layout-quote__meta {
+.slidev-layout[data-presentation-preset] .slide-frame :not(pre) > code {
+  border-radius: 4px;
+}
+
+.slidev-layout[data-presentation-preset] .presentation-code-layout {
+  --slidev-code-margin: 0;
+}
+
+/* Parallel content needs a tighter rhythm than a full-width reading column. */
+.slidev-layout.two-cols[data-presentation-preset] .slide-frame {
+  --presentation-content-gap: 0.6rem;
+  --presentation-slide-title-size: 30px;
+  --slidev-code-padding: 0.8rem 1rem;
+}
+
+/* A header needs its own vertical budget without shrinking reading text. */
+.slidev-layout.two-cols[data-presentation-preset] .slide-frame--header {
+  padding-block: 2rem;
+  gap: 0.85rem;
+}
+
+.slidev-layout.two-cols[data-presentation-preset] .slide-frame h1 {
+  font-size: 30px;
+}
+
+.slidev-layout.two-cols[data-presentation-preset] .presentation-callout {
+  margin-block: 0.7rem;
+  padding: 0.55rem 0.85rem;
+}
+
+.slidev-layout.two-cols[data-presentation-preset] .presentation-media {
+  margin-block: 0.7rem;
+}
+
+.slidev-layout.two-cols[data-presentation-preset] blockquote {
+  margin-block: 0.5rem;
+  padding: 0.4rem 0 0.4rem 2rem;
+  line-height: 1.25;
+}
+
+.slidev-layout.two-cols[data-presentation-preset] blockquote p {
+  line-height: 1.25;
+}
+
+.slidev-layout.two-cols[data-presentation-preset] .slide-layout-two-cols__pane > :last-child {
+  margin-bottom: 0;
+}
+
+.slidev-layout[data-presentation-preset] pre.shiki {
+  background: color-mix(in srgb, var(--presentation-code-bg) 45%, var(--shiki-light-bg, var(--presentation-bg)));
+}
+
+html.dark .slidev-layout[data-presentation-preset] pre.shiki {
+  background: color-mix(in srgb, var(--presentation-code-bg) 45%, var(--shiki-dark-bg, var(--presentation-bg)));
+}
+
+.slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right)[data-presentation-preset] .slide-frame h1 {
+  margin-bottom: 0.82em;
+  font-family: var(--presentation-font-sans);
+  font-size: calc(var(--presentation-slide-title-size) * var(--presentation-heading-scale));
+  font-weight: 600;
+  line-height: var(--presentation-heading-line-height);
+}
+
+/* Keep bilingual two-column titles and tables within the same reading budget. */
+.slidev-layout.two-cols[data-presentation-preset] .slide-frame h1 {
+  margin-bottom: 0.5em;
+}
+
+.slidev-layout.two-cols[data-presentation-preset] .slide-frame :is(th, td) {
+  padding-block: 0.35rem;
+}
+
+.slidev-layout.intro[data-presentation-preset] .slide-frame h1 {
+  font-size: var(--presentation-size-64, 64px);
+  font-family: var(--presentation-font-display);
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame li::marker {
+  color: var(--presentation-text-muted);
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame {
+  --presentation-cover-inset-x: 4rem;
+  --presentation-cover-inset-y: 2.25rem;
+  padding: var(--presentation-cover-padding, 2.25rem 4rem);
+  padding-inline: 0;
+  padding-bottom: 0;
+}
+
+/* Full-width cover bands do not remove the reading inset from optional chrome. */
+.slidev-layout.cover[data-presentation-preset] :is(.slide-frame__header, .slide-frame__footer) {
+  padding-inline: var(--presentation-cover-inset-x, 4rem);
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame--chrome {
+  padding-bottom: 0.75rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame--header .slide-cover__main {
+  padding-block: 0.5rem 1rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-frame__content,
+.slidev-layout.section[data-presentation-preset] .slide-frame__content {
+  display: block;
+  overflow: auto;
+  scrollbar-gutter: auto;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas: "main" "meta";
+  align-content: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  gap: 0;
+  text-align: left;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__main {
+  grid-area: main;
+  display: grid;
+  justify-items: start;
+  align-content: end;
+  align-self: stretch;
+  padding-block: 1rem clamp(3rem, 8vh, 5rem);
+  min-width: 0;
+  width: 100%;
+  gap: 0.8rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--presentation-accent);
+  font-family: var(--presentation-font-label);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__title {
+  max-width: var(--presentation-cover-measure, 18ch);
+  margin: 0;
+  color: var(--presentation-brand-title, var(--presentation-text));
+  font-family: var(--presentation-font-display);
+  font-size: var(--presentation-cover-size, 64px);
+  font-weight: var(--presentation-cover-weight, 600);
+  letter-spacing: var(--presentation-cover-tracking, -0.01em);
+  line-height: var(--presentation-cover-leading, 1.02);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--long-title .slide-cover__title {
+  max-width: 100%;
+  font-size: var(--presentation-cover-long-size, 52px);
+  line-height: 1.08;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--dense-title .slide-cover__title {
+  font-size: var(--presentation-cover-dense-size, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__subtitle {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--presentation-text-muted);
+  font-family: var(--presentation-font-quote);
+  font-size: 21px;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__body {
+  display: grid;
+  justify-items: start;
+  width: min(100%, 54rem);
+  margin: 0;
+  gap: 0.55rem;
+  font-size: 1.125rem;
+  color: var(--presentation-text);
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__body > :last-child {
+  margin-bottom: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__body > h1:first-child {
+  max-width: var(--presentation-cover-measure, 18ch);
+  margin: 0;
+  color: var(--presentation-brand-title, var(--presentation-text));
+  font-family: var(--presentation-font-display);
+  font-size: var(--presentation-cover-size, 5rem);
+  font-weight: var(--presentation-cover-weight, 600);
+  letter-spacing: var(--presentation-cover-tracking, -0.02em);
+  line-height: var(--presentation-cover-leading, 1.02);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--long-title .slide-cover__body > h1:first-child {
+  max-width: 100%;
+  font-size: var(--presentation-cover-long-size, 3.8rem);
+  line-height: 1.08;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--dense-title .slide-cover__body > h1:first-child {
+  font-size: var(--presentation-cover-dense-size, 2.8rem);
+  line-height: 1.12;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta {
+  position: relative;
+  z-index: 1;
+  grid-area: meta;
+  justify-self: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  width: auto;
+  margin: 0 calc(-1 * var(--presentation-cover-inset-x, 4rem));
+  padding: 1.2rem var(--presentation-cover-inset-x, 4rem);
+  border-top: 1px solid var(--presentation-border);
+  background: var(--presentation-cover-meta-bg, color-mix(in srgb, var(--presentation-accent) 6%, var(--presentation-bg)));
+  font-family: var(--presentation-font-sans);
+  font-size: 16px;
+  line-height: 1.35;
+  gap: 0.5rem 2rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__authors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem 1.4rem;
+  list-style: none;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__author {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__author-name {
+  color: var(--presentation-text);
+  font-weight: 600;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__author-details {
+  margin-top: 0.14rem;
+  color: var(--presentation-text-muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__date {
+  justify-self: end;
+  color: var(--presentation-text-muted);
+  font-family: var(--presentation-font-label);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas: "main visual" "meta meta";
+  column-gap: clamp(2rem, 4vw, 4rem);
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__visual {
+  position: relative;
+  grid-area: visual;
+  display: grid;
+  align-self: stretch;
+  align-content: center;
+  justify-items: center;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  overflow: clip;
+  padding-block: 1rem clamp(3rem, 8vh, 5rem);
+  margin: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__visual > .presentation-media {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__visual > :where(img, svg, video, iframe) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 52vh;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover {
+  justify-items: center;
+  text-align: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__main,
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__body {
+  justify-items: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__meta {
+  justify-self: stretch;
+  width: auto;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  text-align: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__authors {
+  justify-content: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__date {
+  justify-self: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover--has-visual {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-areas: "main visual" "meta meta";
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__visual {
+  width: 100%;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-frame__content,
+.slidev-layout.closing[data-presentation-preset] .slide-frame__content {
+  padding: 0;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-frame__content {
+  display: grid;
+  place-items: center;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 68ch);
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 100%;
+  margin-inline: auto;
+  column-gap: clamp(2rem, 5vw, 4rem);
+  text-align: left;
+  isolation: isolate;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section__index {
+  position: relative;
+  z-index: 0;
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: end;
+  white-space: nowrap;
+  color: var(--presentation-section-index-color);
+  font-family: var(--presentation-font-label);
+  font-size: var(--presentation-section-index-size);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  pointer-events: none;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section__main {
+  position: relative;
+  z-index: 1;
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+}
+
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame .slide-layout-section {
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  justify-items: center;
+  row-gap: 1rem;
+  text-align: center;
+}
+
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame .slide-layout-section__index {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+}
+
+.slidev-layout.section[data-presentation-preset="ucas"] .slide-frame .slide-layout-section__main {
+  grid-column: 1;
+  grid-row: 2;
+  text-align: center;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section__kicker {
+  display: block;
+  margin: 0 0 0.7rem;
+  color: var(--presentation-accent);
+  font-family: var(--presentation-font-label);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section__main > h1 {
+  max-width: 16ch;
+  margin: 0 0 0.3em;
+  color: var(--presentation-text);
+  font-family: var(--presentation-font-display);
+  font-size: var(--presentation-section-size, 48px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.06;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section__main > :last-child {
+  margin-bottom: 0;
+}
+
+.slidev-layout.statement[data-presentation-preset] .slide-layout-statement {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  width: min(100%, 68ch);
+  min-height: 100%;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.slidev-layout.statement[data-presentation-preset] .slide-layout-statement h1,
+.slidev-layout.closing[data-presentation-preset] .presentation-closing--minimal h1 {
+  color: var(--presentation-brand-title, var(--presentation-text));
+  font-family: var(--presentation-font-display);
+  font-weight: var(--presentation-closing-weight, 600);
+  letter-spacing: var(--presentation-closing-tracking, -0.02em);
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.slidev-layout.statement[data-presentation-preset] .slide-layout-statement h1 {
+  margin: 0;
+  font-size: var(--presentation-statement-size, 96px);
+}
+
+.slidev-layout.closing[data-presentation-preset] .presentation-closing--minimal h1 {
+  font-size: var(--presentation-closing-size, 64px);
+}
+
+.slidev-layout.statement[data-presentation-preset] .slide-layout-statement--long h1 {
+  font-size: var(--presentation-size-64, 64px);
+}
+
+.slidev-layout.statement[data-presentation-preset] .slide-layout-statement--dense h1 {
+  font-size: var(--presentation-size-48, 48px);
+}
+
+.slidev-layout.statement[data-presentation-preset] .slide-layout-statement p {
+  max-width: 40rem;
+  margin: 1.25rem auto 0;
+  color: var(--presentation-text-muted);
+  font-family: var(--presentation-font-body);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.slidev-layout.statement[data-presentation-preset] .slide-layout-statement p[lang|="zh"] {
+  line-height: 1.6;
+}
+
+.slidev-layout.closing[data-presentation-preset] .presentation-closing--minimal {
+  width: min(100%, 68rem);
+  justify-items: start;
+  text-align: left;
+}
+
+.slidev-layout.closing[data-presentation-preset="ucas"] .slide-frame__content,
+.slidev-layout.closing[data-presentation-preset="ict"] .slide-frame__content {
+  padding-top: var(--presentation-closing-top-reserve, 5.5rem);
+}
+
+.slidev-layout.closing[data-presentation-preset] .presentation-closing--minimal h1 {
+  max-width: var(--presentation-closing-measure, 17ch);
+}
+
+.slidev-layout.quote:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-layout-quote__meta {
   margin-left: 1.45rem;
   border-top: 0;
   padding-top: 0;
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame
-  :is(.slide-layout-quote__content :lang(zh), .obsidian-slidev-media__caption:lang(zh)) {
-  font-style: normal;
-  letter-spacing: 0;
-}
-
-/* Common editorial rhythm; each preset supplies its own type and color roles. */
-.slidev-layout[data-presentation-preset] .slide-frame .slide-cover__authors {
-  padding-inline: 0;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .slide-cover__author {
-  padding-left: 0;
-  margin-left: 0;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .slide-cover__author-name {
-  font-weight: 500;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .slide-layout-section__kicker {
-  margin-bottom: 1.35rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .slide-layout-toc__button {
-  transition: background-color 180ms ease, color 180ms ease;
-}
-
-/* A consistent page grid; decorative studies never participate in content flow. */
-.slidev-layout[data-presentation-preset] .slide-frame {
-  isolation: isolate;
-  color: var(--presentation-text);
-  --presentation-artwork-width: 32%;
-  --presentation-artwork-band-height: 7rem;
-}
-
-.slidev-layout:is(.cover, .section, .closing)[data-presentation-preset] .slide-frame {
-  padding: var(--presentation-slide-padding);
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame > :is(.slide-frame__header, .slide-frame__content, .slide-frame__footer) {
-  position: relative;
-  z-index: 2;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .slide-frame__footer {
-  border-top: 1px solid var(--presentation-chrome-accent);
-  letter-spacing: 0.025em;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .slide-frame__page {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5em;
-  font-family: var(--presentation-font-mono);
-  font-size: 0.66rem;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame :is(.slide-frame__page-divider, .slide-frame__page-total) {
-  color: var(--presentation-text-muted);
-  font-weight: 400;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork {
-  position: absolute;
-  z-index: 0;
-  inset: 0 0 0 auto;
-  width: var(--presentation-artwork-width);
-  overflow: hidden;
-  pointer-events: none;
-  user-select: none;
-  opacity: var(--presentation-artwork-opacity, 1);
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__drawing {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__line {
-  stroke: currentColor;
-  stroke-width: 0.7;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__wash {
-  fill: currentColor;
-  opacity: 0.06;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__guide {
-  stroke: currentColor;
-  stroke-width: 0.6;
-  opacity: 0.18;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__point {
-  fill: var(--presentation-artwork-point, currentColor);
-}
-
-/* Cover hierarchy is shared; each preset retains its typeface and ink colors. */
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover {
-  width: 100%;
-  gap: 1.5rem;
-  justify-items: start;
-  text-align: left;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover:not(.slide-cover--has-visual) {
-  width: 64%;
-  justify-self: start;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__main {
-  gap: 0.6rem;
-  justify-items: start;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame h1 {
-  max-width: 14ch;
-  margin-bottom: 0;
-  font-size: calc(4rem * var(--presentation-heading-scale));
-  line-height: 1.08;
-  text-wrap: balance;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__subtitle {
-  margin-top: 0.25rem;
-  font-size: 1.1rem;
-  letter-spacing: 0.01em;
-  line-height: 1.5;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__body {
-  justify-items: start;
-  margin-top: 0.25rem;
-  gap: 0.6rem;
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__body > p {
-  margin-block: 0;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__authors {
-  justify-content: flex-start;
-  gap: 0.75rem 1.5rem;
-  font-size: 0.9rem;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover__author-details {
-  font-size: 0.95em;
-  line-height: 1.5;
-}
-
-/* Original motifs blend into the page instead of ending at a hard panel edge. */
-.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="right"]:not([data-artwork="custom"]) {
-  mask-image: linear-gradient(to right, transparent, black 30%);
-}
-
-.slidev-layout:is(.cover, .closing)[data-presentation-preset="ucas"] .slide-frame .slide-frame__ucas-watermark {
-  opacity: 0.5;
-}
-
-/* The motif is independent of the preset palette and institutional identity. */
-.slidev-layout[data-presentation-preset] .preset-artwork:is(
-  [data-artwork="flow"], [data-artwork="field"], [data-artwork="dots"], [data-artwork="custom"]
-) {
-  background: transparent;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__flow .preset-artwork__line {
-  stroke-width: 0.7;
-  opacity: 0.65;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork:is(
-  [data-artwork="flow"], [data-artwork="field"], [data-artwork="dots"]
-) {
-  mask-image: linear-gradient(to right, transparent, black 24%);
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__field {
-  width: 100%;
-  height: 100%;
-  background:
-    radial-gradient(ellipse at 64% 30%, color-mix(in srgb, currentColor 20%, transparent), transparent 60%),
-    radial-gradient(ellipse at 24% 72%, color-mix(in srgb, var(--presentation-artwork-point) 15%, transparent), transparent 55%);
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__field .preset-artwork__line {
-  stroke-width: 0.75;
-  opacity: 0.32;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__custom {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__image {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  object-fit: var(--presentation-artwork-fit, contain);
-  object-position: var(--presentation-artwork-position, center);
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.slidev-layout[data-presentation-preset] .preset-artwork__image--dark:not(:only-child),
-html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--light:not(:only-child) {
-  display: none;
-}
-
-html.dark .slidev-layout[data-presentation-preset] .preset-artwork__image--dark {
-  display: block;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-artwork="none"]
-  .slide-frame .slide-cover:not(.slide-cover--has-visual) {
-  width: 100%;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-artwork="none"]
-  .slide-frame .slide-cover:not(.slide-cover--has-visual) h1 {
-  max-width: 20ch;
-}
-
-.slidev-layout:is(.section, .closing)[data-presentation-preset][data-presentation-artwork="none"]
-  .slide-frame :is(.slide-layout-section, .presentation-closing--minimal) {
-  padding-right: 0;
-}
-
-/* Author-provided imagery owns the visual column. The decoration steps away. */
-.slidev-layout.cover[data-presentation-preset] .slide-frame:has(.slide-cover--has-visual) .preset-artwork {
-  display: none;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--has-visual {
-  width: 100%;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
-  grid-template-areas: "cover-main cover-visual" "cover-authors cover-visual";
-  column-gap: 2rem;
-  row-gap: 1.2rem;
+/* Short display covers and content-heavy covers have separate type budgets. */
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual {
+  --presentation-cover-size: 52px;
+  --presentation-cover-long-size: 44px;
+  --presentation-cover-dense-size: 36px;
+  --presentation-cover-visual-height: min(52vh, 16rem);
 }
 
 .slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__main {
-  grid-area: cover-main;
-  min-width: 0;
+  gap: 0.55rem;
 }
 
-.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__visual {
-  grid-area: cover-visual;
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__subtitle {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__body {
+  font-size: 1.125rem;
+  line-height: 1.45;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__visual :is(svg, img, video) {
+  display: block;
   width: 100%;
-  min-width: 0;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual .slide-cover__authors {
-  grid-area: cover-authors;
-  width: 100%;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual h1 {
-  font-size: calc(3.1rem * var(--presentation-heading-scale));
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--long-title h1 {
   max-width: 100%;
-  font-size: calc(3.1rem * var(--presentation-heading-scale));
-  letter-spacing: -0.035em;
-  line-height: 1.1;
+  max-height: var(--presentation-cover-visual-height, 13rem);
+  object-fit: var(--presentation-media-fit, contain);
 }
 
-.slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--dense-title h1 {
-  font-size: calc(2.55rem * var(--presentation-heading-scale));
-}
-
-.slidev-layout.cover.slidev-layout--custom-background[data-presentation-preset] .slide-frame {
+.slidev-layout.cover[data-presentation-preset] .slide-cover__visual .presentation-media__viewport {
+  height: var(--presentation-cover-visual-height, min(52vh, 16rem));
+  border: 0;
   background: transparent;
+  box-shadow: none;
 }
 
-.slidev-layout.cover.slidev-layout--custom-background[data-presentation-preset] .preset-artwork,
-.slidev-layout.closing[data-presentation-preset] .slide-frame:has(.presentation-closing--rich) .preset-artwork {
-  display: none;
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover--has-visual {
+  --presentation-cover-size: 52px;
+  --presentation-cover-long-size: 44px;
+  --presentation-cover-dense-size: 36px;
 }
 
-.slidev-layout:is(.cover, .closing)[data-presentation-preset] .slide-frame--header {
-  padding-top: 6.4rem;
-}
-
-.slidev-layout[data-presentation-preset] .slide-cover__body:empty {
-  display: none;
-}
-
-/* Placement owns the composition; preset colors remain local to the artwork. */
-.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="bottom"] {
-  inset: auto 0 0;
-  width: 100%;
-  height: var(--presentation-artwork-band-height);
-  background: transparent;
-  mask-image: linear-gradient(to bottom, transparent, black 55%);
-  --presentation-artwork-motion-x: 0px;
-  --presentation-artwork-motion-y: 10px;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="background"] {
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  --presentation-artwork-opacity: 0.65;
-  --presentation-artwork-motion-x: 0px;
-  mask-image: radial-gradient(ellipse 48% 65% at center, transparent 45%, black 100%);
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="bottom"] .preset-artwork__field {
-  background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, currentColor 20%, transparent), transparent 72%);
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame .preset-artwork[data-artwork-placement="background"] .preset-artwork__field {
-  background:
-    radial-gradient(ellipse at 0% 60%, color-mix(in srgb, currentColor 24%, transparent), transparent 55%),
-    radial-gradient(ellipse at 100% 60%, color-mix(in srgb, currentColor 24%, transparent), transparent 55%);
-}
-
-/* A bottom image is a complete, centered vignette, with no directional fade. */
-.slidev-layout[data-presentation-preset] .preset-artwork[data-artwork="custom"][data-artwork-placement="bottom"] {
-  padding: 0.4rem 3rem 0.8rem;
-  mask-image: none;
-}
-
-.slidev-layout.cover[data-presentation-preset]:is(
-  [data-presentation-artwork-placement="bottom"], [data-presentation-artwork-placement="background"]
-) .slide-frame .slide-cover:not(.slide-cover--has-visual) {
-  width: 100%;
-}
-
-.slidev-layout:is(.section, .closing)[data-presentation-preset]:is(
-  [data-presentation-artwork-placement="bottom"], [data-presentation-artwork-placement="background"]
-) .slide-frame :is(.slide-layout-section, .presentation-closing--minimal) {
-  padding-right: 0;
-}
-
-.slidev-layout:is(.cover, .section, .closing)[data-presentation-preset][data-presentation-artwork-placement="bottom"]:not([data-presentation-artwork="none"]) .slide-frame {
-  padding-bottom: calc(var(--presentation-artwork-band-height) + 0.5rem);
-}
-
-.slidev-layout:is(.section, .closing)[data-presentation-preset][data-presentation-artwork-placement="bottom"] .slide-frame h1 {
-  max-width: 24ch;
-  font-size: calc(3.5rem * var(--presentation-heading-scale));
-  text-wrap: balance;
-}
-
-/* Explicit side artwork on a centered cover becomes an edge detail. The title
-   keeps its full reading width, and no secondary seal competes with its axis. */
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .preset-artwork[data-artwork-placement="right"] {
-  background: transparent;
-  mask-image:
-    linear-gradient(to right, transparent calc(100% - 2rem), black),
-    linear-gradient(to bottom, black, transparent 16%, transparent 84%, black);
-}
-
-/* Centering is a cover option shared by every palette, including branding. */
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame__content {
-  scrollbar-gutter: auto;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover {
-  width: 100%;
-  margin-top: 0;
-  justify-self: center;
-  justify-items: center;
-  text-align: center;
-  gap: 1.5rem;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame :is(.slide-cover__main, .slide-cover__body) {
-  justify-items: center;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__main::before {
-  margin-bottom: 0.6rem;
-  transform-origin: center;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover h1 {
-  max-width: min(100%, 24ch);
-  text-wrap: balance;
-  overflow-wrap: anywhere;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--long-title h1 {
-  max-width: 100%;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover {
+.slidev-layout.cover[data-presentation-preset] .slide-frame--header .slide-cover {
+  --presentation-cover-size: 48px;
+  --presentation-cover-long-size: 40px;
+  --presentation-cover-dense-size: 32px;
   gap: 1rem;
 }
 
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover h1 {
-  font-size: calc(3.1rem * var(--presentation-heading-scale));
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover--long-title h1 {
-  font-size: calc(2.15rem * var(--presentation-heading-scale));
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover__main {
-  gap: 0.35rem;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header :is(.slide-cover__subtitle, .slide-cover__body) {
-  margin-top: 0;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame--header .slide-cover__main::before {
-  content: none;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame :is(.slide-cover__subtitle, .slide-cover__body) {
-  max-width: 42rem;
-  text-wrap: pretty;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__body > p {
-  margin-block: 0;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__authors {
-  justify-content: center;
-  width: 100%;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__author {
-  min-width: 0;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame :is(.slide-frame__ucas-rail, .slide-frame__ict-lockup) {
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-}
-
-.slidev-layout.cover:is([data-presentation-preset="ucas"], [data-presentation-preset="ict"])[data-presentation-cover-align="center"] .slide-frame:not(.slide-frame--header) {
-  padding-top: 7rem;
-}
-
-/* Content images follow the centered reading order and retain their alt text. */
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--has-visual {
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "cover-main" "cover-visual" "cover-authors";
-  gap: 0.85rem;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--has-visual h1 {
-  font-size: calc(2.55rem * var(--presentation-heading-scale));
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover--has-visual .slide-cover__main::before {
-  content: none;
-}
-
-.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-frame .slide-cover__visual {
-  width: min(100%, 30rem);
-  --presentation-media-viewport-height: 9rem;
-}
-
-/* Motion belongs to the live frame, never to individual v-click fragments.
-   No forwards fill: authored transforms/opacity regain control after entry. */
 @keyframes presentation-enter {
-  from {
-    opacity: 0;
-    transform: translate3d(var(--presentation-motion-x, 0px), var(--presentation-motion-distance, 10px), 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes presentation-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes presentation-draw {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
-}
-
-@keyframes presentation-artwork {
-  from {
-    opacity: 0;
-    transform: translate3d(var(--presentation-artwork-motion-x, 18px), var(--presentation-artwork-motion-y, 0px), 0);
-  }
-  to { opacity: var(--presentation-artwork-opacity, 1); transform: translate3d(0, 0, 0); }
-}
-
-@keyframes presentation-rule {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+  from { opacity: 0; transform: translate3d(0, var(--presentation-motion-rise), 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] > .slide-frame__content {
-    animation: presentation-enter var(--presentation-motion-duration, 620ms) cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  .slidev-layout:is(.cover, .section, .statement)[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-cover__eyebrow,
+  .slidev-layout:is(.cover, .section, .statement)[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-layout-section__index {
+    animation: presentation-enter var(--presentation-motion-duration) var(--presentation-motion-easing) backwards;
   }
 
-  .slidev-layout:is(.cover, .section, .closing)[data-presentation-preset]
-    .slide-frame[data-presentation-motion="active"] > .slide-frame__content {
-    animation-delay: 60ms;
+  .slidev-layout:is(.cover, .section, .statement)[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(.slide-cover__title, .slide-layout-section__kicker) {
+    animation: presentation-enter var(--presentation-motion-duration) var(--presentation-motion-easing) calc(var(--presentation-motion-stagger) * 1) backwards;
   }
 
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] > :is(.slide-frame__header, .slide-frame__footer) {
-    animation: presentation-fade var(--presentation-motion-duration, 620ms) ease 100ms backwards;
+  .slidev-layout:is(.cover, .section, .statement)[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(.slide-cover__subtitle, .slide-layout-section__main > h1, .slide-layout-statement h1) {
+    animation: presentation-enter var(--presentation-motion-duration) var(--presentation-motion-easing) calc(var(--presentation-motion-stagger) * 2) backwards;
   }
 
-  .slidev-layout.cover[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-cover__authors {
-    animation: presentation-fade var(--presentation-motion-duration, 620ms) ease 240ms backwards;
+  .slidev-layout.cover[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(.slide-cover__body, .slide-cover__visual) {
+    animation: presentation-enter var(--presentation-motion-duration) var(--presentation-motion-easing) calc(var(--presentation-motion-stagger) * 3) backwards;
   }
 
-  .slidev-layout.cover[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(.slide-cover__subtitle, .slide-cover__body) {
-    animation: presentation-fade var(--presentation-motion-duration, 620ms) ease 140ms backwards;
+  .slidev-layout:is(.cover, .section, .statement)[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(.slide-cover__meta, .slide-layout-section__main > p, .slide-layout-statement p) {
+    animation: presentation-enter var(--presentation-motion-duration) var(--presentation-motion-easing) calc(var(--presentation-motion-stagger) * 4) backwards;
   }
 
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .preset-artwork {
-    animation: presentation-artwork 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  .slidev-layout[data-presentation-preset] .slidev-vclick-target {
+    transition: opacity var(--presentation-motion-duration) var(--presentation-motion-easing), translate var(--presentation-motion-duration) var(--presentation-motion-easing);
   }
 
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] :is(path, circle, ellipse).preset-artwork__line,
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .preset-artwork__line > path {
-    stroke-dasharray: 1;
-    animation: presentation-draw 1100ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--artwork-line-index, 0) * 22ms) backwards;
+  .slidev-layout[data-presentation-preset] .slidev-vclick-hidden:not([class*="slidev-vclick-anim-"]) {
+    translate: 0 calc(var(--presentation-motion-rise) / 2);
   }
-
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .preset-artwork__point {
-    animation: presentation-fade 400ms ease 500ms backwards;
-  }
-
-  .slidev-layout[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-cover__main::before {
-    transform-origin: left;
-    animation: presentation-rule 650ms cubic-bezier(0.22, 1, 0.36, 1) 80ms backwards;
-  }
-}
-
-@media (max-width: 760px) {
-  .slidev-layout.cover[data-presentation-preset] .slide-frame h1 {
-    font-size: calc(3.15rem * var(--presentation-heading-scale));
-  }
-
-  .slidev-layout:is(.section, .closing)[data-presentation-preset][data-presentation-artwork-placement="bottom"] .slide-frame h1 {
-    font-size: calc(2.85rem * var(--presentation-heading-scale));
-  }
-
-  .slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--has-visual {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: 0.85rem 1.2rem;
-    margin-top: 1.8rem;
-  }
-
-  .slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual h1 {
-    font-size: calc(2.5rem * var(--presentation-heading-scale));
-  }
-
-  .slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--long-title h1 {
-    font-size: calc(2.55rem * var(--presentation-heading-scale));
-  }
-
-  .slidev-layout.cover[data-presentation-preset] .slide-frame .slide-cover--dense-title h1 {
-    font-size: calc(2.15rem * var(--presentation-heading-scale));
-  }
-}
-
-/* Static output must be complete even when captured during slide entry. */
-html.print .slidev-layout[data-presentation-preset] .slide-frame *,
-html.print .slidev-layout[data-presentation-preset] .slide-frame *::before,
-html.print .slidev-layout[data-presentation-preset] .slide-frame *::after {
-  animation: none !important;
 }
 
 @media print {
@@ -740,4 +709,119 @@ html.print .slidev-layout[data-presentation-preset] .slide-frame *::after {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* A visible header replaces the institutional signature and its top reserve. */
+.slidev-layout.section[data-presentation-preset] .slide-frame--header .slide-frame__content {
+  padding-top: 1rem;
+}
+
+/* Optional content kickers participate in the heading's reading order. */
+.slidev-layout[data-presentation-preset] .slide-frame__kicker {
+  margin: 0 0 0.65rem;
+  color: var(--presentation-accent);
+  font-family: var(--presentation-font-label);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.slidev-layout[data-presentation-preset] .slide-layout-toc__number {
+  color: var(--presentation-toc-number, var(--presentation-accent));
+}
+
+.slidev-layout[data-presentation-preset] .slide-frame ol > li::marker {
+  color: var(--presentation-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.slidev-layout.section:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"], [data-presentation-preset="qingdai"], [data-presentation-preset="songmo"]) .slide-layout-section__index {
+  font-family: var(--presentation-font-serif);
+  font-variant-numeric: oldstyle-nums;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta:has(> .presentation-seal) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta > .presentation-seal {
+  justify-self: end;
+}
+
+.slidev-layout.section[data-presentation-preset] :is(.slide-layout-section__seal, .slide-layout-section__dot) {
+  z-index: 1;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  justify-self: end;
+  transform: translate(0.45rem, 0.45rem) rotate(-2deg);
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--presentation-signature);
+}
+
+.slidev-layout.section[data-presentation-preset]:has(.slide-layout-section__seal):not(:has(.slide-layout-section__index)) .slide-layout-section__seal {
+  align-self: center;
+  transform: rotate(-2deg);
+}
+
+/* A smaller visual rise and a short stamp finish the cover's text entrance. */
+@keyframes presentation-visual-enter {
+  from { opacity: 0; transform: translate3d(0, var(--presentation-motion-rise), 0) scale(0.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes presentation-seal-stamp {
+  from { opacity: 0; transform: rotate(-2deg) scale(1.4); }
+  to { opacity: 1; transform: rotate(-2deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slidev-layout.cover[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-cover__visual {
+    animation-name: presentation-visual-enter;
+  }
+
+  .slidev-layout.cover[data-presentation-preset] .slide-frame[data-presentation-motion="active"] .slide-cover__meta > .presentation-seal {
+    animation: presentation-seal-stamp var(--presentation-motion-seal-duration) var(--presentation-motion-seal-easing) calc(var(--presentation-motion-stagger) * 4) backwards;
+  }
+}
+
+/* The optional seal never creates empty metadata columns. */
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta:has(> .presentation-seal):not(:has(.slide-cover__authors)),
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta:has(> .presentation-seal):not(:has(.slide-cover__date)) {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta:has(> .presentation-seal):not(:has(.slide-cover__authors)):not(:has(.slide-cover__date)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Hiding the optional folio must also remove its empty composition track. */
+.slidev-layout.section[data-presentation-preset] .slide-layout-section:not(:has(.slide-layout-section__index)):not(:has(.slide-layout-section__seal)) {
+  grid-template-columns: minmax(0, 68ch);
+}
+
+.slidev-layout.section[data-presentation-preset] .slide-layout-section:not(:has(.slide-layout-section__index)):not(:has(.slide-layout-section__seal)) .slide-layout-section__main {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* Centered chapters give the folio its own track so the seal follows its edge. */
+.slidev-layout.section:is([data-presentation-preset="qingdai"], [data-presentation-preset="ucas"]) .slide-frame .slide-layout-section:has(.slide-layout-section__index, .slide-layout-section__seal) {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.slidev-layout.section:is([data-presentation-preset="qingdai"], [data-presentation-preset="ucas"]) .slide-frame :is(.slide-layout-section__index, .slide-layout-section__seal) {
+  grid-column: 2;
+}
+
+.slidev-layout.section:is([data-presentation-preset="qingdai"], [data-presentation-preset="ucas"]) .slide-frame .slide-layout-section__main {
+  grid-column: 1 / -1;
 }

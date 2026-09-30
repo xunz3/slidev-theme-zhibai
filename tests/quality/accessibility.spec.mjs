@@ -5,7 +5,6 @@ import test from 'node:test'
 import axe from 'axe-core'
 import { chromium } from 'playwright-chromium'
 import {
-  buildDeck,
   generateExpandedContentBuilds,
   generatePresetMatrixBuilds,
   qualityArtifactRoot,
@@ -14,7 +13,7 @@ import {
   waitForSlide,
 } from './helpers.mjs'
 
-const presets = ['default', 'ucas', 'ict']
+const presets = ['zhubai', 'ucas', 'ict']
 const modes = ['light', 'dark']
 const layoutSlides = {
   default: { marker: 'invalid-inputs', slide: 6 },
@@ -41,19 +40,12 @@ const createFallbackContext = async () => {
     generatePresetMatrixBuilds(),
     generateExpandedContentBuilds(),
   ])
-  const protocolBuild = {
-    id: 'protocol',
-    outDir: resolve(qualityArtifactRoot, 'build/accessibility/protocol'),
-    source: resolve('fixtures/obsidian-protocol.md'),
-  }
-  await buildDeck(protocolBuild)
   const builds = [
     ...matrixBuilds.map(build => ({
       ...build,
       id: `matrix-${build.preset}`,
     })),
     ...expandedBuilds,
-    protocolBuild,
   ]
   const servers = await Promise.all(
     builds.map(build => startStaticServer(build.outDir)),
@@ -389,13 +381,12 @@ test('WCAG, layout, image, console, and interaction contract', {
   const fallback = externalContext ? null : await createFallbackContext()
   const builds = externalContext ?? fallback.builds
   for (const id of [
-    'matrix-default',
+    'matrix-zhubai',
     'matrix-ucas',
     'matrix-ict',
-    'expanded-default',
+    'expanded-zhubai',
     'expanded-ucas',
     'expanded-ict',
-    'protocol',
   ]) {
     assert.ok(builds[id], `quality build context is missing ${id}`)
   }
@@ -712,15 +703,15 @@ test('WCAG, layout, image, console, and interaction contract', {
             })
             if (definition.name.startsWith('callout-')) {
               const callouts = result.page.locator(
-                `.slidev-page-${definition.slide} .obsidian-slidev-callout`,
+                `.slidev-page-${definition.slide} .presentation-callout`,
               )
               const cues = await callouts.evaluateAll(elements => elements.map(
                 (callout) => {
                   const title = callout.querySelector(
-                    '.obsidian-slidev-callout__title',
+                    '.presentation-callout__title',
                   )
                   const content = callout.querySelector(
-                    '.obsidian-slidev-callout__content',
+                    '.presentation-callout__content',
                   )
                   const calloutStyle = getComputedStyle(callout)
                   const titleStyle = getComputedStyle(title)
@@ -791,20 +782,20 @@ test('WCAG, layout, image, console, and interaction contract', {
             }
             if (definition.name === 'figure-alternatives') {
               const alternatives = await result.page.locator(
-                `[data-quality-case="${definition.marker}"] > .obsidian-slidev-media`,
+                `[data-quality-case="${definition.marker}"] > .presentation-media`,
               ).evaluateAll(figures => figures.map((figure) => {
                 const image = figure.querySelector('img')
                 return {
                   alt: image?.getAttribute('alt') ?? null,
                   fallback: figure.querySelector(
-                    '.obsidian-slidev-media__fallback',
+                    '.presentation-media__fallback',
                   )?.textContent?.trim() ?? null,
                 }
               }))
               assert.deepEqual(
                 alternatives.map(item => item.alt),
                 [
-                  'Obsidian card connected to a presentation',
+                  'Zhubai card connected to a presentation',
                   'Caption supplies the omitted alternative.',
                   '',
                   null,
@@ -963,14 +954,14 @@ test('WCAG, layout, image, console, and interaction contract', {
                   )),
                 [
                   'presentation-image-text__narrative',
-                  'obsidian-slidev-media obsidian-slidev-media--image presentation-image-text__figure',
+                  'presentation-media presentation-media--image presentation-media--treatment-plain presentation-image-text__figure',
                 ],
               )
             }
             if (definition.name.startsWith('visual-image-')
               || definition.name === 'visual-media-figure-fits') {
               const figures = result.page.locator(
-                `.slidev-page-${definition.slide} .obsidian-slidev-media`,
+                `.slidev-page-${definition.slide} .presentation-media`,
               )
               assert.ok(await figures.count() > 0)
               assert.ok(await figures.evaluateAll(elements => elements.every(
@@ -987,7 +978,7 @@ test('WCAG, layout, image, console, and interaction contract', {
               assert.equal(await logo.locator('[role="img"] img').count(), 0)
               assert.equal(
                 await result.page.locator(
-                  `.slidev-page-${definition.slide} .presentation-closing__logo.obsidian-slidev-media`,
+                  `.slidev-page-${definition.slide} .presentation-closing__logo.presentation-media`,
                 ).count(),
                 0,
               )
@@ -1105,13 +1096,15 @@ test('WCAG, layout, image, console, and interaction contract', {
                 elements.every((element) => {
                   const style = getComputedStyle(element)
                   return style.borderWidth === '0px'
-                    && style.borderRadius === '0px'
+                    && style.borderRadius === '2px'
+                    && style.textDecorationLine === 'underline'
+                    && style.textDecorationThickness === '1.5px'
                     && style.boxShadow === 'none'
                     && element.tabIndex < 0
                 })
               )))
               const codeHighlights = result.page.locator(
-                `.slidev-page-${definition.slide} [data-highlight-code-scope] :is(mark, .obsidian-slidev-highlight)`,
+                `.slidev-page-${definition.slide} [data-highlight-code-scope] mark`,
               )
               assert.ok(await codeHighlights.evaluateAll(elements => (
                 elements.every((element) => {
@@ -1191,7 +1184,7 @@ test('WCAG, layout, image, console, and interaction contract', {
                   markPresent: true,
                 }
               })
-              assert.equal(brandState.markPresent, preset !== 'default')
+              assert.equal(brandState.markPresent, preset !== 'zhubai')
               assert.deepEqual(brandState.collisions, [])
             }
             if (definition.name === 'coherent-section-header') {
@@ -1354,7 +1347,7 @@ test('WCAG, layout, image, console, and interaction contract', {
                   markPresent: true,
                 }
               })
-              assert.equal(brandState.markPresent, preset !== 'default')
+              assert.equal(brandState.markPresent, preset !== 'zhubai')
               assert.equal(brandState.collisionCount, 0)
             }
             if (definition.name === 'coherent-section-header') {
@@ -1384,152 +1377,14 @@ test('WCAG, layout, image, console, and interaction contract', {
       }
     }
 
-    for (const definition of [
-      { caseId: 'protocol-callouts-light', marker: null, mode: 'light', slide: 5 },
-      { caseId: 'protocol-callouts-dark', marker: null, mode: 'dark', slide: 5 },
-      { caseId: 'protocol-warnings-light', marker: null, mode: 'light', slide: 8 },
-      {
-        caseId: 'protocol-link-forms-light',
-        marker: 'protocol-link-forms',
-        mode: 'light',
-        slide: 28,
-      },
-      {
-        caseId: 'protocol-link-forms-dark',
-        marker: 'protocol-link-forms',
-        mode: 'dark',
-        slide: 28,
-      },
-      {
-        caseId: 'protocol-coherent-generated-states-light',
-        marker: 'protocol-generated-image-states',
-        mode: 'light',
-        slide: 26,
-      },
-      {
-        caseId: 'protocol-coherent-generated-states-dark',
-        marker: 'protocol-generated-image-states',
-        mode: 'dark',
-        slide: 26,
-      },
-      {
-        caseId: 'protocol-coherent-generated-equivalence-light',
-        marker: 'protocol-image-equivalence',
-        mode: 'light',
-        slide: 27,
-      },
-      {
-        caseId: 'protocol-coherent-generated-equivalence-dark',
-        marker: 'protocol-image-equivalence',
-        mode: 'dark',
-        slide: 27,
-      },
-      {
-        caseId: 'protocol-coherent-generated-states-compact-light',
-        marker: 'protocol-generated-image-states',
-        mode: 'light',
-        slide: 26,
-        viewport: { height: 405, width: 720 },
-      },
-      {
-        caseId: 'protocol-coherent-generated-states-compact-dark',
-        marker: 'protocol-generated-image-states',
-        mode: 'dark',
-        slide: 26,
-        viewport: { height: 405, width: 720 },
-      },
-    ]) {
-      if (!isFocusedCase(definition.caseId)) continue
-      subtests.push(t.test(definition.caseId, async () => {
-        const result = await inspectScenario({
-          axeDirectory,
-          baseUrl: builds.protocol.baseUrl,
-          browserContext,
-          ...definition,
-          preset: 'default',
-        })
-        if (definition.slide === 5) {
-          assert.ok(
-            await result.page.locator('.obsidian-slidev-callout').count() >= 3,
-            `${definition.caseId}: generated callouts`,
-          )
-        } else if (definition.slide === 8) {
-          assert.ok(
-            await result.page.locator('.obsidian-slidev-warning').count() > 0,
-            `${definition.caseId}: generated warning`,
-          )
-        } else if (definition.slide === 26) {
-          const figures = result.page.locator(
-            '[data-quality-case="protocol-generated-image-states"] > figure',
-          )
-          assert.equal(await figures.count(), 4)
-          assert.deepEqual(
-            await figures.evaluateAll(elements => elements.map(
-              element => element.getAttribute('data-media-state'),
-            )),
-            ['ready', 'ready', 'ready', 'failed'],
-          )
-          assert.equal(
-            await figures.nth(2).locator(
-              '.obsidian-slidev-media__fallback',
-            ).count(),
-            0,
-          )
-          const failedFallback = figures.nth(3).locator(
-            '.obsidian-slidev-media__fallback[role="img"]',
-          )
-          assert.equal(await failedFallback.count(), 1)
-          assert.equal(
-            await failedFallback.getAttribute('aria-label'),
-            'Generated image unavailable',
-          )
-          assert.equal(await figures.locator('[tabindex]').count(), 0)
-        } else if (definition.slide === 27) {
-          const generated = result.page.locator(
-            '[data-quality-case="protocol-image-equivalence"] [data-generated-equivalent="image"]',
-          )
-          assert.equal(
-            await generated.getAttribute('data-media-state'),
-            'ready',
-          )
-          assert.equal(
-            await generated.getAttribute('data-media-fit'),
-            'contain',
-          )
-          assert.equal(await generated.locator('[tabindex]').count(), 0)
-        } else {
-          const links = result.page.locator(
-            '[data-quality-case="protocol-link-forms"] a',
-          )
-          assert.equal(await links.count(), 3)
-          assert.deepEqual(
-            await links.evaluateAll(elements => elements.map((link) => {
-              const style = getComputedStyle(link)
-              return {
-                borderBottomWidth: style.borderBottomWidth,
-                display: style.display,
-                underline: style.textDecorationLine.includes('underline'),
-              }
-            })),
-            [
-              { borderBottomWidth: '0px', display: 'inline', underline: true },
-              { borderBottomWidth: '0px', display: 'inline', underline: true },
-              { borderBottomWidth: '0px', display: 'block', underline: true },
-            ],
-          )
-        }
-        await result.page.close()
-      }))
-    }
-
     const interactionCaseId = 'ArrowRight, TOC keyboard, Enter, click, and focus outline'
     if (isFocusedCase(interactionCaseId)) subtests.push(t.test(interactionCaseId, async () => {
       const page = await browserContext.newPage()
-      const baseUrl = builds['matrix-default'].baseUrl
+      const baseUrl = builds['matrix-zhubai'].baseUrl
       try {
-        await waitForSlide(page, baseUrl, 2, 'light', 'baseline-default')
+        await waitForSlide(page, baseUrl, 2, 'light', 'baseline-zhubai')
         await page.keyboard.press('ArrowRight')
-        await page.locator('[data-quality-case="local-default"]').waitFor({
+        await page.locator('[data-quality-case="local-zhubai"]').waitFor({
           state: 'attached',
         })
 

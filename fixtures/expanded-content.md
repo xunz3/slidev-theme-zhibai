@@ -26,7 +26,7 @@ author:
   institution: Compatibility Institute
 themeConfig:
   presentation:
-    preset: default # __EXPANDED_PRESET__
+    preset: zhubai # __EXPANDED_PRESET__
     chrome: auto
     header: false
     footerAuthors: true
@@ -38,7 +38,7 @@ themeConfig:
 
 # Expanded theme content
 
-Standalone components, academic layouts, local accents, technical aids, and Obsidian reading
+Standalone components, academic layouts, local accents, technical aids, and Markdown reading
 cues share one production-built fixture.
 
 </div>
@@ -154,7 +154,7 @@ Formatted body with **strong meaning**, `inline code`, a [link](https://example.
 </div>
 
 ---
-title: Generated callout equivalence
+title: Callout component equivalence
 ---
 
 <div data-quality-case="us1-callout-equivalence" class="presentation-callout-gallery">
@@ -163,16 +163,9 @@ title: Generated callout equivalence
   Component-authored warning content.
 </Callout>
 
-<aside
-  class="obsidian-slidev-callout obsidian-slidev-callout--warning"
-  data-callout="warning"
-  data-generated-equivalent="warning"
-  role="note"
-  aria-labelledby="generated-warning-title"
->
-  <div id="generated-warning-title" class="obsidian-slidev-callout__title">Equivalent warning</div>
-  <div class="obsidian-slidev-callout__content"><p>Component-authored warning content.</p></div>
-</aside>
+<Callout type="warning" title="Equivalent warning">
+  Component-authored warning content.
+</Callout>
 
 </div>
 
@@ -183,16 +176,16 @@ title: Figure alternatives and failure states
 <div data-quality-case="us1-figures-alternatives" class="presentation-figure-gallery">
 
 <Figure
-  src="/theme/public/obsidian-card.svg"
-  alt="Obsidian card connected to a presentation"
+  src="/theme/public/zhubai-card.svg"
+  alt="Zhubai card connected to a presentation"
   caption="Meaningful authored alternative text."
 />
 <Figure
-  src="/theme/public/obsidian-card.svg"
+  src="/theme/public/zhubai-card.svg"
   caption="Caption supplies the omitted alternative."
 />
 <Figure
-  src="/theme/public/obsidian-card.svg"
+  src="/theme/public/zhubai-card.svg"
   alt=""
   caption="Decorative image with a visible caption."
 />
@@ -274,8 +267,8 @@ layout: end
 title: Closing with metadata
 contact: research@example.org
 showAuthors: true
-logo: /theme/public/obsidian-card.svg
-logoAlt: Obsidian presentation research mark
+logo: /theme/public/zhubai-card.svg
+logoAlt: Zhubai presentation research mark
 ---
 
 <div data-quality-case="us2-closing-metadata">
@@ -289,7 +282,7 @@ Thank you for reviewing the evidence and its operating boundaries.
 ---
 layout: end
 title: Decorative closing logo
-logo: /theme/public/obsidian-card.svg
+logo: /theme/public/zhubai-card.svg
 logoAlt: ""
 ---
 
@@ -333,8 +326,8 @@ No contact, author collection, or logo region is emitted.
 ---
 layout: image-left
 title: Image left
-image: /theme/public/obsidian-card.svg
-imageAlt: Obsidian card connected to a presentation canvas
+image: /theme/public/zhubai-card.svg
+imageAlt: Zhubai card connected to a presentation canvas
 caption: Figure 2. The narrative remains first in source order.
 ---
 
@@ -349,8 +342,8 @@ The narrative comes first in the document. The figure is placed on the left only
 ---
 layout: image-right
 title: Image right
-image: /theme/public/obsidian-card.svg
-imageAlt: Obsidian card connected to a presentation canvas
+image: /theme/public/zhubai-card.svg
+imageAlt: Zhubai card connected to a presentation canvas
 caption: Figure 2. The narrative remains first in source order.
 backgroundSize: auto 72%
 ---
@@ -366,7 +359,7 @@ The narrative comes first in the document. The figure is placed on the right onl
 ---
 layout: image-left
 title: Legacy image inputs
-image: /theme/public/obsidian-card.svg
+image: /theme/public/zhubai-card.svg
 caption: Caption fallback supplies the omitted image alternative.
 backgroundSize: 80%
 class: legacy-image-layout
@@ -414,7 +407,7 @@ The narrative position remains unchanged when the image fails.
 ---
 layout: image-right
 title: Long bilingual image narrative
-image: /theme/public/obsidian-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Diagram showing a bilingual research workflow
 caption: Figure 3. Collection, normalization, validation, publication · 采集、规范化、验证与发布。
 backgroundSize: contain
@@ -810,23 +803,23 @@ title: Native task-list cues
 </div>
 
 ---
-title: Generated task compatibility
+title: Standard HTML task lists
 ---
 
 <div data-quality-case="us5-tasks-generated">
 
-# Generated task markup
+# Standard task list markup
 
-<ul class="obsidian-slidev-task-list contains-task-list">
-  <li class="obsidian-slidev-task-list-item task-list-item" data-task="">
+<ul class="contains-task-list">
+  <li class="task-list-item" data-task="">
     <input type="checkbox" />
     Generated unchecked task.
   </li>
-  <li class="obsidian-slidev-task-list-item task-list-item is-checked" data-task="x">
+  <li class="task-list-item is-checked" data-task="x">
     <input type="checkbox" checked />
     Generated checked task with a wrapped bilingual explanation · 已完成的生成任务保留状态。
-    <ul class="obsidian-slidev-task-list contains-task-list">
-      <li class="obsidian-slidev-task-list-item task-list-item" data-task="">
+    <ul class="contains-task-list">
+      <li class="task-list-item" data-task="">
         <input type="checkbox" />
         Nested generated follow-up.
       </li>
@@ -837,7 +830,7 @@ title: Generated task compatibility
 </div>
 
 ---
-title: Native and generated highlights
+title: Semantic highlights
 ---
 
 <div data-quality-case="us5-highlights">
@@ -845,7 +838,7 @@ title: Native and generated highlights
 # Highlighted evidence · 高亮证据
 
 Native <mark data-highlight-case="native">reviewed evidence · 已审核证据</mark> and generated
-<span class="obsidian-slidev-highlight" data-highlight-case="generated">reviewed evidence · 已审核证据</span>
+<mark data-highlight-case="generated">reviewed evidence · 已审核证据</mark>
 share one treatment.
 
 The cue remains distinct beside [a link](https://example.com/evidence), *emphasis*, and
@@ -856,7 +849,7 @@ The cue remains distinct beside [a link](https://example.com/evidence), *emphasi
 <mark>literal markup text stays code text</mark>
 ```
 
-<pre data-highlight-code-scope><code><mark>authored mark inside code</mark> <span class="obsidian-slidev-highlight">generated highlight class inside code</span></code></pre>
+<pre data-highlight-code-scope><code><mark>authored mark inside code</mark> <mark>generated highlight class inside code</mark></code></pre>
 
 </div>
 <!-- EXPANDED-US5-END -->
@@ -1173,7 +1166,7 @@ accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 
 # Protected institutional identity
 
-Local accents may change content roles, never official section artwork.
+Local accents may change content roles, never official institutional signatures.
 
 </div>
 
@@ -1188,7 +1181,7 @@ presentationHeader: false
 
 # Protected institutional identity
 
-Local accents may change content roles, never official section artwork.
+Local accents may change content roles, never official institutional signatures.
 
 </div>
 
@@ -1204,7 +1197,7 @@ presentationHeader: true
 
 # Section lockups yield to the header
 
-The illustration stays behind content while the institutional lockup is omitted.
+The header owns the top margin while the institutional signature is omitted.
 
 </div>
 
