@@ -9,9 +9,8 @@ authors:
 footer: Cover studies · 封面设计
 themeConfig:
   presentation:
-    preset: default
+    preset: zhubai
     coverAlign: center
-    artwork: auto
 ---
 
 从一个问题，开启一段探索。
@@ -67,7 +66,6 @@ Systems Research · 计算与系统研究
 layout: cover
 title: Space to think.
 subtitle: 留白，让问题更清晰。
-presentationArtwork: none
 ---
 
 What makes a useful research question?
@@ -77,13 +75,6 @@ layout: cover
 title: A shared horizon.
 subtitle: 在共同的视野中，发现新的方向。
 presentationPreset: ucas
-presentationArtwork:
-  type: custom
-  src: /author-fixtures/artwork-wide-light.svg
-  darkSrc: /author-fixtures/artwork-wide-dark.svg
-  placement: bottom
-  fit: contain
-  opacity: 0.85
 ---
 
 Collaboration · 交流与合作
@@ -93,13 +84,6 @@ layout: cover
 title: Patterns of possibility.
 subtitle: 让研究成为画面的中心。
 presentationPreset: ict
-presentationArtwork:
-  type: custom
-  src: /author-fixtures/artwork-light.svg
-  darkSrc: /author-fixtures/artwork-dark.svg
-  placement: background
-  fit: cover
-  opacity: 0.14
 ---
 
 Learning from structure · 从结构中学习
@@ -138,9 +122,6 @@ layout: cover
 title: Keep an open horizon.
 subtitle: 同一条对齐线，也可以拥有完整的留白。
 presentationCoverAlign: left
-presentationArtwork:
-  type: flow
-  placement: bottom
 ---
 
 A question to carry forward.
@@ -160,9 +141,6 @@ layout: cover
 title: A dependable starting point.
 subtitle: 从可靠的默认值出发。
 presentationCoverAlign: diagonal
-presentationArtwork:
-  type: dots
-  placement: diagonal
 ---
 
 Every new question begins with a little clarity.
@@ -172,13 +150,6 @@ layout: cover
 title: Give the result its space.
 subtitle: 文字与图像，各自清晰。
 presentationCoverAlign: left
-presentationArtwork:
-  type: custom
-  src: /author-fixtures/artwork-light.svg
-  darkSrc: /author-fixtures/artwork-dark.svg
-  placement: right
-  fit: contain
-  opacity: 0.7
 ---
 
 The next step begins here.
@@ -187,9 +158,6 @@ The next step begins here.
 layout: cover
 title: A field of possibilities.
 subtitle: 在开放的空间里，发现新的联系。
-presentationArtwork:
-  type: field
-  placement: background
 ---
 
 New perspectives · 新的视角
@@ -199,9 +167,6 @@ layout: cover
 title: Ideas find their flow.
 subtitle: 让不同的思路，汇成新的方向。
 presentationPreset: ucas
-presentationArtwork:
-  type: flow
-  placement: background
 ---
 
 Across disciplines · 跨学科的对话
@@ -232,44 +197,32 @@ presentationHeader: true
 layout: cover
 title: Research for a Shared Future
 subtitle: 让共同的问题，连接新的发现。
-presentationPreset: default
-presentationArtwork:
-  type: folds
-  placement: right
+presentationPreset: zhubai
 ---
 
-Centered title · Edge decoration
+Centered title · Shared reading axis
 
 ---
 layout: cover
 title: Research for a Shared Future
 subtitle: 让共同的问题，连接新的发现。
 presentationPreset: ucas
-presentationArtwork:
-  type: orbits
-  placement: right
 ---
 
-Centered title · Edge decoration
+Centered title · Shared reading axis
 
 ---
 layout: cover
 title: Research for a Shared Future
 subtitle: 让共同的问题，连接新的发现。
 presentationPreset: ict
-presentationArtwork:
-  type: lattice
-  placement: right
 ---
 
-Centered title · Edge decoration
+Centered title · Shared reading axis
 
 ---
 layout: section
 presentationPreset: ict
-presentationArtwork:
-  type: lattice
-  placement: bottom
 ---
 
 # Towards reliable and efficient learning systems in the real world
@@ -279,9 +232,6 @@ presentationArtwork:
 ---
 layout: end
 presentationPreset: ict
-presentationArtwork:
-  type: lattice
-  placement: bottom
 ---
 
 # Keep exploring.
@@ -292,9 +242,6 @@ presentationArtwork:
 layout: end
 presentationPreset: ict
 contact: research@example.org
-presentationArtwork:
-  type: lattice
-  placement: bottom
 ---
 
 # Keep in touch.

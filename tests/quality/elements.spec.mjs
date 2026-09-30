@@ -119,7 +119,7 @@ test('content elements remain readable and their layout options work across pres
         }
       } finally { await page.close() }
     })
-    await t.test('reversed columns honor authored gaps, equal widths and narrow source order', async () => {
+    await t.test('reversed columns honor authored gaps and equal widths on the scaled canvas', async () => {
       const page = await browser.newPage({ reducedMotion: 'reduce' })
       try {
         for (const slide of [34, 35, 36]) {
@@ -132,20 +132,16 @@ test('content elements remain readable and their layout options work across pres
                 panes: panes.map(pane => ({ width: pane.clientWidth, rect: pane.getBoundingClientRect().toJSON(), paddingLeft: parseFloat(getComputedStyle(pane).paddingLeft), paddingRight: parseFloat(getComputedStyle(pane).paddingRight) })),
                 gap: parseFloat(getComputedStyle(root).columnGap),
                 rem: parseFloat(getComputedStyle(document.documentElement).fontSize),
-                divider: getComputedStyle(root, '::before').display,
+                divider: getComputedStyle(root, '::before').content,
               }
             })
             const [first, second] = geometry.panes
             assert.ok(Math.abs(first.width - second.width) <= 1, JSON.stringify(geometry))
             assert.equal(first.paddingLeft + first.paddingRight, second.paddingLeft + second.paddingRight, 'the gutter must not eat into one pane')
-            if (width === 980) {
-              assert.equal(geometry.gap, 4 * geometry.rem)
-              assert.ok(first.rect.x > second.rect.x, 'reverse changes visual order')
-            } else {
-              assert.ok(first.rect.y < second.rect.y, 'narrow screens preserve source order')
-              assert.ok(Math.abs(first.rect.x - second.rect.x) <= 1)
-              assert.equal(geometry.divider, 'none')
-            }
+            assert.equal(geometry.gap, 4 * geometry.rem)
+            assert.ok(first.rect.x > second.rect.x, 'reverse changes visual order on the fixed Slidev canvas')
+            assert.ok(Math.abs(first.rect.y - second.rect.y) <= 1, 'scaled columns retain their shared top axis')
+            assert.equal(geometry.divider, 'none', 'the gutter has no decorative divider')
           }
         }
       } finally { await page.close() }

@@ -1,29 +1,22 @@
-# Lilas and obsidian-slidev boundaries
+# Zhubai's theme boundary
 
-Lilas is a standalone Slidev theme. Its three presets (`default`, `ucas`, `ict`) share a public layout and component API and supply visual differences through scoped styles and artwork. Deck configuration stays at `themeConfig.presentation`; per-slide overrides keep their documented frontmatter names.
+Zhubai is a presentation theme for Slidev. It supplies slide appearance, layouts, reusable visual components, and default configuration. Slidev's [Writing Themes](https://sli.dev/guide/write-theme) guide describes these as theme capabilities; it recommends addons for features that remain useful independently of a theme. The [Theme and Addons](https://sli.dev/guide/theme-addon) guide explains how projects combine one theme with optional addons.
 
-This follows [Writing Themes](https://sli.dev/guide/write-theme) and [Theme and Addons](https://sli.dev/guide/theme-addon). Slidev supplies Markdown compilation, navigation, click sequencing, and export. Theme defaults live in `package.json` under `slidev.defaults`.
-
-| Concern | Owner |
+| Responsibility | Owner |
 | --- | --- |
-| Typography, light/dark colors, artwork, branding, chrome | Lilas theme/presets |
-| Layouts and visual components such as Callout and Figure | Lilas |
-| Standard Markdown task-list appearance and heading typography | Lilas |
-| Vault note selection, wiki links, embeds, Markdown conversion, asset copying | obsidian-slidev |
-| Generated HTML rendering and compatibility across themes | Producer or independent Slidev addon |
-| Protocol declarations, support manifest, compatibility events and diagnostics | Producer or independent addon |
-| Optional fullscreen image viewer | Deck customization or independent addon |
+| Preset typography, color, page layout, and institutional signatures | Zhubai |
+| Cover, section, content, figure, quote, and closing compositions | Zhubai layouts |
+| Callouts, figures, authors, steps, tags, badges, and timelines | Zhubai components |
+| Research claims, figure sources, alternative text, and deck-local media | The deck author |
+| Markdown compilation, navigation, slide transitions, and export | Slidev |
+| Import/conversion workflows, external services, and independent interactions | The producing application or a Slidev addon |
 
-## Producer-side handoff
+Zhubai follows Slidev's [directory structure conventions](https://sli.dev/custom/directory-structure) for layouts, components, styles, setup, and static institutional assets. These extension directories are optional in Slidev; a theme includes only the ones it uses. The package declares Slidev `>=52.15.2`, the minimum version currently validated for this release.
 
-The theme no longer ships `obsidianSlidev.support`, the protocol runtime/compatibility bridge, generated-callout or generated-image normalizers, `.obsidian-slidev-*` selectors, protocol fixtures, or vendored protocol releases. Theme components use their own `presentation-*` classes; these are implementation details, not a replacement producer protocol.
+Latin font families use Slidev's native webfont defaults. The theme separately imports Inter 500 and upright Noto Sans SC and Noto Serif SC through Google CSS2, while keeping them in Slidev's local list to avoid requesting unsupported CJK italics. This is CSS-only and adds no font-loading runtime. The exact roles and sizes are in the [typography specification](./zhubai-design.md#6-字体排印).
 
-An independent producer should emit standard Slidev Markdown and native components where possible. If it needs custom HTML or Obsidian-specific semantics, it must provide rendering/styles itself, for example through a separately selected addon. That output must work when Lilas is replaced by another theme. Producing `<Callout>` or `<Figure>` from Lilas is an explicit choice to use Lilas's component API, not a requirement for obsidian-slidev.
+The cover's `::visual::` region uses Slidev's [named layout slots](https://sli.dev/guide/write-layout) and [`::name::` slot shorthand](https://sli.dev/features/slot-sugar). The markup inside it remains authored Markdown, Vue components, or HTML. Zhubai does not parse it as a separate document format.
 
-The producer should copy vault assets into its generated deck's `public/` directory and generate deck-local URLs. It should own unresolved-link diagnostics and any protocol checks, without inspecting this theme's package metadata.
+Each deck owns the meaning and source of its content. Put local figures in the deck's `public/` directory and provide their alternative text. Zhubai provides accessible figure handling and visual defaults; it does not download, reinterpret, or validate the underlying research material.
 
-This repository change does not implement or publish an addon and does not modify the separate obsidian-slidev repository. Its consumer-side migration must be completed there before relying on legacy generated HTML with this theme version. Removed implementation remains recoverable from Git history.
-
-## Validation
-
-Theme checks cover ordinary Slidev decks, public component behavior, three-preset isolation, dark/light modes, assets, layout stability, accessibility, and motion. Producer conformance fixtures belong with the producer/addon. The source-boundary check rejects Obsidian runtime hooks in shipped theme source.
+The package includes only the institutional signatures used by its presets. Demonstration and quality-test media live under `fixtures/public/author-fixtures/` and are excluded from the published theme. The sample deck illustrates ordinary Slidev authoring without adding a second runtime or producer protocol.

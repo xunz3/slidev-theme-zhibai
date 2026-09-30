@@ -1,13 +1,17 @@
+.slide-frame {
+  counter-reset: zhubai-figure;
+}
+
 .presentation-callout {
   --presentation-callout-family: var(--presentation-family-neutral);
   --presentation-callout-family-surface: var(--presentation-callout-bg);
-  margin: 1rem 0;
-  padding: 0.86rem 1rem 0.92rem;
-  border: 1px solid var(--presentation-callout-border);
-  border-left: 3px solid var(--presentation-callout-family);
-  border-radius: var(--presentation-callout-radius);
+  margin: 0.75rem 0;
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-inline-start: 2px solid var(--presentation-callout-family);
+  border-radius: 8px;
   background: var(--presentation-callout-family-surface);
-  box-shadow: var(--presentation-callout-shadow);
+  box-shadow: none;
 }
 
 .presentation-callout__title {
@@ -17,8 +21,8 @@
   margin-bottom: 0.42rem;
   color: var(--presentation-callout-family);
   font-size: 0.94em;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-weight: 500;
+  letter-spacing: 0;
   text-transform: none;
 }
 
@@ -35,7 +39,7 @@
 }
 
 .presentation-callout[data-callout="neutral"] {
-  border-left-style: dashed;
+  --presentation-callout-family-surface: var(--presentation-family-neutral-surface);
 }
 
 .presentation-callout[data-callout-family="info"] {
@@ -134,9 +138,10 @@
   height: var(--presentation-media-viewport-height);
   min-height: 0;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--presentation-border) 72%, transparent);
+  border: 0;
   border-radius: var(--presentation-media-radius);
-  background: var(--presentation-media-viewport-bg);
+  background: transparent;
+  box-shadow: var(--presentation-media-shadow);
 }
 
 .presentation-media__viewport > .presentation-media__image {
@@ -258,11 +263,134 @@
   text-align: start;
 }
 
+.presentation-media__caption-prefix {
+  display: inline;
+}
+
+.presentation-media__caption-prefix::before {
+  content: "Fig. " counter(zhubai-figure) " — ";
+  font-variant-numeric: tabular-nums;
+}
+
+.presentation-media--image:has(> .presentation-media__caption > .presentation-media__caption-prefix):not(.presentation-media--caption-custom-number) {
+  counter-increment: zhubai-figure;
+}
+
+.presentation-media--caption-custom-number .presentation-media__caption-prefix {
+  display: none;
+}
+
+.presentation-media--treatment-framed {
+  padding: 0.8rem;
+  border-radius: calc(var(--presentation-media-radius) + 0.4rem);
+  background: var(--presentation-bg-elevated);
+  box-shadow: var(--presentation-shadow-2);
+}
+
+.presentation-media--treatment-framed .presentation-media__viewport {
+  box-shadow: none;
+}
+
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  gap: 0;
+}
+
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed .presentation-media__viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed .presentation-media__viewport > .presentation-media__image {
+  border-radius: 0;
+}
+
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed .presentation-media__viewport,
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed .presentation-media__viewport > .presentation-media__image {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__visual .presentation-media--treatment-bleed .presentation-media__viewport,
+.slidev-layout.cover[data-presentation-preset] .slide-cover__visual .presentation-media--treatment-bleed .presentation-media__viewport > .presentation-media__image {
+  height: 100%;
+  max-height: none;
+}
+
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed .presentation-media__viewport[data-media-fit="cover"] > .presentation-media__image {
+  object-fit: cover;
+}
+
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed .presentation-media__viewport[data-media-fit="contain"] > .presentation-media__image {
+  object-fit: contain;
+}
+
+.slidev-layout:is(.cover, .section)[data-presentation-preset] .presentation-media--treatment-bleed::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--presentation-bg) 30%, transparent),
+      color-mix(in srgb, var(--presentation-bg) 88%, transparent) 35%,
+      color-mix(in srgb, var(--presentation-bg) 88%, transparent) 82%,
+      color-mix(in srgb, var(--presentation-bg) 30%, transparent)),
+    linear-gradient(180deg, rgb(0 0 0 / 8%), transparent 38%, rgb(0 0 0 / 20%));
+  content: "";
+  pointer-events: none;
+}
+
+.slidev-layout.cover[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-frame__content,
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-frame__content {
+  position: static;
+  z-index: auto;
+  overflow: visible;
+}
+
+.slidev-layout.cover[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-cover__visual {
+  position: static;
+  overflow: visible;
+}
+
+.slidev-layout.cover[data-presentation-preset]:has(.presentation-media--treatment-bleed) :is(.slide-cover__main, .slide-cover__meta),
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-layout-section__index,
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-layout-section__main > :not(.presentation-media--treatment-bleed) {
+  position: relative;
+  z-index: 2;
+}
+
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-frame__content {
+  position: static;
+  z-index: auto;
+  overflow: visible;
+}
+
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-layout-section,
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-layout-section__main {
+  position: static;
+}
+
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-layout-section__index,
+.slidev-layout.section[data-presentation-preset]:has(.presentation-media--treatment-bleed) .slide-layout-section__main > :not(.presentation-media--treatment-bleed) {
+  position: relative;
+  z-index: 2;
+}
+
 @media (max-width: 720px) {
   .presentation-callout {
     margin: 0.75rem 0;
     padding: 0.72rem 0.82rem;
-    border-radius: 10px;
+    border-radius: var(--presentation-callout-radius);
   }
 
   .presentation-media {

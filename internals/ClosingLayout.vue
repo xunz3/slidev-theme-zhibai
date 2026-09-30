@@ -3,6 +3,7 @@ import { useSlideContext } from '@slidev/client'
 import { computed } from 'vue'
 import Authors from '../components/Authors.vue'
 import SlideFrame from '../components/SlideFrame.vue'
+import Seal from '../components/Seal.vue'
 import ClosingLogo from './ClosingLogo.vue'
 import {
   isActionableEmail,
@@ -49,7 +50,7 @@ const closingState = computed<'minimal' | 'rich'>(() => (
 
 <template>
   <SlideFrame
-    :artwork="closingState === 'rich' ? 'none' : undefined"
+    v-slot="{ presentation }"
     :chrome="props.chrome"
     :subtitle="props.subtitle"
     :title="props.title"
@@ -82,6 +83,7 @@ const closingState = computed<'minimal' | 'rich'>(() => (
       >
         <Authors />
       </div>
+      <Seal v-if="presentation.seal" class="presentation-closing__seal" :text="presentation.seal" />
       <ClosingLogo
         v-if="logo"
         class="presentation-closing__logo"

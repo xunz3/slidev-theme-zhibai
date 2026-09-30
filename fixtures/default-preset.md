@@ -10,7 +10,7 @@ authors:
     email: ruoheng.wang@example.edu
 themeConfig:
   presentation:
-    preset: default
+    preset: zhubai
     chrome: auto
     header: false
     footerAuthors: true
@@ -158,7 +158,7 @@ title: Evidence record and ownership
 # Accessible evidence record
 
 <Figure
-  src="/theme/public/lilas-card.svg"
+  src="/theme/public/zhubai-card.svg"
   alt="A compact research card summarizing one evidence record"
   caption="Figure A. A bounded, captioned fixture image."
   fit="contain"
@@ -235,7 +235,7 @@ assert(report.testDataUsedForFit === false)
 ---
 layout: image-left
 title: Evidence card and narrative
-image: /theme/public/lilas-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Research evidence card placed to the left of the narrative
 caption: Figure B. Narrative remains first in source order.
 backgroundSize: contain
@@ -249,7 +249,7 @@ preserving reading order, caption semantics, and bounded geometry.
 ---
 layout: image-right
 title: Alternative evidence orientation
-image: /theme/public/lilas-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Research evidence card placed to the right of the narrative
 caption: Figure C. The mirrored visual orientation uses the same source order.
 backgroundSize: contain

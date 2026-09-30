@@ -18,7 +18,7 @@ test('preset covers keep long titles, author details and images inside the canva
   const servers = []
   const browser = await chromium.launch({ headless: true })
   try {
-    for (const [preset, id] of [['default', 'default-only'], ['ucas', 'ucas'], ['ict', 'ict']]) {
+    for (const [preset, id] of [['zhubai', 'default-only'], ['ucas', 'ucas'], ['ict', 'ict']]) {
       let baseUrl = supplied?.[id]?.baseUrl
       if (!baseUrl) {
         const outDir = resolve(qualityArtifactRoot, 'build/cover-layout', preset)
@@ -65,15 +65,15 @@ test('delayed media state transitions preserve reserved geometry', {
 
   if (!builds) {
     const expandedDefinitions = await generateExpandedContentDefinitions()
-    const build = expandedDefinitions.find(definition => definition.preset === 'default')
+    const build = expandedDefinitions.find(definition => definition.preset === 'zhubai')
     assert.ok(build)
     await buildDeck(build)
     server = await startStaticServer(build.outDir)
     builds = {
-      'expanded-default': {
+      'expanded-zhubai': {
         ...build,
         baseUrl: server.baseUrl,
-        preset: 'default',
+        preset: 'zhubai',
       },
     }
   }
@@ -88,7 +88,7 @@ test('delayed media state transitions preserve reserved geometry', {
 
   const verifyDelayedMedia = async ({
     asset,
-    buildId = 'expanded-default',
+    buildId = 'expanded-zhubai',
     expectedStateAttribute,
     expectedStateValue,
     fromSlide,

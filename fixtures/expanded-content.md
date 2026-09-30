@@ -26,7 +26,7 @@ author:
   institution: Compatibility Institute
 themeConfig:
   presentation:
-    preset: default # __EXPANDED_PRESET__
+    preset: zhubai # __EXPANDED_PRESET__
     chrome: auto
     header: false
     footerAuthors: true
@@ -176,16 +176,16 @@ title: Figure alternatives and failure states
 <div data-quality-case="us1-figures-alternatives" class="presentation-figure-gallery">
 
 <Figure
-  src="/theme/public/lilas-card.svg"
-  alt="Lilas card connected to a presentation"
+  src="/theme/public/zhubai-card.svg"
+  alt="Zhubai card connected to a presentation"
   caption="Meaningful authored alternative text."
 />
 <Figure
-  src="/theme/public/lilas-card.svg"
+  src="/theme/public/zhubai-card.svg"
   caption="Caption supplies the omitted alternative."
 />
 <Figure
-  src="/theme/public/lilas-card.svg"
+  src="/theme/public/zhubai-card.svg"
   alt=""
   caption="Decorative image with a visible caption."
 />
@@ -267,8 +267,8 @@ layout: end
 title: Closing with metadata
 contact: research@example.org
 showAuthors: true
-logo: /theme/public/lilas-card.svg
-logoAlt: Lilas presentation research mark
+logo: /theme/public/zhubai-card.svg
+logoAlt: Zhubai presentation research mark
 ---
 
 <div data-quality-case="us2-closing-metadata">
@@ -282,7 +282,7 @@ Thank you for reviewing the evidence and its operating boundaries.
 ---
 layout: end
 title: Decorative closing logo
-logo: /theme/public/lilas-card.svg
+logo: /theme/public/zhubai-card.svg
 logoAlt: ""
 ---
 
@@ -326,8 +326,8 @@ No contact, author collection, or logo region is emitted.
 ---
 layout: image-left
 title: Image left
-image: /theme/public/lilas-card.svg
-imageAlt: Lilas card connected to a presentation canvas
+image: /theme/public/zhubai-card.svg
+imageAlt: Zhubai card connected to a presentation canvas
 caption: Figure 2. The narrative remains first in source order.
 ---
 
@@ -342,8 +342,8 @@ The narrative comes first in the document. The figure is placed on the left only
 ---
 layout: image-right
 title: Image right
-image: /theme/public/lilas-card.svg
-imageAlt: Lilas card connected to a presentation canvas
+image: /theme/public/zhubai-card.svg
+imageAlt: Zhubai card connected to a presentation canvas
 caption: Figure 2. The narrative remains first in source order.
 backgroundSize: auto 72%
 ---
@@ -359,7 +359,7 @@ The narrative comes first in the document. The figure is placed on the right onl
 ---
 layout: image-left
 title: Legacy image inputs
-image: /theme/public/lilas-card.svg
+image: /theme/public/zhubai-card.svg
 caption: Caption fallback supplies the omitted image alternative.
 backgroundSize: 80%
 class: legacy-image-layout
@@ -407,7 +407,7 @@ The narrative position remains unchanged when the image fails.
 ---
 layout: image-right
 title: Long bilingual image narrative
-image: /theme/public/lilas-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Diagram showing a bilingual research workflow
 caption: Figure 3. Collection, normalization, validation, publication · 采集、规范化、验证与发布。
 backgroundSize: contain
@@ -1166,7 +1166,7 @@ accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 
 # Protected institutional identity
 
-Local accents may change content roles, never official section artwork.
+Local accents may change content roles, never official institutional signatures.
 
 </div>
 
@@ -1181,7 +1181,7 @@ presentationHeader: false
 
 # Protected institutional identity
 
-Local accents may change content roles, never official section artwork.
+Local accents may change content roles, never official institutional signatures.
 
 </div>
 
@@ -1197,7 +1197,7 @@ presentationHeader: true
 
 # Section lockups yield to the header
 
-The illustration stays behind content while the institutional lockup is omitted.
+The header owns the top margin while the institutional signature is omitted.
 
 </div>
 

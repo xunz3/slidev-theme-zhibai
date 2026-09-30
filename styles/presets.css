@@ -1,3 +1,6 @@
-@import "./presets/default.css";
+@import "./presets/base.css";
+@import "./presets/zhubai.css";
+@import "./presets/qingdai.css";
+@import "./presets/songmo.css";
 @import "./presets/ucas.css";
 @import "./presets/ict.css";

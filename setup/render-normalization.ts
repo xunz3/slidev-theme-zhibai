@@ -17,7 +17,7 @@ const BILINGUAL_HEADING_SELECTOR = [
   'h4',
   '.slide-frame__title',
   '.slide-frame__subtitle',
-].join(', ')
+].map(selector => `.slidev-layout ${selector}`).join(', ')
 
 const textNodesWithin = (element: Element): Text[] => {
   const nodes: Text[] = []

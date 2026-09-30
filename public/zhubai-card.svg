@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
-  <title id="title">Lilas theme sample card</title>
-  <desc id="desc">A neutral sample image for the Lilas Slidev theme.</desc>
+  <title id="title">Zhubai theme sample card</title>
+  <desc id="desc">A quiet white research card illustration for the Zhubai Slidev theme.</desc>
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-      <stop stop-color="#f7f2e8"/>
-      <stop offset="1" stop-color="#d8e2dc"/>
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#faf8f3"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" x2="1">
-      <stop stop-color="#4f6f64"/>
-      <stop offset="1" stop-color="#294f7a"/>
+      <stop stop-color="#b83521"/>
+      <stop offset="1" stop-color="#9e2f1c"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="675" fill="url(#bg)"/>
-  <path d="M128 128h944v419H128z" fill="#fffaf0" stroke="#4f6f64" stroke-opacity=".22" stroke-width="3"/>
+  <path d="M128 128h944v419H128z" fill="#ffffff" stroke="#b83521" stroke-opacity=".16" stroke-width="3"/>
   <path d="M204 218h472" stroke="url(#accent)" stroke-width="24" stroke-linecap="round"/>
-  <path d="M204 292h792M204 354h688M204 416h760" stroke="#70685d" stroke-width="16" stroke-linecap="round" opacity=".42"/>
+  <path d="M204 292h792M204 354h688M204 416h760" stroke="#68717b" stroke-width="16" stroke-linecap="round" opacity=".28"/>
   <circle cx="934" cy="226" r="54" fill="url(#accent)" opacity=".88"/>
   <path d="M891 482c62-86 132-86 194 0" fill="none" stroke="url(#accent)" stroke-width="18" stroke-linecap="round"/>
 </svg>

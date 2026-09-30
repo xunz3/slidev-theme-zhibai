@@ -13,7 +13,7 @@ import {
   waitForSlide,
 } from './helpers.mjs'
 
-const presets = ['default', 'ucas', 'ict']
+const presets = ['zhubai', 'ucas', 'ict']
 const modes = ['light', 'dark']
 const layoutSlides = {
   default: { marker: 'invalid-inputs', slide: 6 },
@@ -381,10 +381,10 @@ test('WCAG, layout, image, console, and interaction contract', {
   const fallback = externalContext ? null : await createFallbackContext()
   const builds = externalContext ?? fallback.builds
   for (const id of [
-    'matrix-default',
+    'matrix-zhubai',
     'matrix-ucas',
     'matrix-ict',
-    'expanded-default',
+    'expanded-zhubai',
     'expanded-ucas',
     'expanded-ict',
   ]) {
@@ -795,7 +795,7 @@ test('WCAG, layout, image, console, and interaction contract', {
               assert.deepEqual(
                 alternatives.map(item => item.alt),
                 [
-                  'Lilas card connected to a presentation',
+                  'Zhubai card connected to a presentation',
                   'Caption supplies the omitted alternative.',
                   '',
                   null,
@@ -954,7 +954,7 @@ test('WCAG, layout, image, console, and interaction contract', {
                   )),
                 [
                   'presentation-image-text__narrative',
-                  'presentation-media presentation-media--image presentation-image-text__figure',
+                  'presentation-media presentation-media--image presentation-media--treatment-plain presentation-image-text__figure',
                 ],
               )
             }
@@ -1096,7 +1096,9 @@ test('WCAG, layout, image, console, and interaction contract', {
                 elements.every((element) => {
                   const style = getComputedStyle(element)
                   return style.borderWidth === '0px'
-                    && style.borderRadius === '0px'
+                    && style.borderRadius === '2px'
+                    && style.textDecorationLine === 'underline'
+                    && style.textDecorationThickness === '1.5px'
                     && style.boxShadow === 'none'
                     && element.tabIndex < 0
                 })
@@ -1182,7 +1184,7 @@ test('WCAG, layout, image, console, and interaction contract', {
                   markPresent: true,
                 }
               })
-              assert.equal(brandState.markPresent, preset !== 'default')
+              assert.equal(brandState.markPresent, preset !== 'zhubai')
               assert.deepEqual(brandState.collisions, [])
             }
             if (definition.name === 'coherent-section-header') {
@@ -1345,7 +1347,7 @@ test('WCAG, layout, image, console, and interaction contract', {
                   markPresent: true,
                 }
               })
-              assert.equal(brandState.markPresent, preset !== 'default')
+              assert.equal(brandState.markPresent, preset !== 'zhubai')
               assert.equal(brandState.collisionCount, 0)
             }
             if (definition.name === 'coherent-section-header') {
@@ -1378,11 +1380,11 @@ test('WCAG, layout, image, console, and interaction contract', {
     const interactionCaseId = 'ArrowRight, TOC keyboard, Enter, click, and focus outline'
     if (isFocusedCase(interactionCaseId)) subtests.push(t.test(interactionCaseId, async () => {
       const page = await browserContext.newPage()
-      const baseUrl = builds['matrix-default'].baseUrl
+      const baseUrl = builds['matrix-zhubai'].baseUrl
       try {
-        await waitForSlide(page, baseUrl, 2, 'light', 'baseline-default')
+        await waitForSlide(page, baseUrl, 2, 'light', 'baseline-zhubai')
         await page.keyboard.press('ArrowRight')
-        await page.locator('[data-quality-case="local-default"]').waitFor({
+        await page.locator('[data-quality-case="local-zhubai"]').waitFor({
           state: 'attached',
         })
 

@@ -3,6 +3,7 @@ import { slides } from '#slidev/slides'
 import { useSlideContext } from '@slidev/client'
 import { computed } from 'vue'
 import SlideFrame from '../components/SlideFrame.vue'
+import Seal from '../components/Seal.vue'
 import type { PresentationChrome } from '../setup/presentation-config'
 
 const props = withDefaults(defineProps<{
@@ -31,19 +32,34 @@ const sectionIndex = computed(() => {
   return index
 })
 
-const kickerText = computed(() => {
+const kickerValue = computed(() => {
   const value = frontmatter.value.kicker ?? props.kicker
-  if (value === false) return ''
+  if (value === false) return false
   if (typeof value === 'string' && value.trim()) return value.trim()
-  return sectionIndex.value > 0 ? `Section ${String(sectionIndex.value).padStart(2, '0')}` : ''
+  return 'Section'
 })
+const sectionNumber = computed(() => String(sectionIndex.value).padStart(2, '0'))
 </script>
 
 <template>
-  <SlideFrame variant="section" :title="title" :subtitle="subtitle" :chrome="chrome">
-    <div class="slide-layout-section">
-      <div v-if="kickerText" class="slide-layout-section__kicker">{{ kickerText }}</div>
-      <slot />
+  <SlideFrame v-slot="{ presentation }" variant="section" :title="title" :subtitle="subtitle" :chrome="chrome">
+    <div class="slide-layout-section" role="group" :aria-label="`Section ${sectionNumber}`">
+      <div v-if="kickerValue !== false" class="slide-layout-section__index" aria-hidden="true">{{ sectionNumber }}</div>
+      <Seal
+        v-if="presentation.seal"
+        class="slide-layout-section__seal"
+        :text="presentation.seal"
+        small
+      />
+      <span
+        v-else-if="kickerValue !== false && ['zhubai', 'songmo'].includes(presentation.preset)"
+        class="slide-layout-section__dot"
+        aria-hidden="true"
+      />
+      <div class="slide-layout-section__main">
+        <div v-if="kickerValue !== false" class="slide-layout-section__kicker">{{ kickerValue }}</div>
+        <slot />
+      </div>
     </div>
   </SlideFrame>
 </template>

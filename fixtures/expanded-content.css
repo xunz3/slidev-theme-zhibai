@@ -126,8 +126,7 @@
 }
 
 @media (max-width: 720px) {
-  .presentation-callout-gallery,
-  .presentation-safe-zone-probe {
+  .presentation-callout-gallery {
     grid-template-columns: 1fr;
   }
 

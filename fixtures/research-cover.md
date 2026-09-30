@@ -8,8 +8,7 @@ authors:
     email: xunzhang03v@gmail.com
 themeConfig:
   presentation:
-    preset: default
-    artwork: flow
+    preset: zhubai
 ---
 
 单次优化还是前馈重建？
@@ -38,7 +37,6 @@ subtitle: Relightable Gaussian Head Avatars
 layout: cover
 title: Relightable Head Avatar
 subtitle: 可重光照 Gaussian 头部 Avatar
-presentationArtwork: none
 ---
 
 单次优化还是前馈重建？
@@ -47,7 +45,7 @@ presentationArtwork: none
 layout: cover
 title: Relightable Head Avatar
 subtitle: 可重光照 Gaussian 头部 Avatar
-image: /theme/public/lilas-card.svg
+image: /theme/public/zhubai-card.svg
 imageAlt: Theme example image for checking the cover's visual column
 ---
 

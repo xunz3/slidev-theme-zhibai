@@ -10,7 +10,6 @@ withDefaults(defineProps<{
   reverse?: boolean
 }>(), {
   chrome: undefined,
-  gap: '2.5rem',
   reverse: false,
 })
 </script>

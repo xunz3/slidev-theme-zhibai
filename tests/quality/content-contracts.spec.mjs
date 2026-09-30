@@ -14,7 +14,7 @@ import {
   waitForSlide,
 } from './helpers.mjs'
 
-export const expandedPresets = Object.freeze(['default', 'ucas', 'ict'])
+export const expandedPresets = Object.freeze(['zhubai', 'ucas', 'ict'])
 export const expandedModes = Object.freeze(['light', 'dark'])
 export const calloutFamilies = Object.freeze([
   {
@@ -234,7 +234,7 @@ test('theme leaves producer-owned markup and image interactions untouched', asyn
   const browser = await chromium.launch({ headless: true })
   try {
     const page = await browser.newPage()
-    await waitForSlide(page, buildContext.builds['expanded-default'].baseUrl, 2, 'light')
+    await waitForSlide(page, buildContext.builds['expanded-zhubai'].baseUrl, 2, 'light')
     const result = await page.evaluate(async () => {
       const host = document.createElement('div')
       host.innerHTML = `
@@ -576,7 +576,7 @@ test('US1 same-source media fit, fallback, caption, and closing-logo contracts',
             const layout = layoutGeometry[index]
             assert.deepEqual(layout.childClasses, [
               'presentation-image-text__narrative',
-              'presentation-media presentation-media--image presentation-image-text__figure',
+              'presentation-media presentation-media--image presentation-media--treatment-plain presentation-image-text__figure',
             ])
             assert.equal(layout.orientation, definition.orientation)
             assert.equal(layout.rootFit, definition.fit)
@@ -735,7 +735,7 @@ test('Figure layout variants preserve media semantics and expose distinct compos
         assert.equal(results[1].trayBackground, 'rgba(0, 0, 0, 0)')
         assert.equal(results[1].imageBackground, 'rgba(0, 0, 0, 0)')
         assert.equal(results[2].figureDisplay, 'grid')
-        assert.equal(results[2].captionBorderTopWidth, '2px')
+        assert.equal(results[2].captionBorderTopWidth, '0px')
         assert.ok(results[2].caption.left >= results[2].viewport.right)
         assert.ok(results[0].viewport.width > results[1].viewport.width)
 
@@ -872,7 +872,7 @@ test('ordinary Figure variants stay local and compact', {
     assert.equal(results[2].trayBackground, 'rgba(0, 0, 0, 0)')
     assert.equal(results[2].imageBackground, 'rgba(0, 0, 0, 0)')
     assert.equal(results[3].display, 'grid')
-    assert.equal(results[3].captionBorder, '2px')
+    assert.equal(results[3].captionBorder, '0px')
     assert.ok(results[3].caption.left >= results[3].viewport.right)
 
     await page.setViewportSize({ height: 720, width: 640 })
@@ -983,6 +983,8 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
                   backgroundColor: computed.backgroundColor,
                   borderLeftColor: computed.borderLeftColor,
                   borderLeftWidth: computed.borderLeftWidth,
+                  borderTopColor: computed.borderTopColor,
+                  borderTopWidth: computed.borderTopWidth,
                   cueBackground: cue.backgroundColor,
                   cueBorderWidth: cue.borderTopWidth,
                   cueColor: family === 'question'
@@ -1003,9 +1005,10 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
                 question: 'ring',
                 quotation: 'bar',
               }[family.family]
-              assert.notEqual(style.backgroundColor, 'rgba(0, 0, 0, 0)')
-              assert.notEqual(style.borderLeftWidth, '0px')
-              assert.notEqual(style.borderLeftColor, 'rgba(0, 0, 0, 0)')
+              assert.notEqual(style.backgroundColor, 'rgba(0, 0, 0, 0)',
+                'notes use a visible semantic tonal surface')
+              assert.equal(style.borderLeftWidth, '2px', 'the tonal surface carries a visible semantic family edge')
+              assert.equal(style.borderTopWidth, '0px')
               assert.ok(
                 style.cueBackground !== 'rgba(0, 0, 0, 0)'
                 || style.cueBorderWidth !== '0px',
@@ -1014,7 +1017,6 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
               assert.equal(style.cueShape, expectedShape)
               assert.equal(style.titleTransform, 'none')
               const styleContext = `${preset}/${mode}/${type}: ${JSON.stringify(style)}`
-              assert.equal(style.borderLeftColor, style.roleColor, styleContext)
               assert.equal(style.cueColor, style.roleColor, styleContext)
               assert.equal(style.titleColor, style.roleColor, styleContext)
               canonicalCases += 1
@@ -1061,7 +1063,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
       }
       assert.equal(canonicalCases, 114)
 
-      const defaultUrl = buildContext.builds['expanded-default'].baseUrl
+      const defaultUrl = buildContext.builds['expanded-zhubai'].baseUrl
       await waitForSlide(
         page,
         defaultUrl,
@@ -1133,7 +1135,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
       assert.equal(await figures.count(), 5)
       assert.equal(
         await figures.nth(0).locator('img').getAttribute('alt'),
-        'Lilas card connected to a presentation',
+        'Zhubai card connected to a presentation',
       )
       assert.equal(
         await figures.nth(1).locator('img').getAttribute('alt'),
@@ -1404,7 +1406,7 @@ test('US3 link decoration and distinct author value, action, and order contract'
             (await page.locator(
               '.slidev-page-2 .slide-frame__footer-left',
             ).textContent())?.trim(),
-            expectedAuthors.map(author => author.primary).join(', '),
+            `Expanded content quality fixture · ${expectedAuthors.map(author => author.primary).join(', ')}`,
           )
         }
       } finally {
@@ -1656,7 +1658,7 @@ test('US4 42-case Badge, task-weight, and flat-highlight contract', {
             'rgba(0, 0, 0, 0)',
           )
           assert.equal(highlightStyles[0].borderWidth, '0px')
-          assert.equal(highlightStyles[0].borderRadius, '0px')
+          assert.equal(highlightStyles[0].borderRadius, '2px')
           assert.equal(highlightStyles[0].boxShadow, 'none')
           assert.equal(highlightStyles[0].boxDecorationBreak, 'clone')
           assert.notEqual(highlightStyles[0].padding, '0px')
@@ -1693,7 +1695,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
   })
   try {
     const page = await context.newPage()
-    const baseUrl = buildContext.builds['expanded-default'].baseUrl
+    const baseUrl = buildContext.builds['expanded-zhubai'].baseUrl
     try {
       const onSlide = (slide, selector) => (
         page.locator(`.slidev-page-${slide} ${selector}`)
@@ -1735,7 +1737,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
       ).count(), 9)
       assert.equal(
         await onSlide(16, '.presentation-closing__logo img').getAttribute('alt'),
-        'Lilas presentation research mark',
+        'Zhubai presentation research mark',
       )
 
       await waitForSlide(
@@ -1792,7 +1794,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
       const right = await inspectImageLayout(21, 'us2-image-right')
       assert.deepEqual(left.childClasses, [
         'presentation-image-text__narrative',
-        'presentation-media presentation-media--image presentation-image-text__figure',
+        'presentation-media presentation-media--image presentation-media--treatment-plain presentation-image-text__figure',
       ])
       assert.deepEqual(right.childClasses, left.childClasses)
       assert.equal(left.orientation, 'left')
@@ -2013,20 +2015,18 @@ test('US3 slide accents are local, first-valid, consumer-complete, and protected
           const local = states[0]
           const fallback = states[1]
           for (const role of [
-            'footerBorder',
-            'headerBorder',
             'inlineCodeBackground',
             'inlineCodeColor',
             'linkColor',
-            'listMarkerColor',
-            'tableHeaderBackground',
-            'tableHeaderBorder',
           ]) {
             assert.notEqual(
               local.consumers[role],
               fallback.consumers[role],
               `${preset}/${mode}: ${role} ignored the local accent`,
             )
+          }
+          for (const role of ['footerBorder', 'headerBorder', 'listMarkerColor', 'tableHeaderBackground', 'tableHeaderBorder']) {
+            assert.equal(local.consumers[role], fallback.consumers[role], `${preset}/${mode}: ${role} stays neutral`)
           }
           assert.notDeepEqual(local.consumers.info, fallback.consumers.info)
           assert.deepEqual(
@@ -2404,7 +2404,7 @@ test('US4 code, sequence, status, and keyboard contracts preserve native meaning
   })
   try {
     const page = await context.newPage()
-    const baseUrl = buildContext.builds['expanded-default'].baseUrl
+    const baseUrl = buildContext.builds['expanded-zhubai'].baseUrl
     const onSlide = (slide, selector) => (
       page.locator(`.slidev-page-${slide} ${selector}`)
     )
@@ -2584,7 +2584,7 @@ test('US4 code, sequence, status, and keyboard contracts preserve native meaning
       ])
       assert.ok(labels.every(label => label.role === null))
       assert.ok(labels.every(label => label.tabIndex === null))
-      assert.notEqual(labels[0].borderRadius, labels[2].borderRadius)
+      assert.equal(labels[0].borderRadius, labels[2].borderRadius, 'tags and badges share the pill geometry')
       assert.notEqual(labels[0].background, labels[2].background)
       assert.equal(labels[0].pseudo, 'none')
       assert.equal(labels[2].pseudo, 'none')
@@ -2664,7 +2664,7 @@ test('US5 tasks stay presentation-only and prose highlights stay code-scoped', {
   })
   try {
     const page = await context.newPage()
-    const baseUrl = buildContext.builds['expanded-default'].baseUrl
+    const baseUrl = buildContext.builds['expanded-zhubai'].baseUrl
     const onSlide = (slide, selector) => (
       page.locator(`.slidev-page-${slide} ${selector}`)
     )
@@ -2939,8 +2939,20 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
   ).evaluate((root) => {
     const content = root.closest('.slide-frame__content')
     const message = root.querySelector('.presentation-closing__message')
-    const rect = (element) => {
-      const bounds = element.getBoundingClientRect()
+    const rect = (element, inner = false) => {
+      const bounds = element.getBoundingClientRect().toJSON()
+      if (inner) {
+        // The institutional signature reserves padding above the reading area.
+        // Center the message in that usable content box, not over the masthead.
+        const style = getComputedStyle(element)
+        const scale = bounds.width / element.offsetWidth
+        bounds.left += Number.parseFloat(style.paddingLeft) * scale
+        bounds.right -= Number.parseFloat(style.paddingRight) * scale
+        bounds.top += Number.parseFloat(style.paddingTop) * scale
+        bounds.bottom -= Number.parseFloat(style.paddingBottom) * scale
+        bounds.width = bounds.right - bounds.left
+        bounds.height = bounds.bottom - bounds.top
+      }
       return {
         bottom: bounds.bottom,
         centerX: bounds.left + bounds.width / 2,
@@ -2955,7 +2967,7 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
     return {
       childClasses: [...root.children].map(element => element.className),
       className: root.className,
-      content: rect(content),
+      content: rect(content, true),
       message: rect(message),
       messageTextAlign: getComputedStyle(message).textAlign,
       root: rect(root),
@@ -2984,9 +2996,11 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
             minimal.childClasses,
             ['presentation-closing__message'],
           )
-          assert.equal(minimal.messageTextAlign, 'left')
+          assert.equal(minimal.messageTextAlign, preset === 'ucas' ? 'center' : 'left')
           assert.ok(Math.abs(
-            minimal.message.left - minimal.content.left,
+            preset === 'ucas'
+              ? minimal.message.centerX - minimal.content.centerX
+              : minimal.message.left - minimal.content.left,
           ) <= 1, JSON.stringify(minimal))
           assert.ok(Math.abs(
             minimal.message.centerY - minimal.content.centerY,
@@ -3066,16 +3080,17 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
                   footer,
                   '::before',
                 ).backgroundColor,
-                footerRule: getComputedStyle(footer).borderTopColor,
+                footerRuleWidth: getComputedStyle(footer).borderTopWidth,
                 headerAccent: headerStyle.getPropertyValue(
                   '--presentation-accent',
                 ),
                 headerChrome: headerStyle.getPropertyValue(
                   '--presentation-chrome-accent',
                 ),
-                headerRule: getComputedStyle(header).borderBottomColor,
+                headerRuleWidth: getComputedStyle(header).borderBottomWidth,
                 marker: getComputedStyle(item, '::marker').color,
                 roleColor,
+                mutedColor: frameStyle.getPropertyValue('--presentation-text-muted').trim(),
                 tableHeaderRule: getComputedStyle(
                   headerCell,
                 ).borderBottomColor,
@@ -3088,19 +3103,13 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
             return { changed, initial }
           })
           for (const state of [chrome.initial, chrome.changed]) {
-            assert.equal(
-              state.headerRule,
-              state.roleColor,
-              JSON.stringify(chrome, null, 2),
-            )
-            assert.equal(state.footerRule, state.roleColor)
+            assert.equal(state.headerRuleWidth, '0px', 'the header is separated by space')
+            assert.equal(state.footerRuleWidth, '0px', 'the footer is separated by space')
             assert.equal(state.tableHeaderRule, state.roleColor)
-            assert.equal(state.marker, state.roleColor)
-            if (preset === 'ict') {
-              assert.equal(state.footerCap, state.roleColor)
-            }
+            assert.equal(state.footerCap, 'rgba(0, 0, 0, 0)', 'footer has no accent ornament')
           }
-          assert.notEqual(chrome.changed.roleColor, chrome.initial.roleColor)
+          assert.equal(chrome.changed.roleColor, chrome.initial.roleColor, 'chrome stays neutral when the accent changes')
+          assert.equal(chrome.changed.marker, chrome.initial.marker, 'list markers stay neutral when the accent changes')
 
           await waitForSlide(
             page,
@@ -3141,7 +3150,9 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
               ),
             ].filter(visible)
             return {
-              backgroundColor: getComputedStyle(frame).backgroundColor,
+              backgroundColor: getComputedStyle(frame).backgroundColor === 'rgba(0, 0, 0, 0)'
+                ? getComputedStyle(frame.closest('.slidev-layout')).backgroundColor
+                : getComputedStyle(frame).backgroundColor,
               identityImageCount: frame.querySelectorAll(
                 'img[class*="slide-frame__ucas"], img[class*="slide-frame__ict"]',
               ).length,
@@ -3157,15 +3168,15 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
           })
           assert.equal(safeZone.isSection, true)
           assert.ok(safeZone.probes.length >= 5, JSON.stringify(safeZone))
-          if (preset === 'default') {
+          if (preset === 'zhubai') {
             assert.equal(safeZone.identityImageCount, 0)
             assert.equal(safeZone.mark, null)
           } else {
             assert.equal(
               safeZone.backgroundColor,
-              mode === 'dark'
-                ? (preset === 'ucas' ? 'rgb(18, 61, 105)' : 'rgb(16, 31, 43)')
-                : (preset === 'ucas' ? 'rgb(237, 242, 246)' : 'rgb(245, 249, 250)'),
+              mode === 'light'
+                ? ({ ucas: 'rgb(249, 250, 252)', ict: 'rgb(247, 249, 251)' })[preset]
+                : ({ ucas: 'rgb(17, 21, 27)', ict: 'rgb(16, 22, 29)' })[preset],
             )
             assert.equal(safeZone.identityImageCount, 1)
             assert.ok(safeZone.mark, JSON.stringify(safeZone))

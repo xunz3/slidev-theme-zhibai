@@ -1,0 +1,55 @@
+/* 青黛: moon-white paper, blue-black structure, and centered book-like headings. */
+.slidev-layout[data-presentation-preset="qingdai"] {
+  --zhubai-paper: var(--zhubai-moon);
+  --zhubai-ink: #202a35;
+  --zhubai-accent: var(--zhubai-dai);
+}
+
+html.dark .slidev-layout[data-presentation-preset="qingdai"] {
+  --zhubai-paper: #12171d;
+  --zhubai-ink: #e5ebf2;
+  --zhubai-surface: #1d2630;
+}
+
+.slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right, .image-text, .figure, .toc, .center)[data-presentation-preset="qingdai"] .slide-frame h1 {
+  padding-block: 0.35em;
+  border-block: 1px solid color-mix(in srgb, var(--presentation-accent) 50%, transparent);
+  text-align: center;
+}
+
+.slidev-layout[data-presentation-preset="qingdai"] .slide-frame__kicker {
+  text-align: center;
+}
+
+.slidev-layout.cover[data-presentation-preset="qingdai"] .slide-cover__meta {
+  border-block: 1px solid var(--presentation-border-strong);
+}
+
+.slidev-layout.section[data-presentation-preset="qingdai"] .slide-layout-section {
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  justify-items: center;
+  row-gap: 1rem;
+  text-align: center;
+}
+
+.slidev-layout.section[data-presentation-preset="qingdai"] .slide-layout-section__index {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+}
+
+.slidev-layout.section[data-presentation-preset="qingdai"] .slide-layout-section__main {
+  grid-column: 1;
+  grid-row: 2;
+  text-align: center;
+}
+
+.slidev-layout.section[data-presentation-preset="qingdai"] .slide-layout-section h1 {
+  margin-inline: auto;
+}
+
+.slidev-layout.closing[data-presentation-preset="qingdai"] .presentation-closing--minimal {
+  justify-items: center;
+  text-align: center;
+}

@@ -43,7 +43,7 @@ export const browserContextOptionsForViewport = (viewport) => ({
 export const reviewMatrix = ({
   compactCases = [],
   modes = ['light', 'dark'],
-  presets = ['default', 'ucas', 'ict'],
+  presets = ['zhubai', 'ucas', 'ict'],
 } = {}) => [
   ...presets.flatMap(preset => modes.map(mode => ({
     mode,
@@ -242,7 +242,7 @@ export const generatePresetMatrixDefinitions = async () => {
     resolve(qualityArtifactRoot, 'build/matrix'),
   )
   const template = await readFile(templatePath, 'utf8')
-  const presets = ['default', 'ucas', 'ict']
+  const presets = ['zhubai', 'qingdai', 'songmo', 'ucas', 'ict']
 
   return Promise.all(presets.map(async (preset) => {
     const source = resolve(generatedRoot, `global-${preset}.md`)
@@ -284,12 +284,12 @@ export const generateExpandedContentDefinitions = async () => {
     readFile(fixtureCssPath, 'utf8'),
   ])
   await writeFile(resolve(generatedRoot, 'style.css'), fixtureCss, 'utf8')
-  const presetMarker = 'preset: default # __EXPANDED_PRESET__'
+  const presetMarker = 'preset: zhubai # __EXPANDED_PRESET__'
   if (!template.includes(presetMarker)) {
     throw new Error('expanded-content fixture is missing its preset-generation marker')
   }
 
-  return Promise.all(['default', 'ucas', 'ict'].map(async (preset) => {
+  return Promise.all(['zhubai', 'ucas', 'ict'].map(async (preset) => {
     const source = resolve(generatedRoot, `${preset}.md`)
     const content = template
       .replace(

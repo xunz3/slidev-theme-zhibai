@@ -3,7 +3,7 @@ theme: ../
 title: Ordinary Figure variants
 themeConfig:
   presentation:
-    preset: default
+    preset: zhubai
     chrome: auto
 ---
 

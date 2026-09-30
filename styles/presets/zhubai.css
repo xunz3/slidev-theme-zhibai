@@ -1,0 +1,83 @@
+/* 朱白: warm paper, ink structure, and a restrained cinnabar signature. */
+.slidev-layout:not([data-presentation-preset]),
+.slidev-layout[data-presentation-preset="default"],
+.slidev-layout[data-presentation-preset="zhubai"] {
+  --zhubai-paper: #faf8f3;
+  --zhubai-ink: #232019;
+  --zhubai-accent: var(--zhubai-ink);
+  --presentation-toc-number: var(--zhubai-zhu);
+}
+
+html.dark .slidev-layout:not([data-presentation-preset]),
+html.dark .slidev-layout[data-presentation-preset="default"],
+html.dark .slidev-layout[data-presentation-preset="zhubai"] {
+  --zhubai-paper: var(--zhubai-night);
+  --zhubai-ink: #efe9df;
+}
+
+.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame {
+  --presentation-cover-weight: 700;
+  --presentation-toc-number: var(--presentation-signature);
+}
+
+.slidev-layout.cover:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-cover__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.slidev-layout.cover:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-cover__eyebrow::before {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5px;
+  background: var(--presentation-signature);
+  content: "";
+}
+
+.slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right, .image-text, .figure, .toc, .center):is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame h1::after {
+  display: block;
+  width: 2.5rem;
+  height: 1.5px;
+  margin-top: 0.4em;
+  background: var(--presentation-signature);
+  content: "";
+}
+
+/* Center the signature beneath centered title blocks, including figure variants. */
+.slidev-layout:is(.center, .figure):is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame h1::after {
+  margin-inline: auto;
+}
+
+/* Custom list geometry excludes task lists and component-owned author lists. */
+.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame__content ul:not([class]) > li:not(.presentation-task-item) {
+  position: relative;
+  list-style: none;
+}
+
+.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame__content ul:not([class]) > li:not(.presentation-task-item)::before {
+  position: absolute;
+  top: 0.6em;
+  left: -1.05em;
+  width: 0.32rem;
+  height: 0.32rem;
+  background: color-mix(in srgb, var(--presentation-signature) 80%, transparent);
+  transform: rotate(45deg);
+  content: "";
+}
+
+.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame__content ul ul:not([class]) > li:not(.presentation-task-item)::before {
+  border: 1px solid var(--presentation-text-muted);
+  background: transparent;
+}
+
+.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-layout-toc__number {
+  font-family: var(--presentation-font-serif);
+  font-variant-numeric: oldstyle-nums;
+}
+
+/* Match the base H1 gap (0.55em) where shared.css otherwise uses 0.82em.
+   Center, figure and image-text inherit the base rhythm, including terminal-child
+   spacing. Two-cols keeps 0.5em; TOC combines its own 0.05em margin with grid gap. */
+.slidev-layout:is(.default, .code, .references, .image-left, .image-right):is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame h1 {
+  margin-bottom: 0.55em;
+}

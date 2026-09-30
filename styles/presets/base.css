@@ -1,0 +1,89 @@
+/* Pigments are scoped to a slide; all layouts and components consume semantic roles. */
+.slidev-layout {
+  --zhubai-zhu: #b83521;
+  --zhubai-zhu-deep: #9e2f1c;
+  --zhubai-paper: #faf8f3;
+  --zhubai-ink: #232019;
+  --zhubai-night: #171511;
+  --zhubai-moon: #f4f6f7;
+  --zhubai-dai: #2f4257;
+  --zhubai-mo: #1c1b19;
+  --zhubai-accent: var(--zhubai-ink);
+  --zhubai-highlight: var(--zhubai-zhu-deep);
+  --zhubai-surface: #ffffff;
+  --presentation-bg: var(--zhubai-paper);
+  --presentation-bg-elevated: var(--zhubai-surface);
+  --presentation-frame-bg: transparent;
+  --presentation-text: var(--zhubai-ink);
+  --presentation-text-muted: color-mix(in srgb, var(--zhubai-ink) 68%, var(--zhubai-paper));
+  --presentation-text-faint: color-mix(in srgb, var(--zhubai-ink) 45%, var(--zhubai-paper));
+  --presentation-border: color-mix(in srgb, var(--zhubai-ink) 10%, transparent);
+  --presentation-border-strong: color-mix(in srgb, var(--zhubai-ink) 22%, transparent);
+  --presentation-chrome-accent: var(--presentation-border-strong);
+  --presentation-brand-title: var(--presentation-text);
+  --presentation-brand-muted: var(--presentation-text-muted);
+  --presentation-focus: var(--zhubai-highlight);
+  --presentation-signature: var(--zhubai-zhu);
+  --presentation-seal-background: var(--zhubai-zhu);
+  --presentation-seal-text: #faf8f3;
+  --presentation-seal-font: "Libertinus Serif", "Noto Serif SC", serif;
+  --presentation-section-index-color: color-mix(in srgb, var(--presentation-text) 16%, transparent);
+  --presentation-scrollbar-thumb: color-mix(in srgb, var(--zhubai-ink) 26%, transparent);
+  --presentation-scrollbar-track: transparent;
+  --presentation-shadow: var(--presentation-shadow-1);
+
+  /* Read-compatible aliases for the 0.5 migration window. */
+  --veil-paper: var(--zhubai-paper);
+  --veil-ink: var(--zhubai-ink);
+  --veil-accent: var(--zhubai-accent);
+  --veil-highlight: var(--zhubai-highlight);
+  --veil-grid-opacity: var(--zhubai-grid-opacity, 3%);
+}
+
+/* Re-evaluate derived accents on the frame, where authors can override accent. */
+.slidev-layout,
+.slide-frame {
+  --slidev-theme-primary: var(--zhubai-accent);
+  --presentation-accent: var(--slidev-theme-primary);
+  --presentation-toc-number: var(--presentation-accent);
+  --presentation-bg-muted: color-mix(in srgb, var(--presentation-accent) 4%, var(--presentation-bg));
+  --presentation-cover-meta-bg: color-mix(in srgb, var(--presentation-accent) 6%, var(--presentation-bg));
+  --zhubai-chart-1: var(--presentation-accent);
+  --zhubai-chart-2: var(--presentation-signature);
+  --zhubai-chart-3: color-mix(in srgb, var(--presentation-text) 56%, var(--presentation-bg));
+  --zhubai-chart-4: color-mix(in srgb, var(--presentation-text) 30%, var(--presentation-bg));
+  --zhubai-chart-5: color-mix(in srgb, var(--presentation-accent) 55%, var(--presentation-bg));
+  --zhubai-chart-6: color-mix(in srgb, var(--presentation-accent) 30%, var(--presentation-bg));
+  --presentation-chart-1: var(--zhubai-chart-1);
+  --veil-chart-1: var(--zhubai-chart-1);
+  --presentation-chart-2: var(--zhubai-chart-2);
+  --veil-chart-2: var(--zhubai-chart-2);
+  --presentation-chart-3: var(--zhubai-chart-3);
+  --veil-chart-3: var(--zhubai-chart-3);
+  --presentation-chart-4: var(--zhubai-chart-4);
+  --veil-chart-4: var(--zhubai-chart-4);
+  --presentation-chart-5: var(--zhubai-chart-5);
+  --veil-chart-5: var(--zhubai-chart-5);
+  --presentation-chart-6: var(--zhubai-chart-6);
+  --veil-chart-6: var(--zhubai-chart-6);
+}
+
+html.dark .slidev-layout {
+  --zhubai-zhu: #d9644c;
+  --zhubai-zhu-deep: #e0785f;
+  --zhubai-paper: var(--zhubai-night);
+  --zhubai-ink: #efe9df;
+  --zhubai-dai: #8aa5c4;
+  --zhubai-mo: #e8e6e1;
+  --zhubai-surface: #24211b;
+}
+
+/* Native Slidev layouts preserve their full-bleed canvas behavior. */
+.slidev-layout:not([data-presentation-preset]):not(.full):not(.image):not(.iframe):not(:has(iframe)):not([style*="background"]) {
+  padding: var(--presentation-slide-padding);
+}
+
+.slidev-layout:not([data-presentation-preset]):is(.full, .image, .iframe),
+.slidev-layout:not([data-presentation-preset]):has(iframe) {
+  padding: 0;
+}

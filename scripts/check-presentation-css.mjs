@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url'
 
 const repositoryRoot = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const errors = []
-const presetNames = ['default', 'ucas', 'ict']
+const presetNames = ['zhubai', 'qingdai', 'songmo', 'ucas', 'ict']
 
 const filesWithin = (directory, pattern = /./) => {
   const files = []
@@ -26,7 +26,7 @@ const filesWithin = (directory, pattern = /./) => {
 const sourceAt = path => readFileSync(resolve(repositoryRoot, path), 'utf8')
 
 const aggregate = sourceAt('styles/presets.css')
-const expectedPresetImports = presetNames.map(
+const expectedPresetImports = ['base', ...presetNames].map(
   name => `@import "./presets/${name}.css";`,
 )
 const aggregateLines = aggregate
@@ -45,6 +45,7 @@ if (
 
 const styleIndex = sourceAt('styles/index.ts')
 const expectedStyleImports = [
+  './cjk-fonts.css',
   '@slidev/client/styles/layouts-base.css',
   './tokens.css',
   './base.css',
@@ -52,8 +53,8 @@ const expectedStyleImports = [
   './semantic.css',
   './components.css',
   './content-layouts.css',
-  './presets.css',
   './presets/shared.css',
+  './presets.css',
 ]
 const actualStyleImports = [...styleIndex.matchAll(
   /import\s+['"]([^'"]+\.css)['"]/g,
@@ -80,13 +81,18 @@ const requiredPresetTokens = [
   '--presentation-media-radius',
 ]
 
+const sharedTokenSource = sourceAt('styles/presets/base.css') + sourceAt('styles/tokens.css')
+for (const token of requiredPresetTokens) {
+  if (!sharedTokenSource.includes(`${token}:`)) errors.push(`shared token base is missing ${token}`)
+}
+
 for (const preset of presetNames) {
   const path = `styles/presets/${preset}.css`
   const source = sourceAt(path)
   const anchor = `.slidev-layout[data-presentation-preset="${preset}"]`
   if (!source.includes(anchor)) errors.push(`${path} is missing ${anchor}`)
-  for (const token of requiredPresetTokens) {
-    if (!source.includes(`${token}:`)) errors.push(`${path} is missing ${token}`)
+  for (const token of ['--zhubai-paper', '--zhubai-ink', '--zhubai-accent']) {
+    if (!source.includes(`${token}:`)) errors.push(`${path} is missing pigment ${token}`)
   }
   if (source.includes('!important')) errors.push(`${path} contains !important`)
   if (/^\s*(?::root|body)\b[^{]*data-presentation-preset/m.test(source)) {
@@ -108,6 +114,26 @@ for (const preset of presetNames) {
 }
 
 const packageJson = JSON.parse(sourceAt('package.json'))
+const expectedWebfonts = ['Inter', 'Libertinus Serif', 'JetBrains Mono']
+const expectedLocalFonts = ['Noto Sans SC', 'Noto Serif SC']
+const fonts = packageJson.slidev?.defaults?.fonts ?? {}
+if (
+  fonts.sans !== 'Inter, Noto Sans SC'
+  || fonts.serif !== 'Libertinus Serif, Noto Serif SC'
+  || fonts.mono !== 'JetBrains Mono'
+  || JSON.stringify(fonts.webfonts) !== JSON.stringify(expectedWebfonts)
+  || JSON.stringify(fonts.local) !== JSON.stringify(expectedLocalFonts)
+  || fonts.weights !== '400,600,700'
+  || fonts.italic !== true
+) {
+  errors.push('package.json must declare the verified Latin and local CJK font roles')
+}
+const cjkFontStylesheet = sourceAt('styles/cjk-fonts.css')
+if (!cjkFontStylesheet.includes(
+  'https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap',
+)) {
+  errors.push('styles/cjk-fonts.css must load Inter 500 and supported upright CJK weights separately')
+}
 if ('obsidianSlidev' in packageJson) {
   errors.push('package.json must not publish a producer-specific compatibility manifest')
 }
@@ -115,8 +141,8 @@ const runtimeDependencies = Object.keys(packageJson.dependencies ?? {}).sort()
 if (runtimeDependencies.join(',') !== '@slidev/client') {
   errors.push('package.json runtime dependencies must contain only @slidev/client')
 }
-if (!packageJson.files?.includes('public/lilas-card.svg')) {
-  errors.push('package.json must ship public/lilas-card.svg')
+if (packageJson.files?.some(path => path.startsWith('public'))) {
+  errors.push('package.json must not ship demonstration images')
 }
 if (existsSync(resolve(repositoryRoot, '.npmignore'))) {
   errors.push('package.json.files is authoritative; redundant .npmignore must be absent')
