@@ -105,7 +105,7 @@ test('Zhubai signature, five-preset colors, seal geometry, and refinement contra
             assert.equal(state.seal['background-color'], state.zhu)
             assert.equal(state.seal['font-weight'], '700')
             assert.equal(state.seal['animation-name'], 'none')
-            assert.match(state.seal['font-family'], /^"Libertinus Serif", "Noto Serif SC", serif$/, 'Latin initials use Libertinus before the Chinese serif fallback')
+            assert.match(state.seal['font-family'], /Libertinus Serif.*Noto Serif SC/, 'Latin initials use Libertinus before the Chinese serif fallback')
           } else assert.equal(state.seal, null, 'unconfigured seal leaves no DOM placeholder')
           if (state.preset === 'zhubai') assert.equal(state.background, mode === 'light' ? 'rgb(250, 248, 243)' : 'rgb(23, 21, 17)')
           if ([2, 9, 10].includes(slide)) {

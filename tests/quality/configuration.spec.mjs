@@ -87,18 +87,14 @@ test('option definitions are the immutable canonical public contract', () => {
     'preset',
     'coverAlign',
     'chrome',
-    'header',
-    'footerAuthors',
     'pageNumber',
     'accent',
     'seal',
   ])
   assert.deepEqual(config.PRESENTATION_DEFAULTS, {
     preset: 'zhubai',
-    coverAlign: 'left',
+    coverAlign: 'center',
     chrome: 'auto',
-    header: false,
-    footerAuthors: false,
     pageNumber: true,
     accent: null,
     seal: null,
@@ -108,8 +104,7 @@ test('option definitions are the immutable canonical public contract', () => {
   assert.deepEqual(config.PRESENTATION_OPTIONS.preset.slideKeys, ['presentationPreset'])
   assert.equal(config.PRESENTATION_OPTIONS.coverAlign.deckKey, 'coverAlign')
   assert.deepEqual(config.PRESENTATION_OPTIONS.coverAlign.slideKeys, ['presentationCoverAlign'])
-  assert.deepEqual(config.PRESENTATION_OPTIONS.chrome.slideKeys, ['presentationChrome', 'chrome'])
-  assert.deepEqual(config.PRESENTATION_OPTIONS.header.slideKeys, ['presentationHeader', 'header'])
+  assert.deepEqual(config.PRESENTATION_OPTIONS.chrome.slideKeys, ['showFooter', 'presentationChrome', 'chrome'])
   assert.deepEqual(config.PRESENTATION_OPTIONS.pageNumber.slideKeys, ['pageNumber'])
   assert.deepEqual(config.PRESENTATION_OPTIONS.accent.slideKeys, ['accent'])
   assert.equal('scope' in config.PRESENTATION_OPTIONS.accent, false)
@@ -222,8 +217,6 @@ test('missing and invalid deck configuration resolve field-by-field to defaults'
     preset: 'invalid',
     coverAlign: 'middle',
     chrome: 'always',
-    header: 'yes',
-    footerAuthors: 0,
     pageNumber: {},
     accent: 'not-a-color',
   }, {
@@ -236,8 +229,6 @@ test('deck normalization accepts every supported value and textual boolean', () 
     preset: 'ict',
     coverAlign: ' center ',
     chrome: 'true',
-    header: 'on',
-    footerAuthors: 'false',
     pageNumber: 'off',
     accent: '  #345f8f  ',
   }, {
@@ -246,20 +237,16 @@ test('deck normalization accepts every supported value and textual boolean', () 
     preset: 'ict',
     coverAlign: 'center',
     chrome: 'on',
-    header: true,
-    footerAuthors: false,
     pageNumber: false,
     accent: '#345f8f',
     seal: null,
   })
 })
 
-test('slide resolution uses first-valid prop, slide, deck, and default precedence', () => {
+test('slide resolution uses canonical slide, legacy slide, prop, deck, and default precedence', () => {
   const deck = {
     preset: 'ucas',
     chrome: 'off',
-    header: true,
-    footerAuthors: false,
     pageNumber: false,
     accent: '#123456',
   }
@@ -269,24 +256,20 @@ test('slide resolution uses first-valid prop, slide, deck, and default precedenc
     slide: {
       presentationPreset: 'ict',
       presentationChrome: 'on',
-      presentationHeader: 'off',
-      footerAuthors: 'true',
       pageNumber: 'on',
     },
     variant: 'default',
     supportsColor: value => value === '#123456',
   }), {
     preset: 'ict',
-    coverAlign: 'left',
+    coverAlign: 'center',
     chrome: 'on',
-    header: false,
-    footerAuthors: true,
     pageNumber: true,
     accent: '#123456',
     seal: null,
     variant: 'default',
     showChrome: true,
-    showHeader: false,
+    showFooter: true,
   })
 
   assert.equal(config.resolvePresentation({
@@ -297,7 +280,7 @@ test('slide resolution uses first-valid prop, slide, deck, and default precedenc
     },
     chrome: 'auto',
     variant: 'default',
-  }).chrome, 'auto')
+  }).chrome, 'off')
 })
 
 test('invalid higher-priority input inherits the next valid candidate', () => {
@@ -305,17 +288,12 @@ test('invalid higher-priority input inherits the next valid candidate', () => {
     deck: {
       preset: 'ucas',
       chrome: 'on',
-      header: true,
-      footerAuthors: false,
       pageNumber: false,
     },
     slide: {
       presentationPreset: 'unsupported',
       presentationChrome: 'sometimes',
       chrome: 'off',
-      presentationHeader: 'maybe',
-      header: 'false',
-      footerAuthors: 'no',
       pageNumber: 'yes',
     },
     chrome: 'invalid',
@@ -326,14 +304,12 @@ test('invalid higher-priority input inherits the next valid candidate', () => {
     preset: 'ucas',
     coverAlign: 'center',
     chrome: 'off',
-    header: false,
-    footerAuthors: false,
     pageNumber: false,
     accent: null,
     seal: null,
     variant: 'intro',
     showChrome: false,
-    showHeader: false,
+    showFooter: false,
   })
 })
 
@@ -401,9 +377,9 @@ test('accent validation and local → deck → preset fallback are first-valid',
   }).accent, 'rebeccapurple')
 })
 
-test('cover alignment follows preset defaults and explicit overrides', () => {
+test('cover alignment defaults to center across presets and respects explicit overrides', () => {
   for (const preset of config.PRESENTATION_PRESETS) {
-    const expectedDefault = ['ucas', 'qingdai'].includes(preset) ? 'center' : 'left'
+    const expectedDefault = 'center'
     assert.equal(config.resolveDeckPresentation({ preset }).coverAlign, expectedDefault)
     assert.equal(config.resolvePresentation({ deck: { preset }, variant: 'cover' }).coverAlign, expectedDefault)
 
@@ -423,11 +399,11 @@ test('cover alignment follows preset defaults and explicit overrides', () => {
     }
   }
 
-  // A local preset change re-evaluates the preset default only when no author
-  // explicitly set a deck or slide alignment.
+  // Switching the local preset keeps the shared centered default and inherits
+  // any explicitly authored deck alignment.
   assert.equal(config.resolvePresentation({
     deck: { preset: 'ucas' }, slide: { presentationPreset: 'zhubai' }, variant: 'cover',
-  }).coverAlign, 'left')
+  }).coverAlign, 'center')
   assert.equal(config.resolvePresentation({
     deck: { preset: 'zhubai' }, slide: { presentationPreset: 'ucas' }, variant: 'cover',
   }).coverAlign, 'center')
@@ -505,31 +481,44 @@ test('app setup remains deck-only while the shared frame owns local accent scope
   assert.match(frameSource, /--slidev-theme-primary/)
 })
 
-test('derived chrome and header behavior covers every frame variant', () => {
+test('removed header and footer-author options cannot change presentation state', () => {
+  for (const preset of config.PRESENTATION_PRESETS) {
+    for (const variant of config.FRAME_VARIANTS) {
+      const baseline = config.resolvePresentation({ deck: { preset }, variant })
+      assert.deepEqual(config.resolvePresentation({
+        deck: { preset, header: true, footerAuthors: true },
+        slide: { presentationHeader: true, header: true, footerAuthors: true },
+        variant,
+      }), baseline)
+      for (const key of ['header', 'footerAuthors', 'showHeader']) {
+        assert.equal(key in baseline, false)
+      }
+    }
+  }
+})
+
+test('derived chrome behavior covers every frame variant', () => {
   for (const variant of config.FRAME_VARIANTS) {
     const auto = config.resolvePresentation({
-      deck: { preset: 'ucas', chrome: 'auto', header: true },
+      deck: { preset: 'ucas', chrome: 'auto' },
       variant,
     })
     const expectedChrome = !['cover', 'section', 'closing'].includes(variant)
     assert.equal(auto.showChrome, expectedChrome, variant)
-    assert.equal(auto.showHeader, expectedChrome, variant)
     assert.equal('brandSafeZone' in auto, false, variant)
 
     const forcedOn = config.resolvePresentation({
-      deck: { preset: 'ucas', chrome: 'on', header: true },
+      deck: { preset: 'ucas', chrome: 'on' },
       variant,
     })
     assert.equal(forcedOn.showChrome, true, variant)
-    assert.equal(forcedOn.showHeader, true, variant)
     assert.equal('brandSafeZone' in forcedOn, false, variant)
 
     const forcedOff = config.resolvePresentation({
-      deck: { preset: 'ucas', chrome: 'off', header: true },
+      deck: { preset: 'ucas', chrome: 'off' },
       variant,
     })
     assert.equal(forcedOff.showChrome, false, variant)
-    assert.equal(forcedOff.showHeader, false, variant)
     assert.equal('brandSafeZone' in forcedOff, false, variant)
   }
 
@@ -852,7 +841,7 @@ test('follow-up source hygiene removes dead runtime paths and remote font CSS', 
   )
   assert.match(
     tokens,
-    /--presentation-font-serif:\s*"Libertinus Serif"/,
+    /--presentation-font-serif:\s*var\(--presentation-resolved-serif/,
   )
   assert.match(kbd, /Array\.isArray/)
   assert.match(kbd, /typeof key === ['"]string['"]/)
@@ -1055,8 +1044,8 @@ test('pre-1.0 source keeps one canonical implementation path', async () => {
     [...branding.matchAll(/v-else-if="variant === 'section'"/g)].length,
     2,
   )
-  assert.equal([...branding.matchAll(/v-if="!showHeader"/g)].length, 2)
-  assert.match(frame, /:show-header="resolved\.showHeader"/)
+  assert.doesNotMatch(branding, /showHeader/)
+  assert.doesNotMatch(frame, /showHeader|slide-frame__header|footerAuthors/)
   assert.doesNotMatch(branding, /slide-frame__ict-mark/)
   assert.doesNotMatch(branding, /slide-frame__ucas-content-brand/)
   assert.doesNotMatch(branding, /ucasWordmark\s+from|--theme-(?:light|dark)/)
@@ -1096,4 +1085,46 @@ test('seal is optional, validated by Unicode characters, and supports explicit o
     assert.equal(config.resolvePresentation({ deck: { preset, seal: '陈' }, slide: { seal: '米拉' } }).seal, '米拉')
     assert.equal(config.resolvePresentation({ deck: { preset, seal: '陈' }, slide: { seal: '一二三四五' } }).seal, '陈')
   }
+})
+
+test('nested presentation fields override legacy names and inherit invalid values independently', () => {
+  const result = config.resolvePresentation({
+    deck: { preset: 'ucas', showFooter: false, accent: '#123456', seal: '陈' },
+    slide: {
+      presentation: { preset: 'qingdai', coverAlign: 'left', showFooter: true, accent: 'auto', pageNumber: 'invalid', seal: false },
+      presentationPreset: 'ict', presentationChrome: 'off', chrome: 'off', pageNumber: false,
+    },
+    chrome: 'off',
+  })
+  assert.equal(result.preset, 'qingdai')
+  assert.equal(result.coverAlign, 'left')
+  assert.equal(result.showFooter, true)
+  assert.equal(result.pageNumber, false)
+  assert.equal(result.accent, null)
+  assert.equal(result.seal, false)
+  assert.equal(config.resolvePresentation({
+    deck: { preset: 'songmo' }, slide: { presentation: { preset: 'invalid' }, presentationPreset: 'ict' },
+  }).preset, 'ict')
+})
+
+test('showFooter and legacy chrome use the same visibility rule without changing footer text', () => {
+  for (const variant of config.FRAME_VARIANTS) {
+    for (const [value, expected] of [[true, true], [false, false], ['auto', !['cover', 'section', 'closing'].includes(variant)]]) {
+      assert.equal(config.resolvePresentation({ deck: { showFooter: value }, variant }).showFooter, expected)
+      assert.equal(config.resolvePresentation({ slide: { presentation: { showFooter: value } }, variant }).showFooter, expected)
+    }
+  }
+  assert.equal(config.resolvePresentation({ deck: { showFooter: false, chrome: 'on' } }).showFooter, false)
+  assert.equal(config.resolvePresentation({ slide: { footer: false } }).showFooter, true)
+  assert.equal(config.resolvePresentation({ slide: { showFooter: false, chrome: 'on' }, chrome: 'on' }).showFooter, false)
+})
+
+test('auto accent restores the selected preset while missing or invalid colors inherit the deck', () => {
+  const deck = { preset: 'ucas', accent: '#123456' }
+  for (const preset of config.PRESENTATION_PRESETS) {
+    assert.equal(config.resolvePresentation({ deck, slide: { presentation: { preset, accent: ' auto ' } } }).accent, null)
+    assert.equal(config.resolvePresentation({ deck, slide: { presentation: { preset } } }).accent, '#123456')
+    assert.equal(config.resolvePresentation({ deck, slide: { presentation: { preset, accent: 'invalid' } } }).accent, '#123456')
+  }
+  assert.equal(config.resolveDeckPresentation({ accent: 'auto' }).accent, null)
 })

@@ -123,3 +123,39 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-locku
 .slidev-layout[data-presentation-preset="ict"] {
   --presentation-focus: color-mix(in srgb, var(--zhubai-highlight) 65%, var(--presentation-text));
 }
+
+/* Technical drafting: sans display, mono labels, tight evidence grids. */
+.slidev-layout[data-presentation-preset="ict"],
+.slidev-layout[data-presentation-preset="ict"] .slide-frame {
+  --presentation-font-display: var(--presentation-font-sans);
+  --presentation-font-quote: var(--presentation-font-sans);
+  --presentation-font-quote-cjk: var(--presentation-font-sans);
+  --presentation-font-heading: var(--presentation-font-sans);
+  --presentation-body-line-height: 1.5;
+  --presentation-two-cols-gap: 2rem;
+  --presentation-blockquote-font-style: normal;
+  --presentation-media-radius: 2px;
+  --presentation-media-shadow: none;
+  --presentation-callout-radius: 3px;
+  --presentation-table-row-alt-bg: color-mix(in srgb, var(--zhubai-accent) 3%, transparent);
+}
+
+.slidev-layout[data-presentation-preset="ict"] :is(th, figcaption) {
+  font-family: var(--presentation-font-mono);
+}
+
+.slidev-layout[data-presentation-preset="ict"] blockquote {
+  padding-left: 1.2rem;
+  border-left: 2px solid var(--presentation-accent);
+}
+
+.slidev-layout[data-presentation-preset="ict"] blockquote::before {
+  content: none;
+}
+
+.slidev-layout[data-presentation-native][data-presentation-preset="ict"] {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--presentation-accent) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--presentation-accent) 4%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

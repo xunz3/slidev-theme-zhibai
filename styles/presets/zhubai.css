@@ -81,3 +81,28 @@ html.dark .slidev-layout[data-presentation-preset="zhubai"] {
 .slidev-layout:is(.default, .code, .references, .image-left, .image-right):is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame h1 {
   margin-bottom: 0.55em;
 }
+
+/* Editorial paper: serif display, generous prose, and vermilion punctuation. */
+.slidev-layout[data-presentation-preset="zhubai"],
+.slidev-layout[data-presentation-preset="zhubai"] .slide-frame {
+  --presentation-font-display: var(--presentation-font-serif);
+  --presentation-font-heading: var(--presentation-font-sans);
+  --presentation-body-line-height: 1.6;
+  --presentation-quote-line-height: 1.5;
+  --presentation-table-header-bg: transparent;
+}
+
+.slidev-layout[data-presentation-native="two-cols-header"][data-presentation-preset="zhubai"] .col-header h1::after {
+  display: block;
+  width: 2.5rem;
+  height: 1.5px;
+  margin-top: 0.4em;
+  background: var(--presentation-signature);
+  content: "";
+}
+
+/* Ruled and monochrome tables keep their paper surface in both modes. */
+html.dark .slidev-layout[data-presentation-preset="zhubai"],
+html.dark .slidev-layout[data-presentation-preset="zhubai"] .slide-frame {
+  --presentation-table-header-bg: transparent;
+}

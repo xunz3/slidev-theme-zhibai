@@ -24,8 +24,6 @@ const props = withDefaults(defineProps<{
   imagePosition?: string
   mediaRatio?: number | string
   orientation: 'left' | 'right'
-  subtitle?: string
-  title?: string
 }>(), {
   backgroundSize: 'contain',
   chrome: undefined,
@@ -65,8 +63,6 @@ const layoutStyle = computed<CSSProperties>(() => ({
   <SlideFrame
     v-bind="attrs"
     :chrome="props.chrome"
-    :subtitle="props.subtitle"
-    :title="props.title"
     variant="image-text"
   >
     <div

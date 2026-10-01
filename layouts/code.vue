@@ -7,8 +7,6 @@ defineOptions({ inheritAttrs: false })
 
 const props = withDefaults(defineProps<{
   chrome?: PresentationChrome | boolean
-  subtitle?: string
-  title?: string
 }>(), {
   chrome: undefined,
 })
@@ -20,8 +18,6 @@ const attrs = useAttrs()
   <SlideFrame
     v-bind="attrs"
     :chrome="props.chrome"
-    :subtitle="props.subtitle"
-    :title="props.title"
     variant="code"
   >
     <div class="presentation-code-layout">

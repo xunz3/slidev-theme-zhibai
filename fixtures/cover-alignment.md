@@ -10,7 +10,6 @@ footer: Cover studies · 封面设计
 themeConfig:
   presentation:
     preset: zhubai
-    coverAlign: center
 ---
 
 从一个问题，开启一段探索。
@@ -112,7 +111,6 @@ title: Knowledge grows together.
 subtitle: 开放交流，连接新的可能。
 presentationPreset: ucas
 presentationChrome: true
-presentationHeader: true
 ---
 
 Annual Research Forum · 年度学术报告
@@ -177,7 +175,6 @@ title: 面向开放世界动态场景的可重光照三维高斯头部化身高�
 subtitle: Relightable Avatars · 开放世界研究
 presentationPreset: ucas
 presentationChrome: true
-presentationHeader: true
 ---
 
 从真实场景，到实时交互。
@@ -188,7 +185,6 @@ title: 面向真实光照环境的可重光照三维高斯头部化身重建与�
 subtitle: Relightable Gaussian Head Avatars
 presentationPreset: ucas
 presentationChrome: true
-presentationHeader: true
 ---
 
 单次优化与前馈重建的比较

@@ -91,6 +91,22 @@ export const resolveDeckAuthors = (
   return plural.length > 0 ? plural : normalizeAuthors(record.author)
 }
 
-export const formatAuthorNames = (authors: PresentationAuthor[]): string => {
-  return authors.map(author => author.primary).filter(Boolean).join(', ')
+// Keep authored order and every contact. Only repeated affiliations are shared
+// on a collaborative cover; author names are never deduplicated.
+export const composeCoverAuthors = (authors: PresentationAuthor[]) => {
+  const institutions = [...new Set(authors.flatMap(author => (
+    author.institution ? [author.institution] : []
+  )))]
+  const numbered = institutions.length > 1
+    || (institutions.length > 0 && authors.some(author => !author.institution))
+  return {
+    institutions,
+    numbered,
+    authors: authors.map(author => ({
+      ...author,
+      institutionNumber: author.institution
+        ? institutions.indexOf(author.institution) + 1
+        : undefined,
+    })),
+  }
 }

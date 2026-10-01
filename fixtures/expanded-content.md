@@ -28,8 +28,6 @@ themeConfig:
   presentation:
     preset: zhubai # __EXPANDED_PRESET__
     chrome: auto
-    header: false
-    footerAuthors: true
     pageNumber: true
     accent: "color-mix(in srgb, currentColor 72%, #5b4fc4)"
 ---
@@ -426,7 +424,6 @@ The same logical order supports a longer bilingual explanation. 数据采集以�
 <!-- EXPANDED-US3-START -->
 ---
 title: Valid local accent
-presentationHeader: true
 accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 ---
 
@@ -456,7 +453,6 @@ accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 
 ---
 title: Unaccented fallback
-presentationHeader: true
 ---
 
 <div data-quality-case="us3-accent-unaccented" class="presentation-accent-probe presentation-accent-probe--overview">
@@ -485,7 +481,6 @@ presentationHeader: true
 
 ---
 title: Empty local accent
-presentationHeader: true
 accent: ""
 ---
 
@@ -501,7 +496,6 @@ accent: ""
 
 ---
 title: Invalid local accent
-presentationHeader: true
 accent: definitely-not-a-css-color
 ---
 
@@ -517,7 +511,6 @@ accent: definitely-not-a-css-color
 
 ---
 title: Valid local accent B
-presentationHeader: true
 accent: "color-mix(in srgb, currentColor 68%, #047857)"
 ---
 
@@ -541,7 +534,6 @@ accent: "color-mix(in srgb, currentColor 68%, #047857)"
 
 ---
 title: Local accent equal to deck
-presentationHeader: true
 accent: "color-mix(in srgb, currentColor 72%, #5b4fc4)"
 ---
 
@@ -1086,7 +1078,6 @@ title: Authored sequence numbering
 
 ---
 title: Frame chrome and brand safe-zone probe
-presentationHeader: true
 ---
 
 <div data-quality-case="visual-chrome-safe-zone" class="presentation-safe-zone-probe">
@@ -1131,7 +1122,6 @@ The centered separator remains with the preceding phrase while the following phr
 ---
 layout: section
 title: Section brand collision probe
-presentationHeader: false
 ---
 
 <div data-quality-case="visual-brand-collision" class="presentation-safe-zone-probe">
@@ -1158,7 +1148,6 @@ presentationHeader: false
 layout: section
 title: Protected section identity
 kicker: false
-presentationHeader: false
 accent: "color-mix(in srgb, currentColor 68%, #c2410c)"
 ---
 
@@ -1174,7 +1163,6 @@ Local accents may change content roles, never official institutional signatures.
 layout: section
 title: Protected section identity
 kicker: false
-presentationHeader: false
 ---
 
 <div data-quality-case="us3-section-accent-unaccented">
@@ -1187,17 +1175,16 @@ Local accents may change content roles, never official institutional signatures.
 
 ---
 layout: section
-title: Header-safe section branding
-subtitle: Optional chrome owns the top row
+title: Section branding with a footer
+subtitle: Institutional signature retains its own space
 presentationChrome: "on"
-presentationHeader: true
 ---
 
 <div data-quality-case="visual-section-header">
 
-# Section lockups yield to the header
+# Section identity remains visible
 
-The header owns the top margin while the institutional signature is omitted.
+The institutional signature keeps its reserved space when the footer is enabled.
 
 </div>
 

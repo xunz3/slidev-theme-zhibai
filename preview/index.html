@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>朱白 · 五种表达，一份清晰的内容</title>
+  <style>
+    :root { --paper:#faf8f3; --surface:#fff; --ink:#232019; --muted:#656159; --line:#dedbd3; --zhu:#a52f20; color-scheme:light; }
+    :root.dark { --paper:#171511; --surface:#24211b; --ink:#efe9df; --muted:#bab3a7; --line:#484238; --zhu:#f1917c; color-scheme:dark; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.6 system-ui,"Noto Sans SC",sans-serif; }
+    button,select { font:inherit; color:inherit; }
+    button,a,select { -webkit-tap-highlight-color:transparent; }
+    a { color:var(--zhu); text-underline-offset:4px; }
+    button { cursor:pointer; }
+    button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,pre:focus-visible { outline:2px solid var(--zhu); outline-offset:4px; }
+    button:disabled { opacity:.35; cursor:default; }
+    .shell { max-width:1180px; margin:auto; padding:28px 36px 56px; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:20px; padding-bottom:24px; border-bottom:1px solid var(--line); }
+    .wordmark { display:flex; align-items:baseline; gap:13px; text-decoration:none; color:var(--ink); }
+    .wordmark strong { font:600 30px/1.1 "Noto Serif SC",Georgia,serif; }
+    .wordmark span,.eyebrow { color:var(--muted); font:12px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .header-links { display:flex; align-items:center; gap:20px; }
+    .quiet { padding:4px 0; border:0; background:none; }
+    .intro { padding:32px 0 26px; }
+    h1 { margin:10px 0 10px; font:600 clamp(27px,4vw,40px)/1.3 "Noto Serif SC",Georgia,serif; letter-spacing:-.02em; }
+    .intro p { max-width:52em; margin:0; color:var(--muted); }
+    .toolbar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; margin-bottom:18px; }
+    select { max-width:100%; padding:8px 28px 8px 10px; border:1px solid var(--line); border-radius:3px; background:var(--surface); }
+    .presets { display:flex; flex-wrap:wrap; gap:6px; }
+    .preset { display:flex; align-items:center; gap:7px; padding:7px 12px; border:1px solid transparent; border-radius:3px; background:transparent; }
+    .preset[aria-pressed="true"] { border-color:var(--line); background:var(--surface); }
+    .preset::before { width:7px; height:7px; background:var(--pigment); content:""; }
+    .stage { overflow:hidden; aspect-ratio:16/9; background:var(--surface); border:1px solid var(--line); box-shadow:0 4px 18px #00000006; }
+    iframe { display:block; width:100%; height:100%; border:0; }
+    .below { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin:14px 0; }
+    .pages { display:flex; gap:4px; flex-wrap:wrap; }
+    .page { padding:5px 10px; border:0; border-bottom:2px solid transparent; background:transparent; color:var(--muted); }
+    .page[aria-current="page"] { color:var(--ink); border-color:var(--zhu); }
+    .navigation { display:flex; align-items:center; gap:13px; }
+    .navigation button { min-width:32px; }
+    .counter { color:var(--muted); font:12px/1.4 ui-monospace,monospace; }
+    .note { color:var(--muted); margin:0 0 24px; }
+    details { border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:16px 0; }
+    summary { width:fit-content; cursor:pointer; }
+    .source-actions { display:flex; justify-content:space-between; align-items:center; gap:16px; margin:16px 0 8px; }
+    .source-actions span { color:var(--muted); font-size:13px; }
+    pre { max-height:420px; margin:0; overflow:auto; padding:20px; background:var(--surface); border:1px solid var(--line); border-radius:3px; font:13px/1.65 ui-monospace,"Noto Sans Mono",monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .resources { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; margin-top:32px; }
+    .resource { padding-top:14px; border-top:1px solid var(--line); }
+    .resource h2 { margin:0 0 7px; font-size:17px; }
+    .resource p { margin:0 0 10px; color:var(--muted); font-size:14px; }
+    .resource-links { display:flex; gap:14px; }
+    footer { margin-top:40px; color:var(--muted); font-size:12px; }
+    #status { min-height:1em; color:var(--muted); font-size:13px; }
+    [hidden] { display:none !important; }
+    @media(max-width:700px) { .shell { padding:20px 18px 40px; } .wordmark span { display:none; } .header-links { gap:14px; font-size:13px; } .intro { padding-top:24px; } .resources { grid-template-columns:1fr; gap:20px; } .toolbar { gap:12px; } .preset { padding:6px 9px; } .page { padding-inline:7px; font-size:13px; } }
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <a class="wordmark" href="./" aria-label="朱白预览首页"><strong>朱白</strong><span>ZHUBAI / SLIDEV THEME</span></a>
+    <div class="header-links"><a href="https://github.com/xunz3/slidev-theme-zhubai">文档与源码</a><button id="mode" class="quiet" aria-pressed="false">深色预览</button></div>
+  </header>
+  <div class="intro"><div class="eyebrow">纸 · 墨 · 有分寸的表达</div><h1>五种表达，一份清晰的内容。</h1><p id="description">同样的内容，比较五套完整的排版。选择适合你的一种，再从一个真实的演讲结构开始。</p></div>
+  <div class="toolbar">
+    <label>预览内容 <select id="deck" aria-label="预览内容"></select></label>
+    <div id="presets" class="presets" role="group" aria-label="主题预设">
+      <button class="preset" data-preset="zhubai" style="--pigment:#b83521" aria-pressed="true">朱白</button>
+      <button class="preset" data-preset="qingdai" style="--pigment:#526c89" aria-pressed="false">青黛</button>
+      <button class="preset" data-preset="songmo" style="--pigment:#787671" aria-pressed="false">松墨</button>
+      <button class="preset" data-preset="ucas" style="--pigment:#477ac1" aria-pressed="false">UCAS</button>
+      <button class="preset" data-preset="ict" style="--pigment:#0b6bcb" aria-pressed="false">ICT</button>
+    </div>
+  </div>
+  <div class="stage"><iframe id="slides" title="主题幻灯片预览" allowfullscreen></iframe></div>
+  <div class="below"><nav id="pages" class="pages" aria-label="预览页面"></nav><div class="navigation"><button id="previous" class="quiet" aria-label="上一页">←</button><span id="counter" class="counter"></span><button id="next" class="quiet" aria-label="下一页">→</button><a id="open" target="_blank" rel="noopener">打开演示</a></div></div>
+  <p class="note" id="identity"></p>
+  <details id="source-panel"><summary>查看这一页的 Markdown</summary><div class="source-actions"><span id="source-label"></span><button id="copy" class="quiet">复制 Markdown</button></div><pre tabindex="0" role="region" aria-label="当前页 Markdown 源码"><code id="source"></code></pre><p id="status" role="status" aria-live="polite"></p><a id="download" download>下载完整演示文稿</a></details>
+  <div id="resources" class="resources" aria-label="场景模板"></div>
+  <footer>朱白 · 内容先行，装饰有度。演示中的实验数值均为示例数据。</footer>
+</main>
+<script type="module">
+  const manifest = await fetch('./manifest.json').then(response => {
+    if (!response.ok) throw new Error('无法载入预览目录');
+    return response.json();
+  }).catch(error => { document.querySelector('#description').textContent = error.message; return null; });
+  if (manifest) {
+    const $ = selector => document.querySelector(selector);
+    const iframe = $('#slides');
+    const query = new URLSearchParams(location.search);
+    let deck = manifest.decks.find(item => item.id === query.get('deck')) ?? manifest.decks[0];
+    let preset = ['zhubai','qingdai','songmo','ucas','ict'].includes(query.get('preset')) ? query.get('preset') : 'zhubai';
+    let dark = query.get('mode') === 'dark';
+    let current;
+    let loadedDeck;
+    const labels = {cover:'封面',section:'章节',default:'正文','two-cols-header':'图表与对照','two-cols':'双栏与公式',quote:'引用',fact:'大数字',code:'代码',references:'参考资料',end:'结束'};
+    const identities = {zhubai:'朱白 · 温暖纸面、衬线展示标题与朱色标点。',qingdai:'青黛 · 书页中轴、衬线标题、疏朗正文与横向细线。',songmo:'松墨 · 无衬线展示、黑白图表、安静的页码与留白。',ucas:'UCAS · 正式学术层级、机构蓝细线与紧凑证据。',ict:'ICT · 技术网格、无衬线展示、等宽标签与结构蓝。'};
+    const comparesPresets = () => deck.id === 'gallery' || deck.comparePresets;
+    const visiblePages = () => comparesPresets() ? deck.pages.filter(page => page.preset === preset) : deck.pages;
+    // Static Slidev builds do not expose the development postMessage controls.
+    // These decks are served from the same origin, so use their public hash URL
+    // and the CSS color-schema class instead.
+    const syncMode = () => {
+      document.documentElement.classList.toggle('dark', dark);
+      $('#mode').setAttribute('aria-pressed', String(dark));
+      $('#mode').textContent = dark ? '浅色预览' : '深色预览';
+      try { iframe.contentDocument?.documentElement.classList.toggle('dark', dark); } catch {}
+    };
+    function render(page, navigate = true) {
+      current = page;
+      if (!comparesPresets()) preset = page.preset;
+      const pages = visiblePages();
+      const index = pages.findIndex(item => item.no === page.no);
+      $('#presets').hidden = !comparesPresets();
+      $('#deck').value = deck.id;
+      $('#description').textContent = deck.description;
+      $('#identity').textContent = identities[page.preset];
+      $('#source').textContent = page.source;
+      $('#source-label').textContent = `${page.title} · ${page.layout}`;
+      $('#download').href = `./sources/${deck.file}`;
+      $('#open').href = `./decks/${deck.id}/index.html#/${page.no}`;
+      $('#counter').textContent = `${String(index+1).padStart(2,'0')} / ${String(pages.length).padStart(2,'0')}`;
+      $('#previous').disabled = index === 0;
+      $('#next').disabled = index === pages.length-1;
+      $('#status').textContent = '';
+      document.querySelectorAll('[data-preset]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.preset === preset)));
+      $('#pages').replaceChildren(...pages.map(item => {
+        const button = document.createElement('button');
+        button.className = 'page'; button.textContent = comparesPresets() ? labels[item.layout] : String(pages.indexOf(item)+1);
+        button.title = item.title;
+        if (item.no === page.no) button.setAttribute('aria-current', 'page');
+        button.addEventListener('click', () => render(item)); return button;
+      }));
+      history.replaceState(null, '', `?${new URLSearchParams({deck:deck.id,preset,page:String(page.no),mode:dark?'dark':'light'})}`);
+      if (navigate) {
+        if (loadedDeck !== deck.id) { loadedDeck = deck.id; iframe.src = `./decks/${deck.id}/index.html?embedded=true#/${page.no}`; }
+        else iframe.contentWindow.location.hash = `/${page.no}`;
+      }
+      syncMode();
+    }
+    for (const item of manifest.decks) { const option = document.createElement('option'); option.value = item.id; option.textContent = item.title; $('#deck').append(option); }
+    $('#deck').addEventListener('change', event => { deck = manifest.decks.find(item => item.id === event.target.value); render(visiblePages()[0]); });
+    document.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => {
+      const index = visiblePages().findIndex(page => page.no === current.no); preset = button.dataset.preset; render(visiblePages()[index] ?? visiblePages()[0]);
+    }));
+    for (const [id, offset] of [['previous',-1],['next',1]]) $(`#${id}`).addEventListener('click', () => { const pages=visiblePages(); const page=pages[pages.findIndex(item=>item.no===current.no)+offset]; if(page)render(page); });
+    $('#mode').addEventListener('click', () => { dark=!dark; render(current,false); });
+    iframe.addEventListener('load', syncMode);
+    // Router history writes inside a deck may not dispatch hashchange. Keep
+    // the page source in sync when the reader follows its TOC or uses keys.
+    setInterval(() => {
+      try {
+        const frameLocation = iframe.contentWindow.location;
+        if (frameLocation.pathname !== new URL(`./decks/${deck.id}/index.html`, document.baseURI).pathname) return;
+        const no = Number(frameLocation.hash.match(/^#\/(\d+)/)?.[1]);
+        if (!no) return;
+        const page = deck.pages.find(item=>item.no===no);
+        if(page && page.no!==current.no) { preset=page.preset; render(page,false); }
+      } catch {}
+    }, 200);
+    $('#copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(current.source); $('#status').textContent='Markdown 已复制。'; } catch { $('#status').textContent='请在下方选择 Markdown 并手动复制。'; } });
+    for (const item of manifest.decks.filter(item=>item.id!=='gallery')) {
+      const card=document.createElement('article'); card.className='resource';
+      const title=document.createElement('h2'); title.textContent=item.title;
+      const text=document.createElement('p'); text.textContent=item.description;
+      const links=document.createElement('div'); links.className='resource-links';
+      const view=document.createElement('a'); view.href=`?deck=${item.id}`; view.textContent='预览模板';
+      view.addEventListener('click',event=>{event.preventDefault();deck=item;render(visiblePages()[0]);$('#deck').focus();});
+      const download=document.createElement('a'); download.href=`./sources/${item.file}`; download.download=item.file; download.textContent='下载 Markdown';
+      links.append(view,download);card.append(title,text,links);$('#resources').append(card);
+    }
+    render(visiblePages().find(page=>page.no===Number(query.get('page')))??visiblePages()[0]);
+  }
+</script>
+</body>
+</html>

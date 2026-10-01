@@ -17,8 +17,6 @@ const props = withDefaults(defineProps<{
   logo?: string
   logoAlt?: string
   showAuthors?: boolean
-  subtitle?: string
-  title?: string
 }>(), {
   chrome: undefined,
   showAuthors: false,
@@ -52,8 +50,6 @@ const closingState = computed<'minimal' | 'rich'>(() => (
   <SlideFrame
     v-slot="{ presentation }"
     :chrome="props.chrome"
-    :subtitle="props.subtitle"
-    :title="props.title"
     variant="closing"
   >
     <div

@@ -499,8 +499,14 @@ const executeQuality = async () => {
     await runPhase('native-layouts', () => runCommandPhase(
       'native-layouts', ['--test', 'tests/quality/native-layouts.spec.mjs'], 180_000,
     ))
-    await runPhase('veil-surfaces', () => runCommandPhase(
-      'veil-surfaces', ['--test', 'tests/quality/veil-surfaces.spec.mjs'], 240_000,
+    await runPhase('preview', () => runCommandPhase(
+      'preview', ['--test', 'tests/quality/preview.spec.mjs'], 600_000,
+    ))
+    await runPhase('cover-authors', () => runCommandPhase(
+      'cover-authors', ['--test', 'tests/quality/cover-authors.spec.mjs'], 480_000,
+    ))
+    await runPhase('media-treatments', () => runCommandPhase(
+      'media-treatments', ['--test', 'tests/quality/media-treatments.spec.mjs'], 240_000,
     ))
     await runPhase('typography', () => runCommandPhase(
       'typography', ['--test', 'tests/quality/typography.spec.mjs'], 240_000,
@@ -508,13 +514,6 @@ const executeQuality = async () => {
     await runPhase('zhubai-design', () => runCommandPhase(
       'zhubai-design', ['--test', 'tests/quality/zhubai-design.spec.mjs'], 240_000,
     ))
-    await runPhase(
-      'veil-design',
-      () => runCommandPhase(
-        'veil-design',
-        ['--test', 'tests/quality/veil-design.spec.mjs'],
-      ),
-    )
   }
 
   let exitCode = 0

@@ -1,6 +1,6 @@
 # 朱白 0.5 token 契约
 
-主题分为色料、语义、消费三层。`styles/presets/base.css` 定义公共映射；各预设文件只声明纸、墨、结构色和构图差异；布局与组件消费 `--presentation-*`。尺寸、字体、动效和阴影集中在 `styles/tokens.css`。
+主题分为色料、语义、消费三层。`styles/presets/base.css` 定义公共映射；各预设文件声明纸、墨、结构色、字体角色、内容密度与构图差异；布局与组件消费 `--presentation-*`。公共尺寸、字体映射、动效和阴影集中在 `styles/tokens.css`。
 
 ## 命名与作用域
 
@@ -23,13 +23,15 @@
 | `--zhubai-accent` | `--presentation-accent` | 墨、黛或机构蓝 |
 | `--zhubai-highlight` | `--presentation-focus` | 默认朱深；机构保留自己的 highlight |
 
-`--presentation-text-muted` / `--presentation-text-faint` 使用墨与纸混合（68% / 45%）；边界使用墨的 10% / 22%。淡墨用于次要装饰，不能作为小字号关键信息的唯一颜色。封面 meta 带使用结构色 6%。印章字符颜色独立于正文，始终为纸白；字体栈优先 Libertinus Serif，再回退 Noto Serif SC。正文标记的 `--presentation-highlight-text` 保持 `--presentation-text` 墨色，淡朱底与朱色下划承担批注信号；封面、statement 标题中的 mark 和 `.presentation-focus` 仍使用焦点朱色。
+`--presentation-text-muted` / `--presentation-text-faint` 使用墨与纸混合（68% / 45%）；边界使用墨的 10% / 22%。淡墨用于次要装饰，不能作为小字号关键信息的唯一颜色。一般封面 meta 带使用结构色 6%，松墨保留透明落款区。印章字符颜色独立于正文，始终为纸白；字体使用标准衬线角色。正文标记的 `--presentation-highlight-text` 保持 `--presentation-text` 墨色，淡朱底与朱色下划承担批注信号；封面、statement 标题中的 mark 和 `.presentation-focus` 仍使用焦点朱色。
 
-`--zhubai-chart-1` 至 `-6` 依次为结构色、朱、墨的 56% / 30%、结构色的 55% / 30%。同时提供 `--presentation-chart-*`。图表作者仍需提供文字标签、线型等辨识手段。
+`--zhubai-chart-1` 至 `-6` 一般依次为结构色、朱、墨的 56% / 30%、结构色的 55% / 30%；松墨将第二系列替换为墨的 72%。同时提供 `--presentation-chart-*`。图表作者仍需提供文字标签、线型等辨识手段。
+
+表头与行底色分别使用 `--presentation-table-header-bg`、`--presentation-table-row-alt-bg`，表头细线使用 `--presentation-table-rule-color`。这些默认绑定预设色料，保持独立于作者的可选 `accent`。
 
 ## 字体与尺寸
 
-正文为 Inter / Noto Sans SC；display 为 Libertinus Serif / Noto Serif SC。内容 H1 40px、双栏 H1 30px。中文 display 使用显式 `lang="zh"` 字重 700，Latin 使用对应预设字重。引文的中文字体角色为 `--presentation-font-quote-cjk`，指向本地 `Kaiti SC`, `STKaiti`, `KaiTi`, `Noto Serif SC`, serif 栈。
+默认正文为 Inter / Noto Sans SC；衬线 display 为 Libertinus Serif / Noto Serif SC。青黛的内容标题使用衬线，松墨与 ICT 的 display 使用无衬线。实际字族映射到 Slidev 已解析的 `fonts.sans / serif / mono`，字体加载完全由其 provider 控制。内容 H1 40px、双栏 H1 30px。中文 display 使用显式 `lang="zh"` 字重 700，Latin 使用对应预设字重。引文的中文字体角色为 `--presentation-font-quote-cjk`：朱白、青黛、UCAS 优先使用本地 `Kaiti SC / STKaiti / KaiTi`，松墨与 ICT 使用标准无衬线角色。
 
 ## 动效和层次
 

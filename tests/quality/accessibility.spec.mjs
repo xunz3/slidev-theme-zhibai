@@ -1201,11 +1201,11 @@ test('WCAG, layout, image, console, and interaction contract', {
                   '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup--section',
                 ).length,
               }))
-              assert.equal(brandState.headerCount, 1)
-              assert.equal(brandState.lockupCount, 0)
+              assert.equal(brandState.headerCount, 0)
+              assert.equal(brandState.lockupCount, preset === 'zhubai' ? 0 : 1)
               assert.equal(
                 brandState.identityImageCount,
-                0,
+                preset === 'zhubai' ? 0 : 1,
               )
             }
             await result.page.close()
@@ -1364,11 +1364,11 @@ test('WCAG, layout, image, console, and interaction contract', {
                   '.slide-frame__ucas-wordmark, .slide-frame__ict-lockup--section',
                 ).length,
               }))
-              assert.equal(brandState.headerCount, 1)
-              assert.equal(brandState.lockupCount, 0)
+              assert.equal(brandState.headerCount, 0)
+              assert.equal(brandState.lockupCount, preset === 'zhubai' ? 0 : 1)
               assert.equal(
                 brandState.identityImageCount,
-                0,
+                preset === 'zhubai' ? 0 : 1,
               )
             }
             await result.page.close()

@@ -45,8 +45,6 @@ export type DeckPresentationState = Readonly<{
   preset: PresentationPreset
   coverAlign: PresentationCoverAlign
   chrome: PresentationChrome
-  header: boolean
-  footerAuthors: boolean
   pageNumber: boolean
   accent: string | null
   seal: string | false | null
@@ -55,11 +53,12 @@ export type DeckPresentationState = Readonly<{
 export type ResolvedPresentationState = DeckPresentationState & Readonly<{
   variant: FrameVariant
   showChrome: boolean
-  showHeader: boolean
+  showFooter: boolean
 }>
 
 type PresentationOptionDefinition<T> = Readonly<{
   deckKey: string
+  deckAliases?: readonly string[]
   inputKeys: readonly string[]
   slideKeys: readonly string[]
   defaultValue: T
@@ -144,9 +143,10 @@ export const supportsCssColor: CssColorSupport = (value) => {
 export const normalizeAccent = (
   value: unknown,
   supportsColor: CssColorSupport = supportsCssColor,
-): string | undefined => {
+): string | null | undefined => {
   if (typeof value !== 'string') return undefined
   const normalized = value.trim()
+  if (normalized === 'auto') return null
   if (!normalized || !supportsColor(normalized)) return undefined
   return normalized
 }
@@ -166,6 +166,7 @@ const freezeDefinition = <T>(
 ): PresentationOptionDefinition<T> => {
   return Object.freeze({
     ...definition,
+    deckAliases: Object.freeze([...(definition.deckAliases ?? [])]),
     inputKeys: Object.freeze([...(definition.inputKeys ?? [])]),
     slideKeys: Object.freeze([...definition.slideKeys]),
   })
@@ -181,27 +182,16 @@ export const PRESENTATION_OPTIONS = Object.freeze({
   coverAlign: freezeDefinition<PresentationCoverAlign>({
     deckKey: 'coverAlign',
     slideKeys: ['presentationCoverAlign'],
-    defaultValue: 'left',
+    defaultValue: 'center',
     normalize: normalizeCoverAlign,
   }),
   chrome: freezeDefinition<PresentationChrome>({
-    deckKey: 'chrome',
-    inputKeys: ['chrome'],
-    slideKeys: ['presentationChrome', 'chrome'],
+    deckKey: 'showFooter',
+    deckAliases: ['chrome'],
+    inputKeys: ['showFooter', 'chrome'],
+    slideKeys: ['showFooter', 'presentationChrome', 'chrome'],
     defaultValue: 'auto',
     normalize: normalizeChrome,
-  }),
-  header: freezeDefinition<boolean>({
-    deckKey: 'header',
-    slideKeys: ['presentationHeader', 'header'],
-    defaultValue: false,
-    normalize: normalizeBoolean,
-  }),
-  footerAuthors: freezeDefinition<boolean>({
-    deckKey: 'footerAuthors',
-    slideKeys: ['footerAuthors'],
-    defaultValue: false,
-    normalize: normalizeBoolean,
   }),
   pageNumber: freezeDefinition<boolean>({
     deckKey: 'pageNumber',
@@ -273,7 +263,7 @@ export const resolveDeckOption = <K extends PresentationOptionKey>(
   const definition = optionDefinition(key)
   return firstValid(
     definition.normalize,
-    [raw[definition.deckKey]],
+    [raw[definition.deckKey], ...(definition.deckAliases ?? []).map(key => raw[key])],
     fallback === undefined ? definition.defaultValue : fallback,
     supportsColor,
   )
@@ -297,8 +287,9 @@ export const resolveSlideOption = <K extends PresentationOptionKey>(
   return firstValid(
     definition.normalize,
     [
-      ...definition.inputKeys.map(inputKey => input[inputKey]),
+      asRecord(slide.presentation)[definition.deckKey],
       ...definition.slideKeys.map(slideKey => slide[slideKey]),
+      ...definition.inputKeys.map(inputKey => input[inputKey]),
       inheritedValue,
     ],
     overrides?.fallback ?? definition.defaultValue,
@@ -312,17 +303,11 @@ export const resolveDeckPresentation = (
 ): DeckPresentationState => {
   const raw = asRecord(rawPresentation)
   const supportsColor = options.supportsColor ?? supportsCssColor
-  const preset = resolveDeckOption('preset', raw, supportsColor)
 
   return Object.freeze(Object.fromEntries(
     PRESENTATION_OPTION_KEYS.map(key => [
       key,
-      resolveDeckOption(
-        key,
-        raw,
-        supportsColor,
-        key === 'coverAlign' && (preset === 'ucas' || preset === 'qingdai') ? 'center' : undefined,
-      ),
+      resolveDeckOption(key, raw, supportsColor),
     ]),
   ) as unknown as DeckPresentationState)
 }
@@ -338,18 +323,12 @@ export const deriveChromeVisibility = (
     && variant !== 'closing'
 }
 
-export const deriveHeaderVisibility = (
-  showChrome: boolean,
-  header: boolean,
-): boolean => {
-  return showChrome && header
-}
-
 export const resolvePresentation = (
   input: Readonly<{
     deck?: unknown
     slide?: unknown
     chrome?: unknown
+    showFooter?: unknown
     variant?: unknown
     supportsColor?: CssColorSupport
   }> = {},
@@ -359,12 +338,8 @@ export const resolvePresentation = (
   })
   const slide = asRecord(input.slide)
   const rawInput = asRecord(input)
-  const rawDeck = asRecord(input.deck)
   const supportsColor = input.supportsColor ?? supportsCssColor
   const variant = normalizeFrameVariant(input.variant) ?? 'default'
-  const resolvedPreset = resolveSlideOption(
-    'preset', rawInput, slide, deck, supportsColor,
-  )
 
   const resolved = Object.fromEntries(PRESENTATION_OPTION_KEYS.map(key => [
     key,
@@ -374,38 +349,27 @@ export const resolvePresentation = (
       slide,
       deck,
       supportsColor,
-      key === 'coverAlign'
-        ? {
-            fallback: resolvedPreset === 'ucas' || resolvedPreset === 'qingdai' ? 'center' : 'left',
-            deckValue: rawDeck.coverAlign,
-          }
-        : undefined,
     ),
   ])) as unknown as DeckPresentationState
   const {
     accent,
     chrome,
     coverAlign,
-    footerAuthors,
-    header,
     pageNumber,
     preset,
     seal,
   } = resolved
   const showChrome = deriveChromeVisibility(chrome, variant)
-  const showHeader = deriveHeaderVisibility(showChrome, header)
 
   return Object.freeze({
     preset,
     coverAlign,
     chrome,
-    header,
-    footerAuthors,
     pageNumber,
     accent,
     seal,
     variant,
     showChrome,
-    showHeader,
+    showFooter: showChrome,
   })
 }

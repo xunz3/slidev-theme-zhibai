@@ -1,6 +1,6 @@
 {
 	"name": "slidev-theme-zhubai",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"type": "module",
 	"description": "A Chinese-first editorial Slidev theme: paper, ink, vermilion seals, and five presentation presets.",
 	"license": "MIT",
@@ -28,6 +28,7 @@
 		"setup",
 		"styles",
 		"README.md",
+		"CHANGELOG.md",
 		"LICENSE"
 	],
 	"engines": {
@@ -59,7 +60,10 @@
 		"check": "node scripts/check-presentation-css.mjs",
 		"test:release": "node --test tests/release.spec.mjs",
 		"package:check": "node scripts/check-package.mjs",
-		"release:check": "node scripts/validate-release.mjs"
+		"release:check": "node scripts/validate-release.mjs",
+		"build:preview": "node scripts/build-preview.mjs",
+		"quality:preview": "node tests/quality/preview.spec.mjs",
+		"quality:authors": "node tests/quality/cover-authors.spec.mjs"
 	},
 	"dependencies": {
 		"@slidev/client": "^52.15.2"
@@ -82,17 +86,8 @@
 				"sans": "Inter, Noto Sans SC",
 				"serif": "Libertinus Serif, Noto Serif SC",
 				"mono": "JetBrains Mono",
-				"webfonts": [
-					"Inter",
-					"Libertinus Serif",
-					"JetBrains Mono"
-				],
-				"local": [
-					"Noto Sans SC",
-					"Noto Serif SC"
-				],
 				"weights": "400,600,700",
-				"italic": true
+				"italic": false
 			}
 		}
 	},

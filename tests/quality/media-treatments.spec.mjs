@@ -6,10 +6,10 @@ import { chromium } from 'playwright-chromium'
 import { buildDeck, qualityArtifactRoot, repositoryRoot, startStaticServer, waitForSlide } from './helpers.mjs'
 
 test('code language and media treatments preserve authored meaning', { timeout: 240_000 }, async () => {
-  const outDir = resolve(qualityArtifactRoot, 'build/veil-surfaces')
-  const output = resolve(qualityArtifactRoot, 'screenshots/veil-surfaces')
+  const outDir = resolve(qualityArtifactRoot, 'build/media-treatments')
+  const output = resolve(qualityArtifactRoot, 'screenshots/media-treatments')
   await mkdir(output, { recursive: true })
-  await buildDeck({ id: 'veil-surfaces', outDir, source: resolve(repositoryRoot, 'fixtures/veil-surfaces.md') })
+  await buildDeck({ id: 'media-treatments', outDir, source: resolve(repositoryRoot, 'fixtures/media-treatments.md') })
   const server = await startStaticServer(outDir)
   const browser = await chromium.launch({ headless: true })
   try {

@@ -386,6 +386,18 @@ test('US1 callout and author normalization is closed, ordered, and empty-safe', 
     authors: ['', {}],
     author: {},
   }), [])
+  const credits = authors.composeCoverAuthors(authors.normalizeAuthors([
+    { name: 'Ada', institution: 'Shared Lab' },
+    { name: 'Grace', institution: 'Shared Lab' },
+    'Independent author',
+  ]))
+  assert.deepEqual(credits.institutions, ['Shared Lab'])
+  assert.equal(credits.numbered, true, 'a name without an affiliation must not acquire the shared one')
+  assert.deepEqual(credits.authors.map(author => author.institutionNumber), [1, 1, undefined])
+  assert.equal(authors.composeCoverAuthors(authors.normalizeAuthors([
+    { name: 'Ada', institution: 'Shared Lab' },
+    { name: 'Ada', institution: 'Shared Lab' },
+  ])).numbered, false, 'one common affiliation does not need superscripts')
 })
 
 test('US1 same-source media fit, fallback, caption, and closing-logo contracts', {
@@ -1379,10 +1391,12 @@ test('US3 link decoration and distinct author value, action, and order contract'
             '.slidev-page-1 .slide-cover__author',
           ).evaluateAll(cards => cards.map((card) => {
             const primary = card.querySelector('.slide-cover__author-primary')
+            const institution = card.querySelector('.slide-cover__author-institution')
+              ?? document.getElementById(card.getAttribute('aria-describedby'))
+                ?.querySelector('.slide-cover__author-institution')
+            const email = card.querySelector('.slide-cover__author-email')
             return {
-              details: [...card.querySelectorAll(
-                '.slide-cover__author-institution, .slide-cover__author-email',
-              )].map(detail => ({
+              details: [institution, email].filter(Boolean).map(detail => ({
                 href: detail.getAttribute('href'),
                 kind: detail.classList.contains(
                   'slide-cover__author-institution',
@@ -1406,7 +1420,7 @@ test('US3 link decoration and distinct author value, action, and order contract'
             (await page.locator(
               '.slidev-page-2 .slide-frame__footer-left',
             ).textContent())?.trim(),
-            `Expanded content quality fixture · ${expectedAuthors.map(author => author.primary).join(', ')}`,
+            'Expanded content quality fixture',
           )
         }
       } finally {
@@ -3053,7 +3067,6 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
           const chrome = await page.locator(
             '.slidev-page-56 .slide-frame',
           ).evaluate((frame) => {
-            const header = frame.querySelector('.slide-frame__header')
             const footer = frame.querySelector('.slide-frame__footer')
             const item = frame.querySelector(
               '[data-quality-case="visual-chrome-safe-zone"] li',
@@ -3062,12 +3075,13 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
               '[data-quality-case="visual-chrome-safe-zone"] th',
             )
             const frameStyle = getComputedStyle(frame)
-            const headerStyle = getComputedStyle(header)
             const inspect = () => {
               const roleProbe = document.createElement('span')
               roleProbe.style.color = 'var(--presentation-chrome-accent)'
               frame.append(roleProbe)
               const roleColor = getComputedStyle(roleProbe).color
+              roleProbe.style.color = 'var(--presentation-table-rule-color)'
+              const tableRuleColor = getComputedStyle(roleProbe).color
               roleProbe.remove()
               return {
                 frameAccent: frameStyle.getPropertyValue(
@@ -3081,15 +3095,9 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
                   '::before',
                 ).backgroundColor,
                 footerRuleWidth: getComputedStyle(footer).borderTopWidth,
-                headerAccent: headerStyle.getPropertyValue(
-                  '--presentation-accent',
-                ),
-                headerChrome: headerStyle.getPropertyValue(
-                  '--presentation-chrome-accent',
-                ),
-                headerRuleWidth: getComputedStyle(header).borderBottomWidth,
                 marker: getComputedStyle(item, '::marker').color,
                 roleColor,
+                tableRuleColor,
                 mutedColor: frameStyle.getPropertyValue('--presentation-text-muted').trim(),
                 tableHeaderRule: getComputedStyle(
                   headerCell,
@@ -3103,9 +3111,8 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
             return { changed, initial }
           })
           for (const state of [chrome.initial, chrome.changed]) {
-            assert.equal(state.headerRuleWidth, '0px', 'the header is separated by space')
-            assert.equal(state.footerRuleWidth, '0px', 'the footer is separated by space')
-            assert.equal(state.tableHeaderRule, state.roleColor)
+            assert.equal(state.footerRuleWidth, preset === 'ucas' ? '1px' : '0px', 'only the academic footer adds a rule')
+            assert.equal(state.tableHeaderRule, state.tableRuleColor)
             assert.equal(state.footerCap, 'rgba(0, 0, 0, 0)', 'footer has no accent ornament')
           }
           assert.equal(chrome.changed.roleColor, chrome.initial.roleColor, 'chrome stays neutral when the accent changes')
@@ -3228,9 +3235,10 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
               lockupCount: lockups.length,
             }
           })
-          assert.ok(headerSafeBrand.header, JSON.stringify(headerSafeBrand))
-          assert.equal(headerSafeBrand.lockupCount, 0)
-          assert.equal(headerSafeBrand.identityImageCount, 0)
+          assert.equal(headerSafeBrand.header, null)
+          const expectedSectionBrands = ['ucas', 'ict'].includes(preset) ? 1 : 0
+          assert.equal(headerSafeBrand.lockupCount, expectedSectionBrands)
+          assert.equal(headerSafeBrand.identityImageCount, expectedSectionBrands)
 
           await waitForSlide(
             page,

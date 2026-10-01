@@ -45,7 +45,6 @@ if (
 
 const styleIndex = sourceAt('styles/index.ts')
 const expectedStyleImports = [
-  './cjk-fonts.css',
   '@slidev/client/styles/layouts-base.css',
   './tokens.css',
   './base.css',
@@ -53,6 +52,7 @@ const expectedStyleImports = [
   './semantic.css',
   './components.css',
   './content-layouts.css',
+  './native-layouts.css',
   './presets/shared.css',
   './presets.css',
 ]
@@ -114,25 +114,22 @@ for (const preset of presetNames) {
 }
 
 const packageJson = JSON.parse(sourceAt('package.json'))
-const expectedWebfonts = ['Inter', 'Libertinus Serif', 'JetBrains Mono']
-const expectedLocalFonts = ['Noto Sans SC', 'Noto Serif SC']
 const fonts = packageJson.slidev?.defaults?.fonts ?? {}
 if (
   fonts.sans !== 'Inter, Noto Sans SC'
   || fonts.serif !== 'Libertinus Serif, Noto Serif SC'
   || fonts.mono !== 'JetBrains Mono'
-  || JSON.stringify(fonts.webfonts) !== JSON.stringify(expectedWebfonts)
-  || JSON.stringify(fonts.local) !== JSON.stringify(expectedLocalFonts)
+  || fonts.webfonts !== undefined
+  || fonts.local !== undefined
   || fonts.weights !== '400,600,700'
-  || fonts.italic !== true
+  || fonts.italic !== false
 ) {
-  errors.push('package.json must declare the verified Latin and local CJK font roles')
+  errors.push('package.json must declare the Latin and CJK font roles through the standard Slidev loader')
 }
-const cjkFontStylesheet = sourceAt('styles/cjk-fonts.css')
-if (!cjkFontStylesheet.includes(
-  'https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap',
-)) {
-  errors.push('styles/cjk-fonts.css must load Inter 500 and supported upright CJK weights separately')
+for (const path of filesWithin(resolve(repositoryRoot, 'styles'), /\.css$/)) {
+  if (/@import\s+(?:url\()?['"]?https?:/.test(readFileSync(path, 'utf8'))) {
+    errors.push(`${relative(repositoryRoot, path)} bypasses Slidev's configurable font loader`)
+  }
 }
 if ('obsidianSlidev' in packageJson) {
   errors.push('package.json must not publish a producer-specific compatibility manifest')

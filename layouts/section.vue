@@ -7,8 +7,6 @@ import Seal from '../components/Seal.vue'
 import type { PresentationChrome } from '../setup/presentation-config'
 
 const props = withDefaults(defineProps<{
-  title?: string
-  subtitle?: string
   kicker?: string | false
   chrome?: PresentationChrome | boolean
 }>(), {
@@ -42,7 +40,7 @@ const sectionNumber = computed(() => String(sectionIndex.value).padStart(2, '0')
 </script>
 
 <template>
-  <SlideFrame v-slot="{ presentation }" variant="section" :title="title" :subtitle="subtitle" :chrome="chrome">
+  <SlideFrame v-slot="{ presentation }" variant="section" :chrome="chrome">
     <div class="slide-layout-section" role="group" :aria-label="`Section ${sectionNumber}`">
       <div v-if="kickerValue !== false" class="slide-layout-section__index" aria-hidden="true">{{ sectionNumber }}</div>
       <Seal

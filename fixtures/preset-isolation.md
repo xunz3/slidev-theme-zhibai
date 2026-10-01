@@ -11,8 +11,6 @@ themeConfig:
   presentation:
     preset: __GLOBAL_PRESET__
     chrome: auto
-    header: true
-    footerAuthors: false
     pageNumber: false
 ---
 
@@ -26,8 +24,6 @@ The following slides contain the canonical same-run equivalence cases.
 layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
-presentationHeader: true
-footerAuthors: false
 pageNumber: false
 ---
 
@@ -64,8 +60,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: zhubai
-presentationHeader: true
-footerAuthors: false
 pageNumber: false
 ---
 
@@ -102,8 +96,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: ucas
-presentationHeader: true
-footerAuthors: false
 pageNumber: false
 ---
 
@@ -140,8 +132,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: ict
-presentationHeader: true
-footerAuthors: false
 pageNumber: false
 ---
 
@@ -177,8 +167,6 @@ const resolved = localPreset ?? deckPreset
 title: Invalid local values inherit
 presentationPreset: unsupported
 presentationChrome: sometimes
-presentationHeader: maybe
-footerAuthors: no
 pageNumber: yes
 ---
 
@@ -191,8 +179,6 @@ Unsupported local values must not suppress a valid deck configuration.
 ---
 title: Textual booleans
 presentationChrome: "on"
-presentationHeader: "true"
-footerAuthors: "off"
 pageNumber: "false"
 ---
 
@@ -337,8 +323,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: qingdai
-presentationHeader: true
-footerAuthors: false
 pageNumber: false
 ---
 
@@ -376,8 +360,6 @@ layout: two-cols
 title: Preset isolation contract
 subtitle: Identical bilingual content · 相同双语内容
 presentationPreset: songmo
-presentationHeader: true
-footerAuthors: false
 pageNumber: false
 ---
 

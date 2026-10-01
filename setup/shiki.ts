@@ -4,8 +4,8 @@ import { defineShikiSetup } from '@slidev/types'
 export default defineShikiSetup((): ShikiSetupReturn => {
   return {
     themes: {
-      dark: 'vitesse-dark',
-      light: 'vitesse-light',
+      dark: 'github-dark-high-contrast',
+      light: 'github-light-high-contrast',
     },
     transformers: [{
       name: 'zhubai-code-language-label',

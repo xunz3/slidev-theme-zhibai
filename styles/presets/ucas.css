@@ -114,3 +114,27 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] :is(.slide-frame__ucas
   --presentation-cover-padding-mobile: 5rem 1.5rem 1.25rem;
   --presentation-cover-width: 68rem;
 }
+
+/* Academic reading: compact evidence, institutional-blue structural rules. */
+.slidev-layout[data-presentation-preset="ucas"],
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame {
+  --presentation-body-line-height: 1.55;
+  --presentation-two-cols-gap: 2.5rem;
+  --presentation-font-heading: var(--presentation-font-sans);
+  --presentation-caption-size: 0.8125rem;
+  --presentation-media-radius: 3px;
+  --presentation-media-shadow: none;
+  --presentation-table-header-bg: color-mix(in srgb, var(--zhubai-accent) 5%, transparent);
+  --presentation-table-rule-color: var(--zhubai-accent);
+  --presentation-blockquote-font-style: normal;
+}
+
+.slidev-layout[data-presentation-preset="ucas"] .slide-frame__footer,
+.slidev-layout[data-presentation-native][data-presentation-preset="ucas"] > .presentation-native-footer {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--presentation-border-strong);
+}
+
+.slidev-layout[data-presentation-preset="ucas"] th {
+  border-bottom-color: var(--presentation-table-rule-color);
+}

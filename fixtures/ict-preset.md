@@ -15,8 +15,6 @@ themeConfig:
   presentation:
     preset: ict
     chrome: auto
-    header: false
-    footerAuthors: true
     pageNumber: true
 ---
 

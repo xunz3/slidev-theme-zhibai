@@ -10,7 +10,6 @@ type TocSectionInput = string | { title?: string; subtitle?: string; slideNo?: n
 
 const props = withDefaults(defineProps<{
   title?: string | false
-  subtitle?: string
   sections?: TocSectionInput[]
   showNumbers?: boolean
   chrome?: PresentationChrome | boolean
@@ -84,7 +83,7 @@ const goToSection = (slideNo?: number) => {
 </script>
 
 <template>
-  <SlideFrame variant="toc" :title="typeof title === 'string' ? title : undefined" :subtitle="subtitle" :chrome="chrome">
+  <SlideFrame variant="toc" :chrome="chrome">
     <div class="slide-layout-toc">
       <h1 v-if="tocTitle">{{ tocTitle }}</h1>
 

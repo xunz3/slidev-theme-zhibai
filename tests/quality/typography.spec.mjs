@@ -44,8 +44,8 @@ test('Latin and Chinese typography uses the intended rendered faces', { timeout:
       const uses = (fonts, family) => fonts.some(font => font.isCustomFont
         && (font.familyName === family || ((family.startsWith('Noto ') || family === 'Libertinus Serif') && font.familyName.startsWith(`${family} `)))
         && font.glyphCount > 0)
-      assert.ok(uses(heading, slide <= 3 ? 'Libertinus Serif' : 'Inter'), `slide ${slide}: use the intended display or reading heading face`)
-      assert.ok(uses(heading, slide <= 3 ? 'Noto Serif SC' : 'Noto Sans SC'), `slide ${slide}: Chinese headings need the matching loaded face`)
+      assert.ok(uses(heading, slide <= 2 ? 'Libertinus Serif' : 'Inter'), `slide ${slide}: use the preset's display or reading face`)
+      assert.ok(uses(heading, slide <= 2 ? 'Noto Serif SC' : 'Noto Sans SC'), `slide ${slide}: Chinese headings need the matching loaded face`)
       assert.equal(geometry.headingWeight, slide === 1 ? '700' : '600', 'headlines use an explicitly loaded weight')
       assert.equal(geometry.cjkHeadingWeight, slide <= 3 ? '700' : '600', 'CJK display receives the projection weight')
       if (slide > 3) assert.equal(geometry.headingSize, '40px')

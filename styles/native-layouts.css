@@ -1,0 +1,50 @@
+/* Native slots remain native; only the theme's reading geometry is supplied. */
+.slidev-layout[data-presentation-native] {
+  position: relative;
+  padding: var(--presentation-slide-padding);
+}
+
+.slidev-layout[data-presentation-native]:is(.full, .image) {
+  padding: 0;
+}
+
+.slidev-layout[data-presentation-native="fact"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.slidev-layout[data-presentation-native="fact"] h1 {
+  font-family: var(--presentation-font-display);
+  font-size: var(--presentation-statement-size);
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.slidev-layout.two-cols-header[data-presentation-native="two-cols-header"] {
+  grid-template-columns: var(--presentation-two-cols-left) var(--presentation-two-cols-right);
+  column-gap: var(--presentation-two-cols-gap);
+  row-gap: 1rem;
+}
+
+.slidev-layout[data-presentation-native="two-cols-header"] :is(.col-left, .col-right) {
+  min-width: 0;
+}
+
+.slidev-layout[data-presentation-native="two-cols-header"] .col-header > :last-child {
+  margin-bottom: 0;
+}
+
+.slidev-layout[data-presentation-native][data-presentation-footer] {
+  padding-bottom: 4rem;
+}
+
+.slidev-layout[data-presentation-native] > .presentation-native-footer {
+  position: absolute;
+  inset: auto 4rem 1.5rem;
+}
+
+.slidev-layout[data-presentation-native] .presentation-native-footer [hidden] {
+  display: none;
+}

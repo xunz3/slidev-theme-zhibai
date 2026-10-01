@@ -5,8 +5,6 @@ import SlideFrame from '../components/SlideFrame.vue'
 import type { PresentationChrome } from '../setup/presentation-config'
 
 withDefaults(defineProps<{
-  title?: string
-  subtitle?: string
   chrome?: PresentationChrome | boolean
 }>(), {
   chrome: undefined,
@@ -55,7 +53,7 @@ const StatementComposition = defineComponent({
 </script>
 
 <template>
-  <SlideFrame variant="statement" :title="title" :subtitle="subtitle" :chrome="chrome">
+  <SlideFrame variant="statement" :chrome="chrome">
     <StatementComposition>
       <slot />
     </StatementComposition>

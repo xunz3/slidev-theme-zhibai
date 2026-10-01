@@ -13,8 +13,6 @@ themeConfig:
     preset: songmo
     seal: "陈"
     chrome: auto
-    header: false
-    footerAuthors: true
     pageNumber: true
 ---
 

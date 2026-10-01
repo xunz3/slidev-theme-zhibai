@@ -2,7 +2,6 @@
 import { useIsSlideActive, useSlideContext } from '@slidev/client'
 import { cloneVNode, computed, h, isVNode, useSlots } from 'vue'
 import type { CSSProperties, VNode } from 'vue'
-import { formatAuthorNames, resolveDeckAuthors } from '../setup/authors'
 import {
   resolvePresentation,
 } from '../setup/presentation-config'
@@ -15,11 +14,11 @@ import PresetBranding from '../internals/PresetBranding.vue'
 const props = withDefaults(defineProps<{
   canvasStyle?: CSSProperties
   chrome?: PresentationChrome | boolean
-  subtitle?: string
-  title?: string
+  showFooter?: boolean | 'auto'
   variant?: FrameVariant
 }>(), {
   chrome: undefined,
+  showFooter: undefined,
   variant: 'default',
 })
 
@@ -38,6 +37,7 @@ const presentationConfig = computed(() => configs.value.themeConfig?.presentatio
 
 const resolved = computed(() => resolvePresentation({
   chrome: props.chrome,
+  showFooter: props.showFooter,
   deck: presentationConfig.value,
   slide: frontmatter.value,
   variant: props.variant,
@@ -57,16 +57,6 @@ const frameStyle = computed<CSSProperties | undefined>(() => {
   return Object.keys(style).length > 0 ? style : undefined
 })
 
-const headerTitle = computed(() => {
-  const value = frontmatter.value.title ?? props.title
-  return typeof value === 'string' ? value.trim() : ''
-})
-
-const headerSubtitle = computed(() => {
-  const value = frontmatter.value.subtitle ?? props.subtitle
-  return typeof value === 'string' ? value.trim() : ''
-})
-
 const footerLabel = computed(() => {
   const slideFooter = frontmatter.value.footer
   if (slideFooter === false) return ''
@@ -76,13 +66,6 @@ const footerLabel = computed(() => {
   if (deckFooter === false) return ''
   const value = deckFooter ?? configs.value.title ?? ''
   return typeof value === 'string' ? value.trim() : String(value)
-})
-
-const footerLeft = computed(() => {
-  const authors = resolved.value.footerAuthors
-    ? formatAuthorNames(resolveDeckAuthors(configs.value))
-    : ''
-  return [footerLabel.value, authors].filter(Boolean).join(' · ')
 })
 
 const contentKicker = computed(() => {
@@ -141,8 +124,7 @@ const onContentKeydown = (event: KeyboardEvent) => {
       :class="[
         `slide-frame--${resolved.variant}`,
         {
-          'slide-frame--chrome': resolved.showChrome,
-          'slide-frame--header': resolved.showHeader,
+          'slide-frame--chrome': resolved.showFooter,
         },
       ]"
       :data-presentation-preset="resolved.preset"
@@ -152,16 +134,8 @@ const onContentKeydown = (event: KeyboardEvent) => {
     >
       <PresetBranding
         :preset="resolved.preset"
-        :show-header="resolved.showHeader"
         :variant="resolved.variant"
       />
-
-      <header v-if="resolved.showHeader" class="slide-frame__header">
-        <div class="slide-frame__header-main">
-          <div v-if="headerTitle" class="slide-frame__title">{{ headerTitle }}</div>
-          <div v-if="headerSubtitle" class="slide-frame__subtitle">{{ headerSubtitle }}</div>
-        </div>
-      </header>
 
       <main
         class="slide-frame__content"
@@ -172,11 +146,11 @@ const onContentKeydown = (event: KeyboardEvent) => {
       </main>
 
       <footer
-        v-if="resolved.showChrome"
+        v-if="resolved.showFooter"
         class="slide-frame__footer"
-        :class="{ 'slide-frame__footer--page-only': !footerLeft }"
+        :class="{ 'slide-frame__footer--page-only': !footerLabel }"
       >
-        <div v-if="footerLeft" class="slide-frame__footer-left">{{ footerLeft }}</div>
+        <div v-if="footerLabel" class="slide-frame__footer-left">{{ footerLabel }}</div>
         <div v-if="resolved.pageNumber" class="slide-frame__page">
           <span class="slide-frame__page-current">{{ String($page).padStart(2, '0') }}</span>
           <span class="slide-frame__page-divider">/</span>

@@ -12,7 +12,6 @@ authors:
 themeConfig:
   presentation:
     preset: zhubai
-    footerAuthors: false
 presentationPreset: zhubai
 title: A clearer research story
 sections:
