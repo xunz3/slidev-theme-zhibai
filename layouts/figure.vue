@@ -6,8 +6,6 @@ import type { FigureVariant } from '../setup/figure-layout'
 import type { PresentationChrome } from '../setup/presentation-config'
 
 const props = withDefaults(defineProps<{
-  title?: string
-  subtitle?: string
   chrome?: PresentationChrome | boolean
   figureVariant?: FigureVariant
 }>(), {
@@ -21,7 +19,7 @@ const resolvedFigureVariant = computed(() => (
 </script>
 
 <template>
-  <SlideFrame variant="figure" :title="title" :subtitle="subtitle" :chrome="chrome">
+  <SlideFrame variant="figure" :chrome="chrome">
     <div
       class="slide-layout-figure"
       :class="`slide-layout-figure--${resolvedFigureVariant}`"

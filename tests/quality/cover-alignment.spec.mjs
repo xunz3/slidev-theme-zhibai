@@ -21,15 +21,15 @@ const cases = [
   { preset: 'ict', align: 'center' },
   { preset: 'zhubai', align: 'center', image: true },
   { preset: 'ict', align: 'center', footer: true },
-  { preset: 'ucas', align: 'center', footer: true, header: true },
+  { preset: 'ucas', align: 'center', footer: true },
   { preset: 'zhubai', align: 'left' },
   { preset: 'ict', align: null, section: true },
   { preset: 'zhubai', align: 'center' },
   { preset: 'zhubai', align: 'left' },
   { preset: 'zhubai', align: 'center' },
   { preset: 'ucas', align: 'center' },
-  { preset: 'ucas', align: 'center', footer: true, header: true, dense: true },
-  { preset: 'ucas', align: 'center', footer: true, header: true, dense: false },
+  { preset: 'ucas', align: 'center', footer: true, dense: true },
+  { preset: 'ucas', align: 'center', footer: true, dense: false },
   { preset: 'zhubai', align: 'center' },
   { preset: 'ucas', align: 'center' },
   { preset: 'ict', align: 'center' },
@@ -166,7 +166,7 @@ test('cover alignment and native imagery compose across palettes, imagery, and c
                   `main heading text stays inside the content region: ${JSON.stringify({ ink, content: geometry.content })}`)
                   assert.ok(!overlaps(ink, geometry.brand), 'main heading text does not overlap the institutional signature')
                 }
-                assert.equal(await frame.locator('.slide-frame__header').count(), expected.header ? 1 : 0)
+                assert.equal(await frame.locator('.slide-frame__header').count(), 0)
                 assert.equal(await frame.locator('.slide-frame__footer').count(), expected.footer ? 1 : 0)
 
                 assert.equal(await frame.locator('.preset-artwork').count(), 0)

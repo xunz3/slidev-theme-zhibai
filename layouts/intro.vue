@@ -6,8 +6,6 @@ import type { PresentationChrome } from '../setup/presentation-config'
 const props = withDefaults(defineProps<{
   background?: string
   chrome?: PresentationChrome | boolean
-  subtitle?: string
-  title?: string
 }>(), {
   chrome: undefined,
 })
@@ -27,8 +25,6 @@ const style = computed(() => {
 <template>
   <SlideFrame
     variant="intro"
-    :title="title"
-    :subtitle="subtitle"
     :chrome="chrome"
     :canvas-style="style"
   >

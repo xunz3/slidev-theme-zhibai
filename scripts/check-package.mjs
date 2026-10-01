@@ -10,7 +10,7 @@ const root = fileURLToPath(new URL('..', import.meta.url))
 const artifactDirectory = resolve(root, '.artifacts/package')
 const runtimeDirectories = ['components', 'internals', 'layouts', 'setup', 'styles']
 const requiredFiles = [
-  'package.json', 'README.md', 'LICENSE',
+  'package.json', 'README.md', 'CHANGELOG.md', 'LICENSE',
   'assets/ICT/SOURCES.md',
   'assets/ICT/signature-official.png',
   'assets/UCAS/emblem-name-bilingual-hz.svg',

@@ -83,7 +83,8 @@ const imagePosition = computed(() => (
 ))
 const hasVisualSlot = computed(() => Boolean(slots.visual))
 const hasVisual = computed(() => hasVisualSlot.value || Boolean(image.value))
-const hasAuthors = computed(() => resolveDeckAuthors(configs.value).length > 0)
+const authors = computed(() => resolveDeckAuthors(configs.value))
+const hasAuthors = computed(() => authors.value.length > 0)
 
 const escapeCssString = (value: string) => value
   .replace(/\\/g, '\\\\')
@@ -146,6 +147,8 @@ const CoverComposition = ({ seal }: { seal: string | false | null }) => {
       'slide-cover--has-visual': hasVisual.value,
       'slide-cover--long-title': titleLength > 30,
       'slide-cover--dense-title': titleLength > 72,
+      'slide-cover--collaboration': authors.value.length > 1,
+      'slide-cover--many-authors': authors.value.length > 3,
     }],
   }, [
     h('div', { class: 'slide-cover__main' }, [
@@ -162,7 +165,9 @@ const CoverComposition = ({ seal }: { seal: string | false | null }) => {
         imagePosition: imagePosition.value,
       })],
     ) : null,
-    (date.value || hasAuthors.value || seal) ? h('div', { class: 'slide-cover__meta' }, [
+    (date.value || hasAuthors.value || seal) ? h('div', {
+      class: ['slide-cover__meta', { 'slide-cover__meta--collaboration': authors.value.length > 1 }],
+    }, [
       hasAuthors.value ? h(Authors, { variant: 'cover' }) : null,
       date.value ? h('span', { class: 'slide-cover__date' }, date.value) : null,
       seal ? h(Seal, { text: seal }) : null,

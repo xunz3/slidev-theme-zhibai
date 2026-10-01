@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSlideContext } from '@slidev/client'
-import { computed } from 'vue'
-import { resolveDeckAuthors } from '../setup/authors'
+import { computed, useId } from 'vue'
+import { composeCoverAuthors, resolveDeckAuthors } from '../setup/authors'
 
 const props = withDefaults(defineProps<{
   variant?: 'cards' | 'cover'
@@ -12,6 +12,11 @@ const props = withDefaults(defineProps<{
 const { $slidev } = useSlideContext()
 const configs = computed(() => (($slidev.configs ?? {}) as Record<string, unknown>))
 const authors = computed(() => resolveDeckAuthors(configs.value))
+const collaboration = computed(() => props.variant === 'cover' && authors.value.length > 1)
+const cover = computed(() => composeCoverAuthors(authors.value))
+const id = useId()
+const emailLocalPart = (email?: string) => (email ?? '').split('@')[0]
+const emailDomain = (email?: string) => `@${(email ?? '').split('@')[1] ?? ''}`
 const classes = computed(() => props.variant === 'cover'
   ? {
       collection: 'slide-cover__authors',
@@ -32,7 +37,31 @@ const classes = computed(() => props.variant === 'cover'
 </script>
 
 <template>
-  <ul v-if="authors.length" :class="classes.collection">
+  <div v-if="collaboration" class="slide-cover__credits" :data-author-count="authors.length">
+    <ul class="slide-cover__authors">
+      <li
+        v-for="author in cover.authors"
+        :key="author.sourceIndex"
+        class="slide-cover__author"
+        :aria-describedby="author.institutionNumber ? `${id}-institution-${author.institutionNumber}` : undefined"
+      >
+        <div class="slide-cover__author-byline">
+          <a v-if="author.primaryHref" :class="classes.primary" :href="author.primaryHref">{{ emailLocalPart(author.primary) }}<wbr>{{ emailDomain(author.primary) }}</a>
+          <span v-else :class="classes.primary">{{ author.primary }}</span>
+          <sup v-if="cover.numbered && author.institutionNumber" class="slide-cover__affiliation-mark" aria-hidden="true">{{ author.institutionNumber }}</sup>
+        </div>
+        <a v-if="author.emailHref" :class="classes.email" :href="author.emailHref">{{ emailLocalPart(author.email) }}<wbr>{{ emailDomain(author.email) }}</a>
+        <div v-else-if="author.email" :class="classes.emailInvalid">{{ author.email }}</div>
+      </li>
+    </ul>
+    <ul v-if="cover.institutions.length" class="slide-cover__institutions">
+      <li v-for="(institution, index) in cover.institutions" :id="`${id}-institution-${index + 1}`" :key="institution" class="slide-cover__institution">
+        <sup v-if="cover.numbered" class="slide-cover__affiliation-mark" aria-hidden="true">{{ index + 1 }}</sup>
+        <span class="slide-cover__author-institution">{{ institution }}</span>
+      </li>
+    </ul>
+  </div>
+  <ul v-else-if="authors.length" :class="classes.collection">
     <li
       v-for="author in authors"
       :key="author.sourceIndex"
@@ -43,7 +72,8 @@ const classes = computed(() => props.variant === 'cover'
         :class="classes.primary"
         :href="author.primaryHref"
       >
-        {{ author.primary }}
+        <template v-if="variant === 'cover'">{{ emailLocalPart(author.primary) }}<wbr>{{ emailDomain(author.primary) }}</template>
+        <template v-else>{{ author.primary }}</template>
       </a>
       <div
         v-else
@@ -59,7 +89,8 @@ const classes = computed(() => props.variant === 'cover'
         :class="classes.email"
         :href="author.emailHref"
       >
-        {{ author.email }}
+        <template v-if="variant === 'cover'">{{ emailLocalPart(author.email) }}<wbr>{{ emailDomain(author.email) }}</template>
+        <template v-else>{{ author.email }}</template>
       </a>
       <div
         v-else-if="author.email"

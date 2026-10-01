@@ -2,6 +2,15 @@
 theme: ../
 layout: fact
 title: Native layouts
+fonts:
+  sans: Arial
+  serif: Georgia
+  mono: Courier New
+  provider: none
+themeConfig:
+  presentation:
+    preset: qingdai
+    accent: "#345f8f"
 ---
 
 # 42%
@@ -49,3 +58,94 @@ layout: none
 # An authored canvas.
 
 </div>
+
+
+---
+layout: fact
+presentation:
+  preset: zhubai
+  accent: auto
+---
+
+# 83%
+
+A page restores its own preset accent.
+
+---
+layout: fact
+presentation:
+  preset: songmo
+  showFooter: false
+---
+
+# 64%
+
+A quiet slide without a footer.
+
+---
+layout: two-cols-header
+columnRatio: 0.65
+presentation:
+  preset: ucas
+  pageNumber: false
+---
+
+# Method and result
+
+::left::
+
+## Method
+
+A wider explanation column.
+
+::right::
+
+## Result
+
+A concise observation.
+
+::bottom::
+
+Evidence comes before interpretation.
+
+---
+layout: two-cols-header
+presentation:
+  preset: ict
+  accent: auto
+  showFooter: true
+footer: A slide-specific label
+---
+
+# A technical comparison
+
+::left::
+
+## Baseline
+
+A fixed evaluation budget.
+
+::right::
+
+## Proposed
+
+A documented improvement.
+
+::bottom::
+
+Labels and line styles distinguish the series.
+
+---
+layout: two-cols
+columnRatio: 0.65
+---
+
+# A wider argument
+
+The theme layout follows the same proportion.
+
+::right::
+
+# Evidence
+
+A compact summary.

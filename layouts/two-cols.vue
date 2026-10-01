@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import SlideFrame from '../components/SlideFrame.vue'
+import { columnVariables } from '../setup/columns'
 import type { PresentationChrome } from '../setup/presentation-config'
 
 withDefaults(defineProps<{
-  title?: string
-  subtitle?: string
   chrome?: PresentationChrome | boolean
+  columnRatio?: number | string
   gap?: string
   reverse?: boolean
 }>(), {
@@ -15,11 +15,11 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <SlideFrame variant="two-cols" :title="title" :subtitle="subtitle" :chrome="chrome">
+  <SlideFrame variant="two-cols" :chrome="chrome">
     <div
       class="slide-layout-two-cols"
       :class="{ 'slide-layout-two-cols--reverse': reverse }"
-      :style="{ '--presentation-two-cols-gap': gap }"
+      :style="{ ...columnVariables(columnRatio), '--presentation-two-cols-gap': gap }"
     >
       <div class="slide-layout-two-cols__pane">
         <slot />

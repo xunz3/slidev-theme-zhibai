@@ -40,6 +40,7 @@
   --presentation-footnote-size: var(--presentation-size-12);
 
   --presentation-table-header-bg: transparent;
+  --presentation-table-rule-color: var(--presentation-border-strong);
   --presentation-table-row-alt-bg: transparent;
   --presentation-code-bg: var(--presentation-bg-muted);
   --presentation-code-border: transparent;
@@ -105,15 +106,16 @@
   --presentation-quote-line-height: 1.45;
   --presentation-reference-size: var(--presentation-size-14);
 
-  --presentation-font-sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", ui-sans-serif, system-ui, sans-serif;
-  --presentation-font-serif: "Libertinus Serif", "Noto Serif SC", "Songti SC", "Source Han Serif SC", STSong, ui-serif, Georgia, serif;
-  --presentation-font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --presentation-font-sans: var(--presentation-resolved-sans, "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif);
+  --presentation-font-serif: var(--presentation-resolved-serif, "Libertinus Serif", "Noto Serif SC", ui-serif, Georgia, serif);
+  --presentation-font-mono: var(--presentation-resolved-mono, "JetBrains Mono", ui-monospace, monospace);
   --presentation-font-body: var(--presentation-font-sans);
   --presentation-font-display: var(--presentation-font-serif);
   --presentation-font-quote: var(--presentation-font-serif);
   --presentation-font-label: var(--presentation-font-sans);
   --presentation-font-kaiti: "Kaiti SC", "STKaiti", "KaiTi", "Noto Serif SC", serif;
   --presentation-font-quote-cjk: var(--presentation-font-kaiti);
+  --presentation-font-heading: var(--presentation-font-sans);
 
   --presentation-cover-padding: 2.5rem 4rem 2rem;
   --presentation-cover-padding-mobile: 2rem 1.5rem 1.25rem;

@@ -26,7 +26,7 @@
   --presentation-signature: var(--zhubai-zhu);
   --presentation-seal-background: var(--zhubai-zhu);
   --presentation-seal-text: #faf8f3;
-  --presentation-seal-font: "Libertinus Serif", "Noto Serif SC", serif;
+  --presentation-seal-font: var(--presentation-font-serif);
   --presentation-section-index-color: color-mix(in srgb, var(--presentation-text) 16%, transparent);
   --presentation-scrollbar-thumb: color-mix(in srgb, var(--zhubai-ink) 26%, transparent);
   --presentation-scrollbar-track: transparent;

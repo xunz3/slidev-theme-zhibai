@@ -88,10 +88,11 @@ Veil 0.4 的审计结论是：工程扎实，但视觉趋同、色彩系统缺�
 
 ### 4.1 `zhubai` 朱白（默认，signature）
 
-宣纸白 + 浓墨 + 朱砂。编辑左轴构图：
+宣纸白 + 浓墨 + 朱砂。编辑式构图：
 
-- 封面：左轴，eyebrow 带 24px 短朱线，serif 700 标题，底部 meta 带（tonal 面 + 顶部发丝线，作者 | 日期 | 印章三栏）。
+- 封面：默认中轴，eyebrow 带 24px 短朱线，serif 700 标题；无图时标题组在署名区上方垂直居中，底部 meta 带使用浅色面与顶部发丝线。
 - 内容页：H1 下方一条 2.5rem × 1.5px 朱线——朱白预设的签名节奏；列表一级 marker 为 0.32rem 朱色菱形。
+- 正文行高 1.6，衬线用于展示标题，无衬线用于内容层级；表格保留纸面。
 - 章节页：淡墨 144px folio 数字（透明度从 9% 提到 16%）+ 右下一枚小朱印对位，构成"大而淡"与"小而浓"的张力。
 
 ### 4.2 `qingdai` 青黛（新增）
@@ -99,8 +100,9 @@ Veil 0.4 的审计结论是：工程扎实，但视觉趋同、色彩系统缺�
 月白 + 黛蓝 + 朱印。清冷的学院气质，适合文献综述、理论报告：
 
 - 内容页标题**居中**，上下各一条 1px 黛色细线（双线夹题，章回体书口的处理）——全家族唯一居中标题的内容页。
+- 内容标题使用衬线，正文行高 1.65；引用沿中轴排版，表格使用细线。
 - 章节页居中，folio 数字用 oldstyle 衬线。
-- 封面默认居中构图，meta 带上下各一条发丝线。
+- 封面默认居中构图，无图时标题组在署名区上方垂直居中，meta 带上下各一条发丝线。
 - 朱印与朱批仍为朱色——"万黛丛中一点朱"。
 
 ### 4.3 `songmo` 松墨（新增）
@@ -109,6 +111,8 @@ Veil 0.4 的审计结论是：工程扎实，但视觉趋同、色彩系统缺�
 
 - 最极端的"安静"：页面是纯黑白排版，朱印成为唯一的、也因此最强的签名。
 - 链接用下划线 + 墨色区分（无彩色依赖，天然满足色彩无障碍）。
+- 展示标题与引用使用无衬线；正文行高 1.5，图表与提示使用黑白层级，图像无阴影。
+- 无图封面使用与朱白、青黛相同的垂直居中与上下内距规则，底部信息区透明；章节使用等宽编号，移除装饰朱点。
 - 适合哲学、文学、以及"不想让观众分心"的场合。
 
 ### 4.4 机构预设（ucas / ict）
@@ -119,6 +123,7 @@ Veil 0.4 的审计结论是：工程扎实，但视觉趋同、色彩系统缺�
 - 暗色 accent 改为按预设定义的提亮值（修复 Veil 的洗灰缺陷）：ucas `#7aa5e0`、ict `#5aa3e8`。
 - 印章默认**关闭**（机构有自己的签章），可显式开启；朱批焦点色沿用各预设现有 highlight（ucas 的 `#b3352c` 恰好也是朱系）。
 - ICT 网格从 8px 密格改为 24px 主格 + 8px 细分，透明度 3%/5%（暗色 6%）——现在的 1.5% 密格等于没有。
+- UCAS 正文行高 1.55，表格使用固定机构蓝细线，内容页脚保留细线；ICT 展示与引用使用无衬线，正文行高 1.5，表头和图注使用等宽标签。
 
 ### 4.5 家族一览
 
@@ -130,7 +135,7 @@ Veil 0.4 的审计结论是：工程扎实，但视觉趋同、色彩系统缺�
 | `ucas` | 冷白 `#f9fafc` | 学术蓝 | 居中礼仪封面 + 校名签名 | 批（印默认关） |
 | `ict` | 蓝灰白 `#f7f9fb` | 信号蓝 | mono 标签 + 疏主格图纸 | 批（印默认关） |
 
-验收：300px 缩略联系表上遮住 logo，五个预设两两可辨。
+验收使用 [同内容对照](../examples/preset-gallery.md)，同时检查五预设的封面、章节、正文、图表、引用与数字页；当前默认设计见 [预设身份](./preset-identities.md)。
 
 ## 5. 签名元素
 
@@ -183,13 +188,13 @@ seal: "米拉"            # 可选，单页覆盖
 
 | 角色 | Latin | 中文 | 规格 |
 | --- | --- | --- | --- |
-| 封面 / 章节 / Statement | Libertinus Serif 600 | **Noto Serif SC 700**（600→700） | 64 / 48 / ≤96px；CJK 大屏投影下 600 偏细 |
-| 内容页 H1 | Inter 600 | Noto Sans SC 600 | 36 → **40px**（two-cols 28→30px），字距 -0.02em |
-| 引文 | Libertinus Serif italic | **楷体**（`"Kaiti SC", "STKaiti", "KaiTi", "Noto Serif SC", serif`，本地字体栈，零 webfont 成本） | 28px；中文引文用楷体是中文排版的正统 |
-| 正文 | Inter 400 | Noto Sans SC 400 | 18px / 1.55；CJK 1.6 |
-| 标签 / 页码 / 编号 | Inter 500 / JetBrains Mono | 同左 | 12–16px |
+| 封面 / 章节 / Statement | `fonts.serif`；松墨与 ICT 用 `fonts.sans` | 对应标准字族，display 700 | 64 / 48 / ≤96px |
+| 内容页 H1 | `fonts.sans`；青黛用 `fonts.serif` | 对应标准字族 | **40px**（two-cols 30px），字距 -0.02em |
+| 引文 | 标准衬线；松墨与 ICT 用无衬线 | 朱白、青黛与 UCAS 优先本地楷体；松墨与 ICT 用无衬线 | 28px；引用层级由预设决定 |
+| 正文 | `fonts.sans` | 对应标准字族 | 18px；预设行高 1.5–1.65，显式 CJK 1.6 |
+| 标签 / 页码 / 编号 | 标准 sans / mono，ICT 标签用 mono | 同左 | 12–16px |
 
-其余（CJK hanging-punctuation、`halt`、text-autospace、字重加载策略）沿用 0.4 契约。
+默认字族为 Inter、Libertinus Serif、JetBrains Mono、Noto Sans SC 与 Noto Serif SC。加载统一由 Slidev 决定，支持 `fonts.local` 与 `provider: none`；主题不注入远程字体 CSS。其余 CJK hanging-punctuation、`halt`、text-autospace 沿用排印契约。详见 [字体配置](./configuration.md#标准字体与离线演示)。
 
 ## 7. 布局与组件处理
 
@@ -197,15 +202,17 @@ seal: "米拉"            # 可选，单页覆盖
 
 **Statement**：支持焦点词——`==词==` 渲染为朱色文字；副标题与标题间距 16→20px。
 
-**Quote**：CJK 引文改楷体（§6）；引用来源前可选小朱点。
+**Quote**：按预设选择衬线、楷体或无衬线（§6）；引用来源前可选小朱点。
 
 **Callout**：保留 borderless tonal 面，左侧加 2px family 色条（现行 family 色只在 0.48rem marker 上，3 米外不可辨）；marker 形状系统保留。
 
-**表格**：新增可选 `.presentation-table--booktabs` 三线表（顶 1.5px / 表头下 1px / 底 1.5px，无纵线），学术场合的正统表式；默认表式不变。
+**表格**：可选 `.presentation-table--booktabs` 三线表（顶 1.5px / 表头下 1px / 底 1.5px，无纵线）；默认表头、细线与交替行由预设决定，独立于可选强调色。
 
 **TOC**：条目编号用朱色 serif oldstyle（朱白）/ 黛色（青黛）/ 墨色（松墨）——目录是朱色被允许"重复出现"的少数场景（结构性朱）。
 
-**Figure / Steps / Badge / Tag / Kbd**：沿用 0.4；`framed` 与 `plain` 的阴影拉开层级（§8 token）。
+**Figure / Steps / Badge / Tag / Kbd**：保留组件接口；普通图像的圆角与阴影由预设决定，`framed` 继续提供更强的展示层级。
+
+**原生布局与配置**：`fact / full / two-cols-header / image / iframe` 继承同一预设解析，`none` 留给作者；双栏支持 `columnRatio`。公开使用 `showFooter`，与文字内容 `footer` 区分；单页 `presentation` 与全局使用相同字段，`accent: auto` 恢复当前预设结构色。完整规则见 [配置文档](./configuration.md)。
 
 ## 8. 动效与阴影
 

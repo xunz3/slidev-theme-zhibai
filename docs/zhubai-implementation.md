@@ -13,13 +13,15 @@
 ## 明确的解释
 
 - `seal: "陈"` 是显式启用，机构预设也遵守这一选项；缺省完全不渲染，`seal: false` 可在单页关闭继承。合法值为去除首尾空白后的 1–4 个 Unicode 字符。非法单页值回退到 deck。
-- 配置仍由 `SlideFrame` 单点解析，通过 scoped slot 向封面、章节和结束页传递，避免布局各自重复解释 deck / slide 继承。
+- 配置由共享 resolver 单点解析，主题布局通过 `SlideFrame` 与 scoped slot 消费，原生布局使用同一 resolver，避免布局各自重复解释 deck / slide 继承。
 - “一页一朱”是作者的焦点预算，不通过运行时扫描或删除内容来强制。朱线、朱点和目录编号属于结构性朱。
 - ICT 保留橙色 highlight 色料，焦点文字语义色混入 35% 正文墨色以保证可读性；正文 mark 的文字按审查修正为墨色，焦点色继续用于批注底色、下划线及 display 强调。
 - 楷体使用本地字体栈，不增加 webfont 请求。没有楷体时回退 Noto Serif SC。中文 display 的独立字重通过 `lang="zh"` 标记体现。
 - 所有历史 `veil-*.md` 保留为档案，当前规范以 `zhubai-design.md` 和 `zhubai-tokens.md` 为准。
 
-![五预设亮暗封面联系表](./assets/zhubai/preset-contact-sheet.png)
+![五预设与六类内容页的亮色对照](./assets/zhubai/preset-contact-sheet.png)
+
+[暗色对照](./assets/zhubai/preset-contact-sheet-dark.png)
 
 ## 验证入口
 
@@ -52,3 +54,42 @@
 - 新增 center、默认 figure、editorial figure 截图场景及 MC 西文印章，检查亮暗模式的朱线几何、mark 与加粗字颜色、标题间距及字体栈。
 
 本轮专项 `quality:design` **46 / 46 通过**，源码架构检查与 `git diff --check` 通过。本轮没有重跑完整 quality；上方全量结果属于首轮实现验收。新截图位于 `.artifacts/quality/screenshots/zhubai-design/`（新增场景 19–21）。
+
+## 配置与内容设计收尾（2026-10-01）
+
+- 原生布局使用共享 preset resolver，保留 native slots 和 `none` 的作者控制边界；双栏支持 `columnRatio`。
+- 接通标准 `fonts.sans / serif / mono`，移除强制远程字体 CSS；`provider: none` 的自定义字体文稿通过浏览器验证。
+- 统一 `presentation` 页级字段、`showFooter`、`accent: auto` 与兼容字段的优先级，清理旧页眉字段的透传。
+- 五预设分别决定字体、行距、引用、表格、图表、图像和签名；同步更新亮暗联系表。
+- 新增 30 页同内容对照与三份 8 页场景模板，提供逐页 Markdown、下载、深浅模式和目录／键盘同步的交互预览。
+
+最终完整 `quality` 退出码 0，23 个执行阶段全部通过，无失败或跳过。17 份维护文稿、矩阵与扩展内容构建通过，预览另构建 4 份文稿。
+
+| 检查 | 最终结果 |
+| --- | --- |
+| 配置契约 | 30 / 30 |
+| 五预设隔离 | 61 / 61 |
+| 内容契约 | 18 / 18 |
+| 可访问性 | 392 / 392 |
+| 交互预览 | 217 / 217，含 54 页 × 两种模式 × 两种尺寸的 216 个渲染场景 |
+| 朱白设计契约 | 46 / 46 |
+| 其他门禁 | 原生布局、真实字体、封面、元素、画布、动效与资源检查均通过 |
+| 发布与包检查 | 发布测试通过，主题 tarball 验证 63 文件 |
+
+最终报告为 `.artifacts/quality/summary.json`，预览截图与探针位于 `.artifacts/quality/screenshots/preset-completion/`。Pages 发布工作流已准备，但本轮未部署公网预览，也未发布 npm 更新。
+
+## 英文排版与多人署名复核（2026-10-01）
+
+新增 45 页英文对照文稿：五预设分别包含封面、章节、正文与脚注、图表、双栏公式、引用、代码、参考资料与结束页。预览中可直接切换预设、深浅模式并查看源码。
+
+多人封面改为并排姓名与邮箱，共享机构去重，通过编号和辅助阅读关联保留每位作者的机构。四位及以上作者采用紧凑节奏；长标题配图封面重新分配图文空间。修复青黛英文脚注受到正文行距影响的轻微溢出，以及松墨署名区重复叠加的左右内距。邮箱在 `@` 前提供换行机会，保持完整地址。
+
+| 专项检查 | 结果 |
+| --- | --- |
+| 英文页面 | 45 页 × 2 种模式 × 2 种尺寸，共 180 个场景无溢出 |
+| 交互预览 | 397 / 397；新增英文预设切换、三人署名与逐页源码验证 |
+| 多人封面 | 528 个渲染场景通过；覆盖 0–8 位作者、五预设、两种对齐方式、配图、印章、亮暗与两种尺寸 |
+| 实际字体 | 英文 Inter 及其斜体、Libertinus Serif、JetBrains Mono 均确认实际加载；六人与八人封面另使用默认字体复核 |
+| 兼容性 | 封面构图、对齐与内容契约合计 180 / 180；邮箱断行后追加作者值、链接与顺序专项复核通过 |
+
+本节记录专项检查，未重跑上节的完整 `quality`。英文与作者汇总保留在 `.artifacts/quality/english-review/summary.json`，渲染尺寸和字体记录位于 `screenshots/preset-completion/`、`screenshots/cover-authors/` 与 `screenshots/cover-authors-5-7/`。文档中的英文深浅对照与三／六／八人封面均来自实际截图。

@@ -1,11 +1,12 @@
 /* Preset roles follow the frame so deck and slide accents stay isolated. */
+.slidev-layout[data-presentation-native],
 .slidev-layout[data-presentation-preset] .slide-frame {
   --presentation-chrome-accent: var(--presentation-border-strong);
   --presentation-family-info: color-mix(in srgb, var(--presentation-accent) 84%, var(--presentation-text));
   --presentation-family-info-surface: color-mix(in srgb, var(--presentation-accent) 6%, transparent);
   --presentation-sequence-node-bg: var(--presentation-accent);
   --presentation-sequence-rail: var(--presentation-chrome-accent);
-  --presentation-table-header-bg: color-mix(in srgb, var(--presentation-accent) 3%, transparent);
+  --presentation-table-header-bg: color-mix(in srgb, var(--zhubai-accent) 3%, transparent);
   --presentation-code-border: color-mix(in srgb, var(--presentation-accent) 22%, var(--presentation-border));
   --presentation-code-copy-color: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
   --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 8%, transparent);
@@ -27,18 +28,18 @@
   background: var(--presentation-bg);
 }
 
+html.dark .slidev-layout[data-presentation-native],
 html.dark .slidev-layout[data-presentation-preset] .slide-frame {
-  --presentation-table-header-bg: color-mix(in srgb, var(--presentation-accent) 11%, transparent);
+  --presentation-table-header-bg: color-mix(in srgb, var(--zhubai-accent) 11%, transparent);
   --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 13%, transparent);
   --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 10%, transparent);
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame > :is(.slide-frame__header, .slide-frame__content, .slide-frame__footer) {
+.slidev-layout[data-presentation-preset] .slide-frame > :is(.slide-frame__content, .slide-frame__footer) {
   position: relative;
   z-index: 1;
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame__header,
 .slidev-layout[data-presentation-preset] .slide-frame__footer {
   border: 0;
   color: var(--presentation-text-muted);
@@ -71,7 +72,7 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame {
 
 .slidev-layout[data-presentation-preset] .slide-frame__page-divider,
 .slidev-layout[data-presentation-preset] .slide-frame__page-total {
-  color: var(--presentation-text-faint);
+  color: var(--presentation-text-muted);
   font-weight: 400;
 }
 
@@ -80,7 +81,7 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame {
 }
 
 .slidev-layout[data-presentation-preset] .slide-frame th {
-  border-bottom: 1px solid var(--presentation-border-strong);
+  border-bottom: 1px solid var(--presentation-table-rule-color);
 }
 
 .slidev-layout[data-presentation-preset] .slide-frame tbody tr:last-child td {
@@ -105,12 +106,6 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame {
   --presentation-content-gap: 0.6rem;
   --presentation-slide-title-size: 30px;
   --slidev-code-padding: 0.8rem 1rem;
-}
-
-/* A header needs its own vertical budget without shrinking reading text. */
-.slidev-layout.two-cols[data-presentation-preset] .slide-frame--header {
-  padding-block: 2rem;
-  gap: 0.85rem;
 }
 
 .slidev-layout.two-cols[data-presentation-preset] .slide-frame h1 {
@@ -150,9 +145,9 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
 
 .slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right)[data-presentation-preset] .slide-frame h1 {
   margin-bottom: 0.82em;
-  font-family: var(--presentation-font-sans);
+  font-family: var(--presentation-font-heading);
   font-size: calc(var(--presentation-slide-title-size) * var(--presentation-heading-scale));
-  font-weight: 600;
+  font-weight: var(--presentation-heading-weight);
   line-height: var(--presentation-heading-line-height);
 }
 
@@ -185,16 +180,12 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
 }
 
 /* Full-width cover bands do not remove the reading inset from optional chrome. */
-.slidev-layout.cover[data-presentation-preset] :is(.slide-frame__header, .slide-frame__footer) {
+.slidev-layout.cover[data-presentation-preset] .slide-frame__footer {
   padding-inline: var(--presentation-cover-inset-x, 4rem);
 }
 
 .slidev-layout.cover[data-presentation-preset] .slide-frame--chrome {
   padding-bottom: 0.75rem;
-}
-
-.slidev-layout.cover[data-presentation-preset] .slide-frame--header .slide-cover__main {
-  padding-block: 0.5rem 1rem;
 }
 
 .slidev-layout.cover[data-presentation-preset] .slide-frame__content,
@@ -229,6 +220,12 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
   min-width: 0;
   width: 100%;
   gap: 0.8rem;
+}
+
+/* Presets without institutional branding share one text-only cover baseline.
+   Padding comes from the common single-author, collaboration, and dense rules. */
+.slidev-layout.cover:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"], [data-presentation-preset="qingdai"], [data-presentation-preset="songmo"]) .slide-cover:not(.slide-cover--has-visual) .slide-cover__main {
+  align-content: center;
 }
 
 .slidev-layout.cover[data-presentation-preset] .slide-cover__eyebrow {
@@ -373,6 +370,126 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
   font-variant-numeric: tabular-nums;
 }
 
+/* A collaboration has one byline grid and shared affiliations, leaving the
+   headline its own area even when names and English institution names are long. */
+.slidev-layout.cover[data-presentation-preset] .slide-cover--collaboration .slide-cover__main {
+  padding-bottom: 2rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__credits {
+  grid-column: 1 / -1;
+  display: grid;
+  min-width: 0;
+  width: 100%;
+  gap: 0.65rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__credits .slide-cover__authors {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem 1.4rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__credits:is([data-author-count="2"], [data-author-count="4"]) .slide-cover__authors {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__author-email {
+  display: block;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__affiliation-mark {
+  margin-left: 0.15em;
+  color: var(--presentation-text-muted);
+  font-family: var(--presentation-font-sans);
+  font-size: 0.7em;
+  line-height: 0;
+  vertical-align: super;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__institutions {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 0.2rem;
+  list-style: none;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__institution {
+  margin: 0;
+  padding: 0;
+  color: var(--presentation-text-muted);
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__institution .slide-cover__affiliation-mark {
+  margin: 0 0.35em 0 0;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta--collaboration .slide-cover__date {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover__meta--collaboration > .presentation-seal {
+  grid-column: -2;
+  grid-row: 2;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors {
+  --presentation-cover-long-size: 40px;
+  --presentation-cover-dense-size: 34px;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__main {
+  padding-block: 0.5rem 1.25rem;
+  gap: 0.6rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__subtitle {
+  font-size: 18px;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__body {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__meta {
+  padding-block: 0.75rem;
+  row-gap: 0.4rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__credits {
+  gap: 0.45rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__authors {
+  gap: 0.4rem 1.2rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__credits[data-author-count="8"] .slide-cover__authors {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__author {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__author-details {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--many-authors .slide-cover__institution {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
 .slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual {
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   grid-template-rows: minmax(0, 1fr) auto;
@@ -432,6 +549,19 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
 
 .slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__date {
   justify-self: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__meta--collaboration {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__meta--collaboration .slide-cover__date {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover__meta--collaboration > .presentation-seal {
+  grid-column: 3;
 }
 
 .slidev-layout.cover[data-presentation-preset][data-presentation-cover-align="center"] .slide-cover--has-visual {
@@ -659,11 +789,22 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
   --presentation-cover-dense-size: 36px;
 }
 
-.slidev-layout.cover[data-presentation-preset] .slide-frame--header .slide-cover {
-  --presentation-cover-size: 48px;
-  --presentation-cover-long-size: 40px;
+/* Long English headlines need a smaller measure in a visual cover. Keep its
+   text and figure above a full collaboration rather than letting the grid clip. */
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual.slide-cover--dense-title {
   --presentation-cover-dense-size: 32px;
-  gap: 1rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual.slide-cover--dense-title :is(.slide-cover__main, .slide-cover__visual) {
+  padding-block: 0.75rem 1.5rem;
+}
+
+.slidev-layout.cover[data-presentation-preset] .slide-cover--has-visual.slide-cover--many-authors {
+  --presentation-cover-long-size: 36px;
+  --presentation-cover-dense-size: 30px;
+  --presentation-cover-visual-height: 10rem;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  column-gap: 2rem;
 }
 
 @keyframes presentation-enter {
@@ -709,11 +850,6 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
     animation: none !important;
     transition: none !important;
   }
-}
-
-/* A visible header replaces the institutional signature and its top reserve. */
-.slidev-layout.section[data-presentation-preset] .slide-frame--header .slide-frame__content {
-  padding-top: 1rem;
 }
 
 /* Optional content kickers participate in the heading's reading order. */

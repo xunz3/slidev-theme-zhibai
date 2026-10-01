@@ -12,8 +12,6 @@ themeConfig:
   presentation:
     preset: zhubai
     chrome: auto
-    header: false
-    footerAuthors: true
     pageNumber: true
 ---
 

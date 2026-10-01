@@ -3,8 +3,6 @@ import SlideFrame from '../components/SlideFrame.vue'
 import type { PresentationChrome } from '../setup/presentation-config'
 
 withDefaults(defineProps<{
-  title?: string
-  subtitle?: string
   author?: string
   source?: string
   chrome?: PresentationChrome | boolean
@@ -14,7 +12,7 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <SlideFrame variant="quote" :title="title" :subtitle="subtitle" :chrome="chrome">
+  <SlideFrame variant="quote" :chrome="chrome">
     <figure class="slide-layout-quote">
       <div class="slide-layout-quote__content">
         <slot />

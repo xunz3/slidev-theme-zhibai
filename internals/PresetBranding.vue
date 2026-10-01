@@ -6,13 +6,10 @@ import type {
 import ictWordmark from '../assets/ICT/signature-official.png'
 import ucasSignature from '../assets/UCAS/emblem-name-bilingual-hz.svg'
 
-withDefaults(defineProps<{
+defineProps<{
   preset: PresentationPreset
-  showHeader?: boolean
   variant: FrameVariant
-}>(), {
-  showHeader: false,
-})
+}>()
 </script>
 
 <template>
@@ -32,7 +29,6 @@ withDefaults(defineProps<{
 
     <template v-else-if="variant === 'section'">
       <img
-        v-if="!showHeader"
         class="slide-frame__ucas-wordmark"
         :src="ucasSignature"
         alt=""
@@ -72,7 +68,6 @@ withDefaults(defineProps<{
 
     <template v-else-if="variant === 'section'">
       <img
-        v-if="!showHeader"
         class="slide-frame__ict-lockup slide-frame__ict-lockup--section"
         :src="ictWordmark"
         alt=""

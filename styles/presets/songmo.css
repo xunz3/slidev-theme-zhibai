@@ -25,3 +25,68 @@ html.dark .slidev-layout[data-presentation-preset="songmo"] {
   text-decoration-line: underline;
   text-decoration-color: currentColor;
 }
+
+/* A modern monochrome essay: sans display, quiet folios, no decorative bands. */
+.slidev-layout[data-presentation-preset="songmo"],
+.slidev-layout[data-presentation-preset="songmo"] .slide-frame {
+  --presentation-font-display: var(--presentation-font-sans);
+  --presentation-font-quote: var(--presentation-font-sans);
+  --presentation-font-quote-cjk: var(--presentation-font-sans);
+  --presentation-cover-weight: 600;
+  --presentation-cover-tracking: -0.035em;
+  --presentation-cover-measure: 20ch;
+  --presentation-body-line-height: 1.5;
+  --presentation-media-radius: 0;
+  --presentation-media-shadow: none;
+  --presentation-blockquote-font-style: normal;
+  --presentation-callout-radius: 2px;
+  --presentation-table-header-bg: transparent;
+  --presentation-code-border: var(--presentation-border-strong);
+  --presentation-family-info: var(--presentation-text);
+  --presentation-family-positive: var(--presentation-text);
+  --presentation-family-caution: var(--presentation-text);
+  --presentation-family-danger: var(--presentation-text);
+  --presentation-family-question: var(--presentation-text);
+  --presentation-chart-2: color-mix(in srgb, var(--presentation-text) 72%, var(--presentation-bg));
+  --zhubai-chart-2: var(--presentation-chart-2);
+}
+
+/* Visual covers keep their own spacing without overriding dense title budgets. */
+.slidev-layout.cover[data-presentation-preset="songmo"] :where(.slide-cover--has-visual) .slide-cover__main {
+  align-content: center;
+  padding-bottom: 2rem;
+}
+
+.slidev-layout.cover[data-presentation-preset="songmo"] .slide-cover__meta {
+  width: auto;
+  margin-inline: 0;
+  padding-inline: 0;
+  border-top: 1px solid var(--presentation-border-strong);
+  background: transparent;
+}
+
+.slidev-layout[data-presentation-preset="songmo"] blockquote {
+  padding: 0.4rem 0 0.4rem 1.2rem;
+  border-left: 2px solid var(--presentation-text);
+}
+
+.slidev-layout[data-presentation-preset="songmo"] blockquote::before {
+  content: none;
+}
+
+.slidev-layout[data-presentation-preset="songmo"] .slide-layout-section__dot {
+  display: none;
+}
+
+.slidev-layout.section[data-presentation-preset="songmo"] .slide-layout-section__index {
+  font-family: var(--presentation-font-mono);
+  font-size: 5rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.06em;
+}
+
+/* Ruled and monochrome tables keep their paper surface in both modes. */
+html.dark .slidev-layout[data-presentation-preset="songmo"],
+html.dark .slidev-layout[data-presentation-preset="songmo"] .slide-frame {
+  --presentation-table-header-bg: transparent;
+}

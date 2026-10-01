@@ -15,8 +15,6 @@ const BILINGUAL_HEADING_SELECTOR = [
   'h2',
   'h3',
   'h4',
-  '.slide-frame__title',
-  '.slide-frame__subtitle',
 ].map(selector => `.slidev-layout ${selector}`).join(', ')
 
 const textNodesWithin = (element: Element): Text[] => {
@@ -81,11 +79,12 @@ export function normalizeBilingualHeadings(
 
 export const normalizePresentationSubtree = (
   root?: PresentationRenderRoot,
+  additional: readonly PresentationNormalizer[] = [],
 ): number => {
   if (typeof document === 'undefined') return 0
   const scope = root ?? document
   let normalized = 0
-  for (const normalizer of normalizers) {
+  for (const normalizer of [...normalizers, ...additional]) {
     const result = normalizer(scope)
     if (typeof result === 'number') normalized += result
   }
@@ -94,13 +93,14 @@ export const normalizePresentationSubtree = (
 
 export const observePresentationRendering = (
   root?: PresentationRenderRoot,
+  additional: readonly PresentationNormalizer[] = [],
 ): (() => void) => {
   if (typeof document === 'undefined' || typeof MutationObserver === 'undefined') {
     return () => {}
   }
 
   const scope = root ?? document
-  normalizePresentationSubtree(scope)
+  normalizePresentationSubtree(scope, additional)
   const target = scope instanceof Document ? scope.documentElement : scope
   if (!target) return () => {}
 
@@ -122,7 +122,7 @@ export const observePresentationRendering = (
         }
       }
     }
-    for (const addedRoot of roots) normalizePresentationSubtree(addedRoot)
+    for (const addedRoot of roots) normalizePresentationSubtree(addedRoot, additional)
   })
   observer.observe(target, {
     attributeFilter: ['class'],

@@ -499,6 +499,12 @@ const executeQuality = async () => {
     await runPhase('native-layouts', () => runCommandPhase(
       'native-layouts', ['--test', 'tests/quality/native-layouts.spec.mjs'], 180_000,
     ))
+    await runPhase('preview', () => runCommandPhase(
+      'preview', ['--test', 'tests/quality/preview.spec.mjs'], 600_000,
+    ))
+    await runPhase('cover-authors', () => runCommandPhase(
+      'cover-authors', ['--test', 'tests/quality/cover-authors.spec.mjs'], 480_000,
+    ))
     await runPhase('veil-surfaces', () => runCommandPhase(
       'veil-surfaces', ['--test', 'tests/quality/veil-surfaces.spec.mjs'], 240_000,
     ))

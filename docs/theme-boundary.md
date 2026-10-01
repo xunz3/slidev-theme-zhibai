@@ -13,7 +13,7 @@ Zhubai is a presentation theme for Slidev. It supplies slide appearance, layouts
 
 Zhubai follows Slidev's [directory structure conventions](https://sli.dev/custom/directory-structure) for layouts, components, styles, setup, and static institutional assets. These extension directories are optional in Slidev; a theme includes only the ones it uses. The package declares Slidev `>=52.15.2`, the minimum version currently validated for this release.
 
-Latin font families use Slidev's native webfont defaults. The theme separately imports Inter 500 and upright Noto Sans SC and Noto Serif SC through Google CSS2, while keeping them in Slidev's local list to avoid requesting unsupported CJK italics. This is CSS-only and adds no font-loading runtime. The exact roles and sizes are in the [typography specification](./zhubai-design.md#6-字体排印).
+Latin and Chinese families both use Slidev's native font loader. The theme maps the resolved `fonts.sans / serif / mono` stacks onto preset typography roles and does not import remote font CSS. `fonts.local` and `fonts.provider: none` keep font requests under the author's control. The defaults request upright weights supported by all five families. See the [font and offline configuration](./configuration.md#标准字体与离线演示).
 
 The cover's `::visual::` region uses Slidev's [named layout slots](https://sli.dev/guide/write-layout) and [`::name::` slot shorthand](https://sli.dev/features/slot-sugar). The markup inside it remains authored Markdown, Vue components, or HTML. Zhubai does not parse it as a separate document format.
 

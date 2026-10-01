@@ -53,3 +53,43 @@ html.dark .slidev-layout[data-presentation-preset="qingdai"] {
   justify-items: center;
   text-align: center;
 }
+
+/* A measured folio: serif headings and quotes, airy reading, ruled tables. */
+.slidev-layout[data-presentation-preset="qingdai"],
+.slidev-layout[data-presentation-preset="qingdai"] .slide-frame {
+  --presentation-font-heading: var(--presentation-font-serif);
+  --presentation-body-line-height: 1.65;
+  --presentation-two-cols-gap: 3rem;
+  --presentation-blockquote-font-style: normal;
+  --presentation-blockquote-bg: color-mix(in srgb, var(--presentation-accent) 4%, transparent);
+  --presentation-media-radius: 2px;
+  --presentation-media-shadow: none;
+  --presentation-table-header-bg: transparent;
+  --presentation-table-row-alt-bg: transparent;
+}
+
+.slidev-layout[data-presentation-preset="qingdai"] blockquote {
+  padding: 0.8rem 1.5rem;
+  border-block: 1px solid var(--presentation-border-strong);
+  text-align: center;
+}
+
+.slidev-layout[data-presentation-preset="qingdai"] blockquote::before {
+  content: none;
+}
+
+.slidev-layout[data-presentation-preset="qingdai"] table {
+  border-block: 1px solid var(--presentation-border-strong);
+}
+
+.slidev-layout[data-presentation-native="two-cols-header"][data-presentation-preset="qingdai"] .col-header h1 {
+  padding-block: 0.35em;
+  border-block: 1px solid var(--presentation-border-strong);
+  text-align: center;
+}
+
+/* Ruled and monochrome tables keep their paper surface in both modes. */
+html.dark .slidev-layout[data-presentation-preset="qingdai"],
+html.dark .slidev-layout[data-presentation-preset="qingdai"] .slide-frame {
+  --presentation-table-header-bg: transparent;
+}
