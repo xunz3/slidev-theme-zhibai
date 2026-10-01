@@ -8,13 +8,13 @@
 
 | Preset | Character | Structure |
 | --- | --- | --- |
-| `zhubai` · 朱白 (default) | Warm rice paper, ink, vermilion title rules and diamond bullets | Left aligned |
+| `zhubai` · 朱白 (default) | Warm rice paper, ink, vermilion title rules and diamond bullets | Centered cover; left aligned content |
 | `qingdai` · 青黛 | Moon-white paper and dark blue, centered titles between fine rules | Centered cover and chapter |
-| `songmo` · 松墨 | Quiet monochrome typography, with vermilion reserved for seals and focus | Left aligned |
+| `songmo` · 松墨 | Quiet monochrome typography, with vermilion reserved for seals and focus | Centered cover; left aligned content |
 | `ucas` | Scholarly blue and the original bilingual institutional signature | Centered academic cover |
-| `ict` | Signal blue, mono labels, and a technical opening grid | Left aligned |
+| `ict` | Signal blue, mono labels, and a technical opening grid | Centered cover; left aligned content |
 
-The [design](./docs/zhubai-design.md), [token contract](./docs/zhubai-tokens.md), and [implementation notes](./docs/zhubai-implementation.md) describe the 0.5 architecture. Historical `veil-*.md` documents remain archived design records.
+The [design](./docs/zhubai-design.md), [token contract](./docs/zhubai-tokens.md), and [preset identities](./docs/preset-identities.md) describe the theme architecture.
 
 ## Start a deck
 
@@ -168,6 +168,8 @@ The [authoring guide](./docs/authoring.md) maps presentation purposes to layouts
 
 Run `pnpm run build:preview` to build the interactive preview: five presets on the same content, light/dark mode, six page types, three templates, and Markdown for every page. Serve `dist-preview` with a static server; [preview instructions](./docs/authoring.md#交互预览与逐页源码) include the GitHub Pages workflow. The preview is prepared locally; no public URL is advertised until a deployment exists.
 
-The demo deck is [example.md](./example.md); [preset-design.md](./fixtures/preset-design.md) compares the preset identities with the same content. Build individual examples with `pnpm run build:zhubai`, `build:qingdai`, or `build:songmo`; matching `screenshot:*` commands export PNGs.
+The demo deck is [example.md](./example.md); [preset-gallery.md](./examples/preset-gallery.md) compares all five preset identities with the same content. Build individual examples with `pnpm run build:zhubai`, `build:qingdai`, or `build:songmo`; matching `screenshot:*` commands export PNGs.
 
 CI runs the complete quality gates and validates the npm tarball on pull requests and `master`. GitHub Releases trigger npm publishing through OIDC after the same checks pass. See [release setup and instructions](./docs/releasing.md).
+
+See [testing and workspace maintenance](./docs/testing.md) for the gate coverage, focused checks, fixtures, and generated artifacts.

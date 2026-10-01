@@ -20,7 +20,7 @@
 
 五种预设的封面默认水平居中，可用 `coverAlign: left` 设置左对齐。朱白、青黛、松墨没有机构 logo，无图封面共用同一套垂直居中与上下内距规则，将标题、副标题和正文作为一组放在署名区上方。长标题和多人署名使用共享的紧凑间距；UCAS、ICT 为机构 logo 保留自己的顶部空间。
 
-每套预设都有显式暗色纸面与提亮结构色。机构标识使用原始资产，配色是主题的设计决定，不代表整套机构品牌规范。资产来源见 [主题边界](./theme-boundary.md) 与历史 [来源调查](./veil-design.md)。
+每套预设都有显式暗色纸面与提亮结构色。机构标识使用原始资产，配色是主题的设计决定，不代表整套机构品牌规范。资产来源见 [主题边界](./theme-boundary.md#institutional-sources)。
 
 中文引文在朱白、青黛与 UCAS 中优先使用本地楷体，松墨与 ICT 使用无衬线。代码、页码与技术索引使用标准 `fonts.mono`。原生布局使用同一预设解析路径；`none` 不注入主题。强调色、页脚和字体的覆盖规则见 [配置文档](./configuration.md)。
 
@@ -29,5 +29,3 @@
 [暗色对照](./assets/zhubai/preset-contact-sheet-dark.png)
 
 验收入口是 [同内容对照](../examples/preset-gallery.md)，覆盖五预设 × 封面／章节／正文／图表／引用／数字，另有 [技术分享](../examples/technical-talk.md)、[研究报告](../examples/research-report.md)、[课程讲义](../examples/course.md) 三份完整模板。使用 [交互预览](./authoring.md#交互预览与逐页源码) 比较页面，并复制对应的 Markdown。
-
-旧 Veil 的三预设说明保留在 `veil-*.md` 设计档案中。

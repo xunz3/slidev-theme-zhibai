@@ -20,3 +20,11 @@ The cover's `::visual::` region uses Slidev's [named layout slots](https://sli.d
 Each deck owns the meaning and source of its content. Put local figures in the deck's `public/` directory and provide their alternative text. Zhubai provides accessible figure handling and visual defaults; it does not download, reinterpret, or validate the underlying research material.
 
 The package includes only the institutional signatures used by its presets. Demonstration and quality-test media live under `fixtures/public/author-fixtures/` and are excluded from the published theme. The sample deck illustrates ordinary Slidev authoring without adding a second runtime or producer protocol.
+
+## Institutional sources
+
+- [UCAS identity resources](https://onestop.ucas.edu.cn/home/info/6b9e95dc-5785-4eee-b25f-1f884698cfc3) provide the reference for preserving the existing official bilingual signature without redrawing it.
+- [UCAS presentation resources](https://onestop.ucas.edu.cn/Home/Info/e1e7b553-14c1-42f3-910a-88d25ebf9c48) are the official template resource index.
+- The ICT horizontal signature comes from the [official site](https://www.ict.ac.cn/); its original URL, retrieval details, and ownership notes remain in [the asset source record](../assets/ICT/SOURCES.md).
+
+Theme palettes and compositions are design choices, not official institutional brand specifications. Institutional marks retain their original proportions and ownership.

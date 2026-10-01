@@ -7,6 +7,7 @@
 - Apply preset and footer configuration consistently to native Slidev layouts, preserve `none`, and honor standard font configuration without forced remote font CSS.
 - Consolidate page-level presentation options and compatibility aliases; support unequal two-column layouts and refine preset typography and content styles.
 - Add Chinese and English preset galleries, three scenario templates, authoring/configuration guides and an interactive source preview with a manual Pages workflow.
+- Remove obsolete Veil design records, screenshots and duplicate gallery tests; retain current coverage and document the quality gates.
 
 ## 0.5.0 — 2026-09-30
 

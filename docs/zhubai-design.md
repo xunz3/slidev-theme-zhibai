@@ -1,7 +1,6 @@
 # 朱白 (zhubai) 设计文档
 
-> 状态：已实施并通过质量验收（见 [实施记录](./zhubai-implementation.md)） · 面向版本：0.5.0 · 前任主题：slidev-theme-veil 0.4.0
-> 吸收：[样式优化审计](./veil-style-optimization.md)（问题诊断仍然有效） · 取代：[0.4 设计契约](./veil-redesign.md) 中与本方案冲突的部分
+> 当前设计方向。公共字段以 [配置文档](./configuration.md) 为准，预设差异见 [预设身份](./preset-identities.md)，验证入口见 [测试说明](./testing.md)。
 
 ![朱白封面概念](./assets/zhubai/cover-concept.svg)
 
@@ -95,7 +94,7 @@ Veil 0.4 的审计结论是：工程扎实，但视觉趋同、色彩系统缺�
 - 正文行高 1.6，衬线用于展示标题，无衬线用于内容层级；表格保留纸面。
 - 章节页：淡墨 144px folio 数字（透明度从 9% 提到 16%）+ 右下一枚小朱印对位，构成"大而淡"与"小而浓"的张力。
 
-### 4.2 `qingdai` 青黛（新增）
+### 4.2 `qingdai` 青黛
 
 月白 + 黛蓝 + 朱印。清冷的学院气质，适合文献综述、理论报告：
 
@@ -105,7 +104,7 @@ Veil 0.4 的审计结论是：工程扎实，但视觉趋同、色彩系统缺�
 - 封面默认居中构图，无图时标题组在署名区上方垂直居中，meta 带上下各一条发丝线。
 - 朱印与朱批仍为朱色——"万黛丛中一点朱"。
 
-### 4.3 `songmo` 松墨（新增）
+### 4.3 `songmo` 松墨
 
 纯白 + 纯墨，**全预设零结构色相**：链接、eyebrow、编号全部是墨。唯一的彩色是印章与朱批的朱。
 
@@ -182,7 +181,7 @@ seal: "米拉"            # 可选，单页覆盖
 
 - 标题块 padding-block 上限 `clamp(2.25rem, 5vh, 3.5rem)` → `clamp(3rem, 8vh, 5rem)`，留白从"空"变成"托"。
 - meta 带：背景 accent 4% → 6%，顶部 1px 发丝线，内部三栏（作者 | 日期 | 印章）。
-- 构图变体：左轴（zhubai/ict）、居中（qingdai/ucas）、`::visual::` 与 `background` 行为不变。
+- 五预设封面默认水平居中，`coverAlign: left` 显式选择左轴；`::visual::` 与 `background` 保留作者控制。
 
 ## 6. 字体排印
 
@@ -204,7 +203,7 @@ seal: "米拉"            # 可选，单页覆盖
 
 **Quote**：按预设选择衬线、楷体或无衬线（§6）；引用来源前可选小朱点。
 
-**Callout**：保留 borderless tonal 面，左侧加 2px family 色条（现行 family 色只在 0.48rem marker 上，3 米外不可辨）；marker 形状系统保留。
+**Callout**：保留 borderless tonal 面，左侧使用 2px family 色条；marker 形状系统保留。
 
 **表格**：可选 `.presentation-table--booktabs` 三线表（顶 1.5px / 表头下 1px / 底 1.5px，无纵线）；默认表头、细线与交替行由预设决定，独立于可选强调色。
 
@@ -216,7 +215,7 @@ seal: "米拉"            # 可选，单页覆盖
 
 ## 8. 动效与阴影
 
-全部参数 token 化（替代现行硬编码）：
+全部参数使用共享 token：
 
 ```css
 --presentation-motion-duration: 520ms;
@@ -239,46 +238,28 @@ seal: "米拉"            # 可选，单页覆盖
 | --- | --- | --- |
 | npm 包 | `slidev-theme-veil` | `slidev-theme-zhubai`（0.5.0 起） |
 | 主题引用 | `theme: slidev-theme-veil` | `theme: slidev-theme-zhubai` |
-| 默认预设 id | `default` | `zhubai`（`default` 作为别名保留一个次版本，控制台提示迁移） |
+| 默认预设 id | `default` | `zhubai`（`default` 作为迁移别名保留） |
 | 色料 token | `--veil-*` | `--zhubai-*` |
 | 语义 token | `--presentation-*` | **不变** |
 | class / data 属性 | `.slide-*`、`data-presentation-preset` | **不变** |
 | 图表 token | `--veil-chart-*` | `--zhubai-chart-*`（旧名 alias 一个次版本） |
 | 文件 | `styles/presets/default.css` | `styles/presets/zhubai.css`（+ 新增 `qingdai.css`、`songmo.css`） |
-| 文档 | `docs/veil-*.md` | 新文档以 `zhubai-*.md` 命名；历史 veil 文档保留存档 |
-| 仓库名 | `slidev-theme-4obsidian` | 建议同步改为 `slidev-theme-zhubai` |
+| 文档 | `docs/veil-*.md` | 当前设计、token 与预设规范；旧文档可从 Git 历史查看 |
+| 仓库名 | `slidev-theme-4obsidian` | `slidev-theme-zhubai` |
 
-### 9.2 token 架构（与更名同做）
+### 9.2 token 架构
 
-1. 提取 `styles/presets/base.css`：三个现行 preset 文件约 90% 重复的 token 块只留一份；各预设只写 delta（纸、墨、结构色、字体角色、签名特征）。预设文件从约 230 行降到 60–80 行。
-2. 命名契约（写入 `docs/zhubai-tokens.md`）：
+1. `styles/presets/base.css` 保留公共映射；各预设只声明纸、墨、结构色、字体角色与签名特征的差异。
+2. 命名契约见 [token 文档](./zhubai-tokens.md)：
    - `--zhubai-*`：色料与品牌资产（zhu、ink、paper、dai、chart、grid）——预设层定义；
    - `--presentation-*`：语义角色（bg、text、border、字体角色、尺寸、动效、阴影）——从色料派生，布局/组件只消费这一层。
 3. 层级约定：尺寸/字体角色在 `.slidev-layout, .slide-frame`；颜色在预设作用域；frame 级只放真正 per-frame 的值。
 
-## 10. 实施路线
+## 10. 验证
 
-| 阶段 | 内容 | 产出 |
-| --- | --- | --- |
-| **P0 地基** | token 架构整理 + 更名脚手架（包名、文件、alias、文档骨架） | `quality` 全绿，行为零变化 |
-| **P1 朱白** | zhubai 预设落地：色料、白文暗色、朱线朱点、朱批、封面 meta 三栏 | 默认预设焕然；暗色不再发灰 |
-| **P2 印章** | seal 组件（配置、渲染、a11y）+ 盖章动效 + 章节页对位 | 签名元素就位 |
-| **P3 家族** | qingdai + songmo 两个新预设；ucas/ict 迁入新架构并修暗色 | 五预设联系表两两可辨 |
-| **P4 精修** | 楷体引文、CJK 700、内容页 kicker、booktabs、动效 token 化 | 全部质量门更新完毕，发 0.5.0 |
+`pnpm run quality` 验证五预设、配置、字体、封面、印章、媒体、可访问性与预览。`pnpm run quality:design` 聚焦朱色 token、签名线、印章几何、图表别名和动效；完整门禁职责与证据位置见 [测试说明](./testing.md)。
 
-每阶段独立可发布；P1+P2 即可构成 0.5.0 的最小叙事（"更名 + 朱白 + 印章"）。
-
-## 11. 验证
-
-沿用 `pnpm run quality`，需要新增/更新的契约：
-
-- **新增** `zhubai-design.spec.mjs`：朱色 token 值、朱线/朱点存在性、暗色朱色不提灰（计算样式断言色相）、白文模式背景值；
-- **新增** seal 用例：渲染几何、aria-label、缺省不渲染、机构预设默认关闭、reduced-motion 下无盖章动画；
-- 更新 `typography.spec.mjs`（H1 40px、CJK display 700、楷体栈）、`accessibility.spec.mjs`（朱/黛亮暗对比度用例，数值见 §3.1）、`preset-isolation.spec.mjs`（五预设）；
-- 截图：`screenshot:{zhubai,qingdai,songmo,ucas,ict}` × 亮/暗联系表，按 §4.5 目检；
-- 行为探针：暗色下朱色 computed style 的色相角在 0–20° 区间（防回归洗灰）。
-
-## 12. 兼容性承诺
+## 11. 兼容性承诺
 
 - 布局、组件 props、frontmatter 字段语义不变；`seal`、`kicker`（内容页）、`.presentation-table--booktabs` 均为可选新增；
 - `--presentation-*` 语义 token 名称保留；`--veil-*` → `--zhubai-*` 提供别名过渡一个次版本；
