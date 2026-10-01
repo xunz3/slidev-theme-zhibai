@@ -51,3 +51,5 @@ The first version is already published by the bootstrap step. Do not trigger an 
 4. Check the workflow result and `npm view slidev-theme-zhubai version dist-tags`.
 
 A draft release does not publish. A failed quality gate or mismatched version stops publication. If a run fails before npm accepts the package, fix the cause and rerun it. If npm already accepted the version, create a new version instead of trying to replace it. Keep `repository.url` and the trusted-publisher repository name in sync if the GitHub repository moves again.
+
+If a publishing-workflow fix is needed after a Release exists, keep its tag unchanged. Merge the fix to `master`, then manually run `publish.yml` with the existing tag and matching prerelease flag. This checks out the tagged source, reruns the full quality workflow at that ref, and publishes its newly validated tarball. Confirm the version is still unpublished before retrying. Tarball paths passed to npm must start with `./` so npm treats them as local files rather than GitHub shorthand.
