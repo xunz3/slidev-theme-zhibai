@@ -99,7 +99,7 @@ test('published assets contain only the institution signatures used by the theme
     'assets/ICT/signature-official.png',
     'assets/UCAS/emblem-name-bilingual-hz.svg',
   ])
-  assert.equal(manifest.name, 'slidev-theme-zhubai')
+  assert.equal(manifest.name, 'slidev-theme-zhibai')
   assert.equal(manifest.slidev.defaults.colorSchema, 'light')
   assert.equal(manifest.slidev.colorSchema, 'both')
   assert.ok(manifest.engines.slidev, 'declare the supported Slidev version')

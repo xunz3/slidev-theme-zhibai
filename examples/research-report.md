@@ -1,5 +1,5 @@
 ---
-theme: zhubai
+theme: zhibai
 layout: cover
 title: 置信度，能否经受分布变化？
 subtitle: 研究问题、受控实验与结论边界。

@@ -1,8 +1,12 @@
-# slidev-theme-zhubai
+# slidev-theme-zhibai
 
-朱白 (Zhubai) is a Chinese-first Slidev theme built around paper, ink, and a restrained vermilion signature. Five presets support light and dark mode. Requires Slidev 52.15.2+ and Node.js 20.19+.
+知白 (Zhibai) is a Chinese-first Slidev theme built around paper, ink, and generous space for ideas.
 
-![Five Zhubai presets across six page types in light mode](./docs/assets/zhubai/preset-contact-sheet.png)
+> 以留白，呈现所知。
+
+Five presets support light and dark mode. Requires Slidev 52.15.2+ and Node.js 20.19+.
+
+![Five Zhibai presets across six page types in light mode](./docs/assets/zhubai/preset-contact-sheet.png)
 
 [Dark mode comparison](./docs/assets/zhubai/preset-contact-sheet-dark.png).
 
@@ -21,14 +25,14 @@ The [design](./docs/zhubai-design.md), [token contract](./docs/zhubai-tokens.md)
 Install the theme in a Slidev project:
 
 ```sh
-pnpm add slidev-theme-zhubai
+pnpm add slidev-theme-zhibai
 ```
 
 Select it in `slides.md`:
 
 ```md
 ---
-theme: slidev-theme-zhubai
+theme: slidev-theme-zhibai
 layout: cover
 title: Make room for the idea.
 subtitle: A clear opening for a thoughtful talk.
@@ -99,7 +103,7 @@ The cover's `background` prop applies a full-slide background image. `image` res
 
 Select `zhubai`, `qingdai`, `songmo`, `ucas`, or `ict` under `themeConfig.presentation.preset`, or override a slide with `presentation: { preset: songmo }`. The older `presentationPreset` field remains supported. Each preset provides a complete visual identity and its own default accent. Keep `accent` unset to follow the preset, or supply a CSS color as an optional override. Other deck settings are `coverAlign`, `showFooter`, `pageNumber`, and optional `seal`; use the same names under a slide-level `presentation` object. `accent: auto` restores that slide’s preset accent. Legacy `chrome` settings remain compatible. See the [complete configuration table and inheritance rules](./docs/configuration.md). `title`, `subtitle`, `eyebrow`, `date`, and `footer` are Slidev frontmatter fields; `authors` belongs in deck frontmatter as described above.
 
-Zhubai provides `cover`, `intro`, `section`, `toc`, `default`, `center`, `two-cols`, `statement`, `quote`, `figure`, `image-left`, `image-right`, `code`, `references`, and `end` layouts. It also provides the `Authors`, `Badge`, `Callout`, `Figure`, `Kbd`, `Seal`, `Steps`, `Tag`, and `Timeline` components.
+Zhibai provides `cover`, `intro`, `section`, `toc`, `default`, `center`, `two-cols`, `statement`, `quote`, `figure`, `image-left`, `image-right`, `code`, `references`, and `end` layouts. It also provides the `Authors`, `Badge`, `Callout`, `Figure`, `Kbd`, `Seal`, `Steps`, `Tag`, and `Timeline` components.
 
 ```md
 <Callout type="note" title="Decision rule">
@@ -138,9 +142,13 @@ Use `==a key phrase==` for a vermilion annotation, or `.presentation-focus` for 
 
 Content slides accept optional frontmatter `kicker`. Add `class="presentation-table--booktabs"` to a table for three academic rules. Mark Chinese quotations with `lang="zh"` to select Kaiti. `Figure treatment="framed"` uses a stronger shadow than `plain`.
 
-## Upgrade from Veil to Zhubai 0.5
+## Upgrade to Zhibai 0.6
 
-- Change the package and deck reference to `slidev-theme-zhubai`.
+From `slidev-theme-zhubai`, install `slidev-theme-zhibai` and change your deck to `theme: zhibai` (or `theme: slidev-theme-zhibai`). The theme brand is now 知白; 朱白 remains the default preset. Preset IDs, `--zhubai-*` pigment tokens, `--presentation-*` semantic tokens, layouts and components keep their existing names.
+
+### From Veil
+
+- Change the package and deck reference to `slidev-theme-zhibai`.
 - Change preset `default` to `zhubai`. The old ID resolves to Zhubai with a once-per-session console warning during the 0.5 transition. The `default` **layout** keeps its name.
 - Change `--veil-*` pigment and chart references to `--zhubai-*`. Legacy aliases remain for one minor release; all `--presentation-*` semantic names stay stable.
 - Layouts, component props, authored visuals, `background`, and institutional signature assets remain supported. Seal, kicker, and booktabs are optional additions.
@@ -151,7 +159,7 @@ The former `artwork` / `presentationArtwork` engine remains removed. Use cover `
 
 ## Theme boundary and development
 
-Zhubai provides slide appearance, layouts, components, and default configuration. Slidev's official guidance recommends addons for features that can operate independently of a theme. See [the boundary and source notes](./docs/theme-boundary.md), [the Zhubai design contract](./docs/zhubai-design.md), and the [cover composition fixture](./fixtures/cover-composition.md).
+Zhibai provides slide appearance, layouts, components, and default configuration. Slidev's official guidance recommends addons for features that can operate independently of a theme. See [the boundary and source notes](./docs/theme-boundary.md), [the Zhibai design contract](./docs/zhubai-design.md), and the [cover composition fixture](./fixtures/cover-composition.md).
 
 To work on this repository, use Node.js 24 (`.nvmrc`) and pnpm 11.13.1 (`packageManager`). The published theme supports Node.js 20.19+ through Slidev:
 

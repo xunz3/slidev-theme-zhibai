@@ -3,16 +3,16 @@ theme: ./
 layout: cover
 title: Evidence Begins with a Question
 subtitle: A quiet structure for ideas that deserve to be understood.
-eyebrow: Zhubai / field notes
+eyebrow: Zhibai / field notes
 date: September 2026
-footer: slidev-theme-zhubai · Theme example
+footer: slidev-theme-zhibai · Theme example
 authors:
-  - name: Zhubai
+  - name: Zhibai
     institution: A Slidev theme for clear thinking
 themeConfig:
   presentation:
     preset: zhubai
-    seal: 朱白
+    seal: 知白
 ---
 
 Make the question visible. Give each result a reason to be here.

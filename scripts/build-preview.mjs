@@ -27,7 +27,7 @@ const decks = []
 for (const definition of definitions) {
   const path = resolve(root, 'examples', definition.file)
   const original = await readFile(path, 'utf8')
-  const portable = original.replace(/^theme: .+$/m, 'theme: zhubai')
+  const portable = original.replace(/^theme: .+$/m, 'theme: zhibai')
   const source = resolve(generated, definition.file)
   await writeFile(source, original.replace(/^theme: .+$/m, `theme: ${JSON.stringify(root)}`))
   await writeFile(resolve(output, 'sources', definition.file), portable)

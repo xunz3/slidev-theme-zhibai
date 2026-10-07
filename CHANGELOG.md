@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0 — 2026-10-07
+
+- Rename the theme brand to 知白 (Zhibai), the npm package to `slidev-theme-zhibai`, and the GitHub repository to `xunz3/slidev-theme-zhibai`.
+- Update installation, examples, portable preview sources, and release automation to the new package name.
+- Keep 朱白 (`zhubai`) as the default preset, with all preset IDs, CSS tokens, layouts, and component APIs unchanged.
+
 ## 0.5.1 — 2026-10-02
 
 - Default all five cover presets to centered alignment. Unify vertical spacing for text-only Zhubai, Qingdai and Songmo covers while retaining institutional logo and image-cover spacing.

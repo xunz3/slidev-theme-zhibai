@@ -6,7 +6,7 @@ subtitle: Identical bilingual content · 相同双语内容
 footer: Theme architecture regression
 authors:
   - name: Quality Gate
-    institution: Zhubai Theme
+    institution: Zhibai Theme
 themeConfig:
   presentation:
     preset: __GLOBAL_PRESET__

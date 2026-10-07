@@ -1,5 +1,5 @@
 ---
-theme: zhubai
+theme: zhibai
 layout: cover
 title: 检索系统，如何减少等待？
 subtitle: 一次从观测、改造到验证的技术分享。

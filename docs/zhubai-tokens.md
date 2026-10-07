@@ -1,4 +1,6 @@
-# 朱白 0.5 token 契约
+# 知白 token 契约
+
+主题品牌自 0.6.0 起为「知白 Zhibai」。`zhubai` 仍是朱白预设 ID；`--zhubai-*` 色料 token 保持兼容。
 
 主题分为色料、语义、消费三层。`styles/presets/base.css` 定义公共映射；各预设文件声明纸、墨、结构色、字体角色、内容密度与构图差异；布局与组件消费 `--presentation-*`。公共尺寸、字体映射、动效和阴影集中在 `styles/tokens.css`。
 

@@ -15,7 +15,7 @@ themeConfig:
 
 # 42%
 
-A native Slidev fact layout, styled by Zhubai.
+A native Slidev fact layout, styled by Zhibai.
 
 ---
 layout: two-cols-header

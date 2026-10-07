@@ -1,6 +1,6 @@
 # GitHub and npm releases
 
-The source repository is [xunz3/slidev-theme-zhubai](https://github.com/xunz3/slidev-theme-zhubai), the default branch is `master`, and the npm package is `slidev-theme-zhubai`.
+The source repository is [xunz3/slidev-theme-zhibai](https://github.com/xunz3/slidev-theme-zhibai), the default branch is `master`, and the npm package is `slidev-theme-zhibai`.
 
 ## Checks and artifacts
 
@@ -25,7 +25,7 @@ The new package must exist before npm allows a trusted publisher to be configure
 After merging the release commit and passing CI, download that commit's `npm-package` artifact from GitHub Actions. Publish the tarball once using the authenticated local npm CLI, for example for the initial stable release:
 
 ```sh
-npm publish ./slidev-theme-zhubai-0.5.0.tgz --access public --tag latest --ignore-scripts
+npm publish ./slidev-theme-zhibai-0.6.0.tgz --access public --tag latest --ignore-scripts
 ```
 
 Then open the package's npm Settings → Trusted Publisher and configure:
@@ -34,7 +34,7 @@ Then open the package's npm Settings → Trusted Publisher and configure:
 | --- | --- |
 | Provider | GitHub Actions |
 | Owner | `xunz3` |
-| Repository | `slidev-theme-zhubai` |
+| Repository | `slidev-theme-zhibai` |
 | Workflow filename | `publish.yml` |
 | Environment | Leave empty |
 | Permission | Allow `npm publish` |
@@ -48,7 +48,7 @@ The first version is already published by the bootstrap step. Do not trigger an 
 1. Update `package.json` to the intended version and merge the reviewed change to `master` after CI passes. There is no compiled npm distribution to rebuild manually.
 2. Create a GitHub Release targeting that commit, with tag `vX.Y.Z` matching the package version. For `X.Y.Z-rc.1` or another prerelease, also select GitHub's prerelease checkbox.
 3. Publish the GitHub Release. The workflow reruns quality checks and publishes the validated package with provenance using npm OIDC.
-4. Check the workflow result and `npm view slidev-theme-zhubai version dist-tags`.
+4. Check the workflow result and `npm view slidev-theme-zhibai version dist-tags`.
 
 A draft release does not publish. A failed quality gate or mismatched version stops publication. If a run fails before npm accepts the package, fix the cause and rerun it. If npm already accepted the version, create a new version instead of trying to replace it. Keep `repository.url` and the trusted-publisher repository name in sync if the GitHub repository moves again.
 

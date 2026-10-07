@@ -124,7 +124,7 @@ $$\sigma^2=\frac{1}{n}\sum_{i=1}^{n}(x_i-\mu)^2$$
 - [研究报告](../examples/research-report.md)：问题 → 定义 → 实验 → 边界 → 文献。
 - [课程讲义](../examples/course.md)：目标 → 反例 → 定义 → 演算 → 练习 → 回顾。
 
-三份模板只依赖主题与 Slidev，使用内联内容，不需要额外图片包。将文件复制为 `slides.md`，安装 `@slidev/cli` 与对应版本的 `slidev-theme-zhubai`，然后运行 `npx slidev slides.md`。模板对应仓库当前配置；在 npm 发布更新前，可以把 `theme` 改为本地主题目录的绝对路径。模板中的实验数据明确标记为示例，开始使用时需要替换。
+三份模板只依赖主题与 Slidev，使用内联内容，不需要额外图片包。将文件复制为 `slides.md`，安装 `@slidev/cli` 与对应版本的 `slidev-theme-zhibai`，然后运行 `npx slidev slides.md`。模板对应仓库当前配置；在 npm 发布更新前，可以把 `theme` 改为本地主题目录的绝对路径。模板中的实验数据明确标记为示例，开始使用时需要替换。
 
 ## 交互预览与逐页源码
 
