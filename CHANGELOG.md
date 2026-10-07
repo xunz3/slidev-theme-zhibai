@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.1 — 2026-10-07
+
+- Widen the shared content grid with 44px side margins, 32px column gaps, and aligned prose, tables, callouts and code across all five presets.
+- Pair Source Sans 3 and Source Serif 4 with the standard Noto Chinese families; give Zhubai serif content titles and use the configured quote face without relying on local Kai fonts.
+- Compose citations with quotation marks, rules and separate source labels. Support `[!cite]` and `[!quote]` through the existing Callout component, and refresh the standalone quote layouts and visual galleries.
+- Keep content citations at the 18px reading size (16px in columns). Style plain blockquotes as compact 16px sans-serif side notes with secondary text and a faint 1px rail; reserve quotation marks and source labels for citations.
+
 ## 0.6.0 — 2026-10-07
 
 - Rename the theme brand to 知白 (Zhibai), the npm package to `slidev-theme-zhibai`, and the GitHub repository to `xunz3/slidev-theme-zhibai`.

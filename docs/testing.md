@@ -24,6 +24,7 @@ pnpm run package:check
 | `native-layouts` | 原生 Slidev 布局的预设、配色与 slots |
 | `preview` | 五预设、中文／英文页面与完整模板，亮暗模式、两种尺寸、逐页源码与预览导航 |
 | `media-treatments` | 真实代码语言标签、plain／framed／bleed、显式图片 fit 与图注编号 |
+| `editorial-system` | 五预设 × 亮暗模式 × 两种窗口宽度，内容网格、引用语法、出处标签与溢出 |
 | `typography` | 浏览器实际使用的中西文字体、字重与标题尺寸 |
 | `zhubai-design` | 朱色、纸面、印章、签名线、强调、图表 token 别名与动效 |
 

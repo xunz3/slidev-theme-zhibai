@@ -40,16 +40,16 @@ test('Latin and Chinese typography uses the intended rendered faces', { timeout:
       })
       records.push({ slide, heading, latin, cjk, geometry })
       await frame.screenshot({ path: resolve(output, `slide-${slide}.png`) })
-      // CDP exposes Noto variable base-face names and Libertinus static weight names.
+      // CDP may expose a variable font's base weight in its family name.
       const uses = (fonts, family) => fonts.some(font => font.isCustomFont
-        && (font.familyName === family || ((family.startsWith('Noto ') || family === 'Libertinus Serif') && font.familyName.startsWith(`${family} `)))
+        && (font.familyName === family || font.familyName.startsWith(`${family} `))
         && font.glyphCount > 0)
-      assert.ok(uses(heading, slide <= 2 ? 'Libertinus Serif' : 'Inter'), `slide ${slide}: use the preset's display or reading face`)
-      assert.ok(uses(heading, slide <= 2 ? 'Noto Serif SC' : 'Noto Sans SC'), `slide ${slide}: Chinese headings need the matching loaded face`)
+      assert.ok(uses(heading, [1, 2, 4].includes(slide) ? 'Source Serif 4' : 'Source Sans 3'), `slide ${slide}: use the preset's display or reading face`)
+      assert.ok(uses(heading, [1, 2, 4].includes(slide) ? 'Noto Serif SC' : 'Noto Sans SC'), `slide ${slide}: Chinese headings need the matching loaded face`)
       assert.equal(geometry.headingWeight, slide === 1 ? '700' : '600', 'headlines use an explicitly loaded weight')
       assert.equal(geometry.cjkHeadingWeight, slide <= 3 ? '700' : '600', 'CJK display receives the projection weight')
       if (slide > 3) assert.equal(geometry.headingSize, '40px')
-      assert.ok(uses(latin, 'Inter'), JSON.stringify(records.at(-1)))
+      assert.ok(uses(latin, 'Source Sans 3'), JSON.stringify(records.at(-1)))
       assert.ok(uses(cjk, 'Noto Sans SC'), JSON.stringify(records.at(-1)))
       assert.ok(geometry.x <= 1 && geometry.y <= 1, `slide ${slide}: typography fits the canvas`)
     }

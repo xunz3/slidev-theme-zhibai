@@ -27,7 +27,7 @@
   text-wrap: balance;
 }
 
-/* Content titles use the shared sans hierarchy; preset chapters may opt into serif. */
+/* Presets select the title face independently of the reading face. */
 .slidev-layout h1 {
   font-family: var(--presentation-font-heading);
   font-size: calc(var(--presentation-slide-title-size) * var(--presentation-heading-scale));
@@ -105,7 +105,7 @@
 }
 
 .slidev-layout .slide-frame__content > :is(pre, .slidev-code-wrapper) {
-  width: min(calc(100% - 2rem), calc(var(--presentation-block-width) + 12ch));
+  width: var(--presentation-block-width);
   max-width: 100%;
   margin-inline: auto;
 }
@@ -268,30 +268,24 @@
 
 .slidev-layout blockquote {
   position: relative;
-  padding: 0.35rem 0 0.35rem 4rem;
+  padding: var(--presentation-blockquote-padding);
   border: 0;
-  color: var(--presentation-text);
+  border-inline-start: 1px solid var(--presentation-blockquote-border);
+  border-radius: 0;
+  color: var(--presentation-blockquote-text);
   background: var(--presentation-blockquote-bg);
-  font-family: var(--presentation-font-quote);
-  font-size: var(--presentation-quote-size, 28px);
+  font-family: var(--presentation-font-body);
+  font-size: var(--presentation-blockquote-size);
   font-style: var(--presentation-blockquote-font-style);
 }
 
 .slidev-layout blockquote::before {
-  position: absolute;
-  top: -0.18em;
-  left: 0;
-  color: color-mix(in srgb, var(--presentation-accent) 20%, transparent);
-  content: "“";
-  font-family: var(--presentation-font-display, var(--presentation-font-quote));
-  font-size: 64px;
-  font-style: normal;
-  line-height: 1;
-  pointer-events: none;
+  content: none;
 }
 
 .slidev-layout blockquote p {
   margin-bottom: 0.55em;
+  line-height: var(--presentation-quote-line-height);
 }
 
 .slidev-layout blockquote p:last-child {
@@ -528,8 +522,14 @@
   font-weight: 700;
 }
 
-.slidev-layout blockquote[lang|="zh"],
-.slidev-layout blockquote [lang|="zh"],
+.slidev-layout:not(.quote) blockquote[lang|="zh"],
+.slidev-layout:not(.quote) blockquote [lang|="zh"] {
+  font-family: var(--presentation-font-body);
+  font-style: normal;
+}
+
+.slidev-layout.quote blockquote[lang|="zh"],
+.slidev-layout.quote blockquote [lang|="zh"],
 .slidev-layout .slide-layout-quote__content[lang|="zh"],
 .slidev-layout .slide-layout-quote__content [lang|="zh"] {
   font-family: var(--presentation-font-quote-cjk);

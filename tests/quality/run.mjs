@@ -511,6 +511,9 @@ const executeQuality = async () => {
     await runPhase('typography', () => runCommandPhase(
       'typography', ['--test', 'tests/quality/typography.spec.mjs'], 240_000,
     ))
+    await runPhase('editorial-system', () => runCommandPhase(
+      'editorial-system', ['--test', 'tests/quality/editorial-system.spec.mjs'], 240_000,
+    ))
     await runPhase('zhubai-design', () => runCommandPhase(
       'zhubai-design', ['--test', 'tests/quality/zhubai-design.spec.mjs'], 240_000,
     ))

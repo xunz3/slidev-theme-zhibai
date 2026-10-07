@@ -33,7 +33,9 @@
 
 ## 字体与尺寸
 
-默认正文为 Inter / Noto Sans SC；衬线 display 为 Libertinus Serif / Noto Serif SC。青黛的内容标题使用衬线，松墨与 ICT 的 display 使用无衬线。实际字族映射到 Slidev 已解析的 `fonts.sans / serif / mono`，字体加载完全由其 provider 控制。内容 H1 40px、双栏 H1 30px。中文 display 使用显式 `lang="zh"` 字重 700，Latin 使用对应预设字重。引文的中文字体角色为 `--presentation-font-quote-cjk`：朱白、青黛、UCAS 优先使用本地 `Kaiti SC / STKaiti / KaiTi`，松墨与 ICT 使用标准无衬线角色。
+默认正文为 Source Sans 3 / Noto Sans SC；衬线 display 为 Source Serif 4 / Noto Serif SC。朱白、青黛的内容标题使用衬线，松墨与 ICT 的 display 使用无衬线。实际字族映射到 Slidev 已解析的 `fonts.sans / serif / mono`，字体加载完全由其 provider 控制。内容 H1 40px、双栏 H1 30px。中文 display 使用显式 `lang="zh"` 字重 700，Latin 使用对应预设字重。引文的中文字体角色为 `--presentation-font-quote-cjk`：朱白、青黛、UCAS 使用标准衬线角色，跟随作者的 `fonts.serif`，松墨与 ICT 使用标准无衬线角色。
+
+左右页边距由 `--presentation-slide-inset` 控制，默认 44px；正文与内容块宽度为内容区的 100%，不再叠加字符宽度限制。双栏间距为 32px。整页引用使用 `--presentation-quote-display-size`（36px），普通引用块使用 `--presentation-blockquote-size`（16px），次级文字色、侧边线与内距由 `--presentation-blockquote-text / border / padding` 控制，引用提示使用 `--presentation-citation-size`（18px，双栏 16px）。`--presentation-quote-accent` 决定引号颜色，朱白绑定朱色签名。
 
 ## 动效和层次
 

@@ -11,7 +11,7 @@
   --presentation-code-copy-color: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
   --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 8%, transparent);
   --presentation-inline-code-border: color-mix(in srgb, var(--presentation-accent) 22%, var(--presentation-border));
-  --presentation-blockquote-border: transparent;
+  --presentation-blockquote-border: var(--presentation-border);
   --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 6%, transparent);
   --presentation-callout-border: color-mix(in srgb, var(--presentation-accent) 54%, transparent);
   --slidev-code-font-family: var(--presentation-font-mono);
@@ -112,9 +112,17 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame {
   font-size: 30px;
 }
 
-.slidev-layout.two-cols[data-presentation-preset] .presentation-callout {
+.slidev-layout.two-cols[data-presentation-preset] .presentation-callout:not([data-callout-family="quotation"]) {
   margin-block: 0.7rem;
   padding: 0.55rem 0.85rem;
+}
+
+.slidev-layout:is(.two-cols, [data-presentation-native="two-cols-header"])[data-presentation-preset],
+.slidev-layout.two-cols[data-presentation-preset] .slide-frame {
+  --presentation-quote-size: 1rem;
+  --presentation-citation-size: var(--presentation-quote-size);
+  --presentation-citation-padding: 0.65rem 0.5rem 0.6rem 2.5rem;
+  --presentation-blockquote-padding: 0.25rem 0 0.25rem 0.75rem;
 }
 
 .slidev-layout.two-cols[data-presentation-preset] .presentation-media {
@@ -123,7 +131,6 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame {
 
 .slidev-layout.two-cols[data-presentation-preset] blockquote {
   margin-block: 0.5rem;
-  padding: 0.4rem 0 0.4rem 2rem;
   line-height: 1.25;
 }
 
@@ -172,7 +179,7 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
 }
 
 .slidev-layout.cover[data-presentation-preset] .slide-frame {
-  --presentation-cover-inset-x: 4rem;
+  --presentation-cover-inset-x: var(--presentation-slide-inset);
   --presentation-cover-inset-y: 2.25rem;
   padding: var(--presentation-cover-padding, 2.25rem 4rem);
   padding-inline: 0;
@@ -738,12 +745,6 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
 
 .slidev-layout.closing[data-presentation-preset] .presentation-closing--minimal h1 {
   max-width: var(--presentation-closing-measure, 17ch);
-}
-
-.slidev-layout.quote:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-layout-quote__meta {
-  margin-left: 1.45rem;
-  border-top: 0;
-  padding-top: 0;
 }
 
 /* Short display covers and content-heavy covers have separate type budgets. */

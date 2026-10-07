@@ -65,13 +65,20 @@ html.dark .slidev-layout[data-presentation-preset="songmo"] {
   background: transparent;
 }
 
-.slidev-layout[data-presentation-preset="songmo"] blockquote {
-  padding: 0.4rem 0 0.4rem 1.2rem;
-  border-left: 2px solid var(--presentation-text);
+.slidev-layout[data-presentation-preset="songmo"] .presentation-callout[data-callout-family="quotation"] {
+  padding-inline-start: 1.2rem;
+  border-block: 0;
+  border-inline-start: 2px solid var(--presentation-text);
 }
 
-.slidev-layout[data-presentation-preset="songmo"] blockquote::before {
+.slidev-layout[data-presentation-preset="songmo"] .presentation-callout[data-callout-family="quotation"]::before,
+.slidev-layout.quote[data-presentation-preset="songmo"] .slide-layout-quote::before {
   content: none;
+}
+
+.slidev-layout.quote[data-presentation-preset="songmo"] .slide-layout-quote {
+  padding: 0.5rem 0 0.5rem 1.75rem;
+  border-inline-start: 2px solid var(--presentation-text);
 }
 
 .slidev-layout[data-presentation-preset="songmo"] .slide-layout-section__dot {

@@ -73,15 +73,15 @@ test('preview exposes working presets, page sources and complete scenario templa
                   const fonts = {}
                   if (slide.layout === 'quote') {
                     fonts.quote = await fontsFor('.slide-layout-quote__content blockquote p')
-                    assert.ok(uses(fonts.quote, serif ? 'Libertinus Serif' : 'Inter'), JSON.stringify(fonts))
+                    assert.ok(uses(fonts.quote, serif ? 'Source Serif 4' : 'Source Sans 3'), JSON.stringify(fonts))
                   } else {
                     fonts.heading = await fontsFor('h1')
-                    assert.ok(uses(fonts.heading, (display && serif) || (!display && slide.preset === 'qingdai') ? 'Libertinus Serif' : 'Inter'), JSON.stringify(fonts))
+                    assert.ok(uses(fonts.heading, (display && serif) || (!display && ['zhubai', 'qingdai'].includes(slide.preset)) ? 'Source Serif 4' : 'Source Sans 3'), JSON.stringify(fonts))
                   }
                   if (slide.layout === 'default') {
                     fonts.prose = await fontsFor('.slide-frame__content > p')
                     fonts.emphasis = await fontsFor('em')
-                    assert.ok(uses(fonts.prose, 'Inter') && uses(fonts.emphasis, 'Inter'), JSON.stringify(fonts))
+                    assert.ok(uses(fonts.prose, 'Source Sans 3') && uses(fonts.emphasis, 'Source Sans 3'), JSON.stringify(fonts))
                     assert.ok(fonts.emphasis.some(font => /italic/i.test(font.postScriptName)), 'English emphasis uses a loaded italic face')
                     const footnoteLeading = await layout.locator('.footnotes li').evaluate(el => parseFloat(getComputedStyle(el).lineHeight) / parseFloat(getComputedStyle(el).fontSize))
                     assert.ok(Math.abs(footnoteLeading - 1.3) < 0.01, 'footnotes use caption leading independently of prose')

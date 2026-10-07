@@ -1,6 +1,6 @@
 {
 	"name": "slidev-theme-zhibai",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"type": "module",
 	"description": "Zhibai: a Chinese-first Slidev theme with paper, ink, generous whitespace, and five presentation presets.",
 	"license": "MIT",
@@ -83,8 +83,8 @@
 			"colorSchema": "light",
 			"aspectRatio": "16:9",
 			"fonts": {
-				"sans": "Inter, Noto Sans SC",
-				"serif": "Libertinus Serif, Noto Serif SC",
+				"sans": "Source Sans 3, Noto Sans SC",
+				"serif": "Source Serif 4, Noto Serif SC",
 				"mono": "JetBrains Mono",
 				"weights": "400,600,700",
 				"italic": false

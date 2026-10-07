@@ -112,6 +112,60 @@
   margin-bottom: 0;
 }
 
+/* Markdown [!cite]/[!quote] and the Vue component share an editorial pull quote.
+   Keep the labelled title in the DOM; visually it becomes the source below. */
+.slidev-layout .presentation-callout[data-callout-family="quotation"] {
+  position: relative;
+  display: grid;
+  grid-template-areas: "quotation" "source";
+  gap: 0.5rem;
+  padding: var(--presentation-citation-padding);
+  border: 0;
+  border-block: 1px solid var(--presentation-border-strong);
+  border-radius: 0;
+  background: transparent;
+  text-align: var(--presentation-citation-align);
+}
+
+.slidev-layout .presentation-callout[data-callout-family="quotation"]::before {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.2rem;
+  color: var(--presentation-quote-accent);
+  content: "“";
+  font-family: var(--presentation-font-serif);
+  font-size: 3rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.slidev-layout .presentation-callout[data-callout-family="quotation"] .presentation-callout__content {
+  grid-area: quotation;
+  min-width: 0;
+  color: var(--presentation-text);
+  font-family: var(--presentation-font-quote);
+  font-size: var(--presentation-citation-size);
+  font-weight: 400;
+  line-height: var(--presentation-quote-line-height);
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.slidev-layout .presentation-callout[data-callout-family="quotation"] .presentation-callout__content :is(p, li) {
+  line-height: inherit;
+}
+
+.slidev-layout .presentation-callout[data-callout-family="quotation"] .presentation-callout__title {
+  grid-area: source;
+  justify-content: var(--presentation-citation-align);
+  margin: 0;
+  color: var(--presentation-family-quotation);
+  font-family: var(--presentation-font-label);
+  font-size: var(--presentation-caption-size);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 .presentation-media {
   display: flex;
   flex-direction: column;

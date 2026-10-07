@@ -116,8 +116,8 @@ for (const preset of presetNames) {
 const packageJson = JSON.parse(sourceAt('package.json'))
 const fonts = packageJson.slidev?.defaults?.fonts ?? {}
 if (
-  fonts.sans !== 'Inter, Noto Sans SC'
-  || fonts.serif !== 'Libertinus Serif, Noto Serif SC'
+  fonts.sans !== 'Source Sans 3, Noto Sans SC'
+  || fonts.serif !== 'Source Serif 4, Noto Serif SC'
   || fonts.mono !== 'JetBrains Mono'
   || fonts.webfonts !== undefined
   || fonts.local !== undefined

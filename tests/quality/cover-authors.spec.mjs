@@ -127,8 +127,8 @@ test('collaborative covers retain every author, contact and affiliation within t
                   }
                   const fonts = { heading: await fontsFor('h1'), author: await fontsFor('.slide-cover__author-primary'), email: await fontsFor('.slide-cover__author-email') }
                   const uses = (faces, family) => faces.some(face => face.isCustomFont && face.familyName.startsWith(family) && face.glyphCount > 0)
-                  assert.ok(uses(fonts.heading, ['songmo', 'ict'].includes(item.preset) ? 'Inter' : 'Libertinus Serif'), JSON.stringify(fonts))
-                  assert.ok(uses(fonts.author, 'Inter') && uses(fonts.email, 'Inter'), JSON.stringify(fonts))
+                  assert.ok(uses(fonts.heading, ['songmo', 'ict'].includes(item.preset) ? 'Source Sans 3' : 'Source Serif 4'), JSON.stringify(fonts))
+                  assert.ok(uses(fonts.author, 'Source Sans 3') && uses(fonts.email, 'Source Sans 3'), JSON.stringify(fonts))
                   evidence.renderedFonts = fonts
                 }
                 assert.deepEqual(state.names, definition.authors.map(author => author.name))

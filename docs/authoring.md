@@ -44,6 +44,23 @@ authors:
 
 实际封面：[三位作者](assets/zhubai/english-cover.png)、[六位作者](assets/zhubai/english-cover-six-authors.png)、[八位作者](assets/zhubai/english-cover-eight-authors.png)。长邮箱优先在 `@` 前换行，避免把域名后缀拆成孤立一行。
 
+## 引文与出处
+
+引用可以直接使用以下语法，或使用等价的 `<Callout type="cite" title="陈一 · 研究笔记">` 组件。标题作为出处显示在引文下方；`[!quote]` 使用同样的构图。只有这两种引用标记由主题识别，普通 blockquote 保留原有语义。
+
+```md
+> [!cite] 陈一 · 研究笔记
+> 让读者知道结论从哪里来，也知道它到哪里为止。
+```
+
+整页引用使用 `layout: quote`，在 frontmatter 中设置 `author`、`source`。朱白使用朱色引号，青黛居中夹线，松墨使用墨色边栏；机构预设沿用各自的结构色。中西文引用都跟随标准 `fonts.serif / sans`，无需依赖本地楷体。
+
+普通 `>` 是 Markdown 引用块，不会自动变成 `cite`。内容页将它排成安静的旁注：16px 正文同款无衬线字体、次级文字色、淡色 1px 侧边线、左对齐，不加引号或出处区；适合短引用或补充背景。旁注内距保持紧凑；`cite / quote` 使用 18px 阅读字号，双栏中为 16px。
+
+如果内容明确是说明或提示，使用 `<Callout type="note" title="补充说明">`；信息提示则使用 `info`。`[!note] / [!info]` 是 Obsidian 的 callout 标记，本主题只编译 `[!cite] / [!quote]`，因此在 Slidev 中直接使用组件。
+
+![朱白的引用正文与下方出处](assets/zhubai/zhubai-citation.png)
+
 ## 多图对照
 
 不需要新增一个专用布局。把两张有意义的图放入原生双栏插槽；两张图使用相同坐标、单位、比例与图注格式。图片路径与内容由作者提供。

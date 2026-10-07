@@ -1017,10 +1017,16 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
                 question: 'ring',
                 quotation: 'bar',
               }[family.family]
-              assert.notEqual(style.backgroundColor, 'rgba(0, 0, 0, 0)',
-                'notes use a visible semantic tonal surface')
-              assert.equal(style.borderLeftWidth, '2px', 'the tonal surface carries a visible semantic family edge')
-              assert.equal(style.borderTopWidth, '0px')
+              if (family.family === 'quotation') {
+                assert.equal(style.backgroundColor, 'rgba(0, 0, 0, 0)', 'citations retain the paper surface')
+                assert.equal(style.borderLeftWidth, '0px')
+                assert.equal(style.borderTopWidth, '1px', 'citations have a distinct editorial rule')
+              } else {
+                assert.notEqual(style.backgroundColor, 'rgba(0, 0, 0, 0)',
+                  'notes use a visible semantic tonal surface')
+                assert.equal(style.borderLeftWidth, '2px', 'the tonal surface carries a visible semantic family edge')
+                assert.equal(style.borderTopWidth, '0px')
+              }
               assert.ok(
                 style.cueBackground !== 'rgba(0, 0, 0, 0)'
                 || style.cueBorderWidth !== '0px',

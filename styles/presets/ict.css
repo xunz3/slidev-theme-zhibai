@@ -113,7 +113,7 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-locku
 
 .slidev-layout[data-presentation-preset="ict"] .slide-frame {
   --presentation-brand-muted: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
-  --presentation-cover-padding: 5.4rem 4rem 2rem;
+  --presentation-cover-padding: 5.4rem var(--presentation-slide-inset) 2rem;
   --presentation-cover-padding-mobile: 4.8rem 1.5rem 1.25rem;
   --presentation-cover-leading: 1.04;
   --presentation-cover-measure: 17ch;
@@ -142,15 +142,6 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-locku
 
 .slidev-layout[data-presentation-preset="ict"] :is(th, figcaption) {
   font-family: var(--presentation-font-mono);
-}
-
-.slidev-layout[data-presentation-preset="ict"] blockquote {
-  padding-left: 1.2rem;
-  border-left: 2px solid var(--presentation-accent);
-}
-
-.slidev-layout[data-presentation-preset="ict"] blockquote::before {
-  content: none;
 }
 
 .slidev-layout[data-presentation-native][data-presentation-preset="ict"] {

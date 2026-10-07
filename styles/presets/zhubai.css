@@ -82,13 +82,16 @@ html.dark .slidev-layout[data-presentation-preset="zhubai"] {
   margin-bottom: 0.55em;
 }
 
-/* Editorial paper: serif display, generous prose, and vermilion punctuation. */
+/* Editorial paper: Song-style titles and quotations over a clear sans body. */
 .slidev-layout[data-presentation-preset="zhubai"],
 .slidev-layout[data-presentation-preset="zhubai"] .slide-frame {
   --presentation-font-display: var(--presentation-font-serif);
-  --presentation-font-heading: var(--presentation-font-sans);
-  --presentation-body-line-height: 1.6;
+  --presentation-font-heading: var(--presentation-font-serif);
+  --presentation-heading-weight: 600;
+  --presentation-heading-letter-spacing: -0.025em;
+  --presentation-body-line-height: 1.55;
   --presentation-quote-line-height: 1.5;
+  --presentation-quote-accent: var(--presentation-signature);
   --presentation-table-header-bg: transparent;
 }
 

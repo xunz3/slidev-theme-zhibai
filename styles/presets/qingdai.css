@@ -12,7 +12,7 @@ html.dark .slidev-layout[data-presentation-preset="qingdai"] {
 }
 
 .slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right, .image-text, .figure, .toc, .center)[data-presentation-preset="qingdai"] .slide-frame h1 {
-  padding-block: 0.35em;
+  padding-block: 0.25em;
   border-block: 1px solid color-mix(in srgb, var(--presentation-accent) 50%, transparent);
   text-align: center;
 }
@@ -58,24 +58,33 @@ html.dark .slidev-layout[data-presentation-preset="qingdai"] {
 .slidev-layout[data-presentation-preset="qingdai"],
 .slidev-layout[data-presentation-preset="qingdai"] .slide-frame {
   --presentation-font-heading: var(--presentation-font-serif);
-  --presentation-body-line-height: 1.65;
-  --presentation-two-cols-gap: 3rem;
+  --presentation-body-line-height: 1.55;
+  --presentation-two-cols-gap: 2rem;
+  --presentation-citation-align: center;
+  --presentation-citation-padding: 0.75rem 1.25rem;
   --presentation-blockquote-font-style: normal;
-  --presentation-blockquote-bg: color-mix(in srgb, var(--presentation-accent) 4%, transparent);
+  --presentation-blockquote-bg: transparent;
   --presentation-media-radius: 2px;
   --presentation-media-shadow: none;
   --presentation-table-header-bg: transparent;
   --presentation-table-row-alt-bg: transparent;
 }
 
-.slidev-layout[data-presentation-preset="qingdai"] blockquote {
-  padding: 0.8rem 1.5rem;
+.slidev-layout[data-presentation-preset="qingdai"] .presentation-callout[data-callout-family="quotation"]::before,
+.slidev-layout.quote[data-presentation-preset="qingdai"] .slide-layout-quote::before {
+  content: none;
+}
+
+.slidev-layout.quote[data-presentation-preset="qingdai"] .slide-layout-quote {
+  padding: 1.5rem 1rem;
   border-block: 1px solid var(--presentation-border-strong);
+  justify-items: center;
   text-align: center;
 }
 
-.slidev-layout[data-presentation-preset="qingdai"] blockquote::before {
-  content: none;
+.slidev-layout.quote[data-presentation-preset="qingdai"] .slide-layout-quote__meta {
+  width: min(100%, 28rem);
+  justify-items: center;
 }
 
 .slidev-layout[data-presentation-preset="qingdai"] table {
@@ -83,7 +92,7 @@ html.dark .slidev-layout[data-presentation-preset="qingdai"] {
 }
 
 .slidev-layout[data-presentation-native="two-cols-header"][data-presentation-preset="qingdai"] .col-header h1 {
-  padding-block: 0.35em;
+  padding-block: 0.25em;
   border-block: 1px solid var(--presentation-border-strong);
   text-align: center;
 }

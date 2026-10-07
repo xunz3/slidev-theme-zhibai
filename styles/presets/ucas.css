@@ -110,7 +110,7 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] :is(.slide-frame__ucas
 
 .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
   --presentation-brand-muted: color-mix(in srgb, var(--presentation-accent) 75%, var(--presentation-text));
-  --presentation-cover-padding: 5.8rem 4rem 2rem;
+  --presentation-cover-padding: 5.8rem var(--presentation-slide-inset) 2rem;
   --presentation-cover-padding-mobile: 5rem 1.5rem 1.25rem;
   --presentation-cover-width: 68rem;
 }
@@ -119,7 +119,7 @@ html.dark .slidev-layout[data-presentation-preset="ucas"] :is(.slide-frame__ucas
 .slidev-layout[data-presentation-preset="ucas"],
 .slidev-layout[data-presentation-preset="ucas"] .slide-frame {
   --presentation-body-line-height: 1.55;
-  --presentation-two-cols-gap: 2.5rem;
+  --presentation-two-cols-gap: 2rem;
   --presentation-font-heading: var(--presentation-font-sans);
   --presentation-caption-size: 0.8125rem;
   --presentation-media-radius: 3px;

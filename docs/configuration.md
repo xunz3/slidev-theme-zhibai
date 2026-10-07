@@ -66,7 +66,7 @@ presentation:
 
 直接使用 [Slidev 的 `fonts` 配置](https://sli.dev/custom/config-fonts)。主题把 Slidev 已解析的 `sans / serif / mono` 字体栈映射到正文、展示标题、引用与标签角色，不再注入远程字体 CSS。
 
-默认字体通过 Slidev 的同一个 provider 加载：Inter、Libertinus Serif、JetBrains Mono、Noto Sans SC、Noto Serif SC。默认请求 400 / 600 / 700 的正体字重，避免对中文字体请求不支持的斜体。不同预设决定哪些角色使用衬线或无衬线。
+默认字体通过 Slidev 的同一个 provider 加载：Source Sans 3、Source Serif 4、JetBrains Mono、Noto Sans SC、Noto Serif SC。默认请求 400 / 600 / 700 的正体字重，避免对中文字体请求不支持的斜体。不同预设决定哪些角色使用衬线或无衬线。
 
 ```yaml
 fonts:

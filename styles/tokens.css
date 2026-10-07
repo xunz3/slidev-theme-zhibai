@@ -17,10 +17,11 @@
   --presentation-size-64: 4rem;
   --presentation-size-96: 6rem;
 
-  --presentation-reading-width: 68ch;
-  --presentation-block-width: 68ch;
-  --presentation-slide-padding: 2.5rem 4rem;
-  --presentation-two-cols-gap: 4rem;
+  --presentation-reading-width: 100%;
+  --presentation-block-width: 100%;
+  --presentation-slide-inset: 2.75rem;
+  --presentation-slide-padding: 2.25rem var(--presentation-slide-inset);
+  --presentation-two-cols-gap: 2rem;
   --presentation-content-gap: 1rem;
   --presentation-body-size: var(--presentation-size-18);
   --presentation-body-line-height: 1.55;
@@ -50,8 +51,11 @@
   --presentation-inline-code-border: transparent;
   --presentation-inline-code-shadow: none;
   --presentation-blockquote-bg: transparent;
-  --presentation-blockquote-border: transparent;
-  --presentation-blockquote-font-style: italic;
+  --presentation-blockquote-border: var(--presentation-border);
+  --presentation-blockquote-padding: 0.25rem 0 0.25rem 0.75rem;
+  --presentation-blockquote-size: var(--presentation-size-16);
+  --presentation-blockquote-text: var(--presentation-text-muted);
+  --presentation-blockquote-font-style: normal;
   --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 6%, transparent);
   --presentation-callout-border: transparent;
   --presentation-callout-radius: 8px;
@@ -102,22 +106,27 @@
   --presentation-highlight-text: var(--presentation-text);
   --presentation-keycap-gap: 0.28rem;
   --presentation-statement-size: var(--presentation-size-96);
-  --presentation-quote-size: 1.75rem;
+  --presentation-quote-size: var(--presentation-body-size);
   --presentation-quote-line-height: 1.45;
+  --presentation-quote-display-size: 2.25rem;
+  --presentation-quote-accent: var(--presentation-accent);
+  --presentation-citation-size: var(--presentation-quote-size);
+  --presentation-citation-padding: 0.75rem 1rem 0.65rem 2.5rem;
+  --presentation-citation-align: start;
   --presentation-reference-size: var(--presentation-size-14);
 
-  --presentation-font-sans: var(--presentation-resolved-sans, "Inter", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif);
-  --presentation-font-serif: var(--presentation-resolved-serif, "Libertinus Serif", "Noto Serif SC", ui-serif, Georgia, serif);
+  --presentation-font-sans: var(--presentation-resolved-sans, "Source Sans 3", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif);
+  --presentation-font-serif: var(--presentation-resolved-serif, "Source Serif 4", "Noto Serif SC", ui-serif, Georgia, serif);
   --presentation-font-mono: var(--presentation-resolved-mono, "JetBrains Mono", ui-monospace, monospace);
   --presentation-font-body: var(--presentation-font-sans);
   --presentation-font-display: var(--presentation-font-serif);
   --presentation-font-quote: var(--presentation-font-serif);
   --presentation-font-label: var(--presentation-font-sans);
   --presentation-font-kaiti: "Kaiti SC", "STKaiti", "KaiTi", "Noto Serif SC", serif;
-  --presentation-font-quote-cjk: var(--presentation-font-kaiti);
+  --presentation-font-quote-cjk: var(--presentation-font-quote);
   --presentation-font-heading: var(--presentation-font-sans);
 
-  --presentation-cover-padding: 2.5rem 4rem 2rem;
+  --presentation-cover-padding: 2.5rem var(--presentation-slide-inset) 2rem;
   --presentation-cover-padding-mobile: 2rem 1.5rem 1.25rem;
   --presentation-cover-size: var(--presentation-size-64);
   --presentation-cover-long-size: 3.125rem;

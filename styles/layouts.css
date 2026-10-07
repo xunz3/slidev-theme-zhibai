@@ -145,34 +145,53 @@
 }
 
 .slide-layout-quote {
+  position: relative;
   display: grid;
-  max-width: 48rem;
+  width: min(100%, 54rem);
+  max-width: 100%;
   margin: 0;
-  justify-items: center;
-  text-align: center;
+  padding: 1.75rem 0 0 3.5rem;
+  justify-items: start;
+  text-align: start;
+}
+
+.slide-layout-quote::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--presentation-quote-accent);
+  content: "“";
+  font-family: var(--presentation-font-serif);
+  font-size: 7rem;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .slide-layout-quote__content {
   margin: 0;
   padding: 0;
   border: 0;
-  color: color-mix(in srgb, var(--presentation-text) 88%, var(--presentation-text-muted));
+  color: var(--presentation-text);
   background: transparent;
   font-family: var(--presentation-font-quote);
-  font-size: var(--presentation-quote-size);
+  font-size: var(--presentation-quote-display-size);
   font-style: var(--presentation-blockquote-font-style);
   font-weight: 400;
   hanging-punctuation: first;
   line-height: var(--presentation-quote-line-height);
 }
 
-.slide-layout-quote__content > blockquote {
+.slidev-layout.quote .slide-layout-quote__content > blockquote {
   margin: 0;
   padding: 0;
   border: 0;
   color: inherit;
   background: transparent;
   font: inherit;
+}
+
+.slidev-layout.quote .slide-layout-quote__content > blockquote::before {
+  content: none;
 }
 
 .slide-layout-quote__content :where(p) {
@@ -186,11 +205,11 @@
 
 .slide-layout-quote__meta {
   display: grid;
-  width: min(100%, 24rem);
+  width: 100%;
   margin-top: 1.45rem;
   padding-top: 0.85rem;
   border-top: 1px solid color-mix(in srgb, var(--presentation-accent) 26%, var(--presentation-border));
-  justify-items: center;
+  justify-items: start;
   gap: 0.2rem;
   color: var(--presentation-text-muted);
 }
@@ -206,7 +225,8 @@
 
 .slide-layout-quote__source {
   font-size: var(--presentation-caption-size);
-  font-style: italic;
+  font-family: var(--presentation-font-sans);
+  font-style: normal;
 }
 
 .slide-layout-toc {

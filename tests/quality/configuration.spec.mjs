@@ -48,6 +48,26 @@ const loadTypeScriptModule = async (path) => {
 
 const config = await loadTypeScriptModule('setup/presentation-config.ts')
 const callouts = await loadTypeScriptModule('setup/callouts.ts')
+const quotations = await loadTypeScriptModule('setup/quotations.ts')
+
+test('citation annotations preserve source, rich body, ordinary prose and fenced examples', () => {
+  const source = '> [!CITE] Chen & "Evidence"\n> A **clear** claim.\n>\n> - With its conditions.\n\nAfterward.'
+  const result = quotations.transformQuotationAnnotations(source)
+  assert.match(result, /<Callout type="cite" title="Chen &amp; &quot;Evidence&quot;">/)
+  assert.match(result, /A \*\*clear\*\* claim\.\n\n- With its conditions\./)
+  assert.ok(result.endsWith('\nAfterward.'))
+  assert.equal(quotations.transformQuotationAnnotations(result), result, 'compilation is idempotent')
+  assert.match(quotations.transformQuotationAnnotations('> [!quote]\n> A thought.'), /type="quote" title=""/)
+  for (const untouched of [
+    '> Ordinary quotation.\n> Its continuation.',
+    '> [!unknown] A title\n> Its body.',
+    '> Ordinary quotation.\n> [!cite] A literal annotation inside it.',
+    '> \\[!cite] Escaped example.',
+    '    > [!cite] Indented code example.',
+    '```md\n> [!cite] Fenced example\n> Its body.\n```',
+    '~~~~md\n> [!quote] Fenced example\n~~~\n> Still inside the longer fence.\n~~~~',
+  ]) assert.equal(quotations.transformQuotationAnnotations(untouched), untouched)
+})
 const figureLayout = await loadTypeScriptModule('setup/figure-layout.ts')
 
 test('removed density inputs do not change preset presentation state', () => {
@@ -836,8 +856,8 @@ test('follow-up source hygiene removes dead runtime paths and remote font CSS', 
   assert.doesNotMatch(tokens, /#3f6f68|#77b5aa/)
   assert.match(
     tokens,
-    /--presentation-reading-width:\s*68ch/,
-    'ordinary prose should keep the selected 68ch reading measure',
+    /--presentation-reading-width:\s*100%/,
+    'ordinary prose should use the slide content grid',
   )
   assert.match(
     tokens,
