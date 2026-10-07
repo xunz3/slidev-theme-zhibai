@@ -1147,7 +1147,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
       assert.equal(await figures.count(), 5)
       assert.equal(
         await figures.nth(0).locator('img').getAttribute('alt'),
-        'Zhubai card connected to a presentation',
+        'Zhibai card connected to a presentation',
       )
       assert.equal(
         await figures.nth(1).locator('img').getAttribute('alt'),
@@ -1751,7 +1751,7 @@ test('US2 canonical closing and image/text layouts preserve their contracts', {
       ).count(), 9)
       assert.equal(
         await onSlide(16, '.presentation-closing__logo img').getAttribute('alt'),
-        'Zhubai presentation research mark',
+        'Zhibai presentation research mark',
       )
 
       await waitForSlide(

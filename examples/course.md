@@ -1,5 +1,5 @@
 ---
-theme: zhubai
+theme: zhibai
 layout: cover
 title: 为什么平均值，还不够？
 subtitle: 从一个反例，理解波动与不确定性。

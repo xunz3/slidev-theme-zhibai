@@ -71,4 +71,4 @@ jobs:
         env:
           VERSION: ${{ needs.release.outputs.version }}
           DIST_TAG: ${{ needs.release.outputs.dist_tag }}
-        run: npm publish "./package/slidev-theme-zhubai-${VERSION}.tgz" --access public --provenance --tag "$DIST_TAG" --ignore-scripts
+        run: npm publish "./package/slidev-theme-zhibai-${VERSION}.tgz" --access public --provenance --tag "$DIST_TAG" --ignore-scripts

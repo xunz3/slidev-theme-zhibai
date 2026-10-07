@@ -175,7 +175,7 @@ title: Figure alternatives and failure states
 
 <Figure
   src="/theme/public/zhubai-card.svg"
-  alt="Zhubai card connected to a presentation"
+  alt="Zhibai card connected to a presentation"
   caption="Meaningful authored alternative text."
 />
 <Figure
@@ -266,7 +266,7 @@ title: Closing with metadata
 contact: research@example.org
 showAuthors: true
 logo: /theme/public/zhubai-card.svg
-logoAlt: Zhubai presentation research mark
+logoAlt: Zhibai presentation research mark
 ---
 
 <div data-quality-case="us2-closing-metadata">
@@ -325,7 +325,7 @@ No contact, author collection, or logo region is emitted.
 layout: image-left
 title: Image left
 image: /theme/public/zhubai-card.svg
-imageAlt: Zhubai card connected to a presentation canvas
+imageAlt: Zhibai card connected to a presentation canvas
 caption: Figure 2. The narrative remains first in source order.
 ---
 
@@ -341,7 +341,7 @@ The narrative comes first in the document. The figure is placed on the left only
 layout: image-right
 title: Image right
 image: /theme/public/zhubai-card.svg
-imageAlt: Zhubai card connected to a presentation canvas
+imageAlt: Zhibai card connected to a presentation canvas
 caption: Figure 2. The narrative remains first in source order.
 backgroundSize: auto 72%
 ---

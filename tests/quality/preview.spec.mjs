@@ -158,7 +158,7 @@ test('preview exposes working presets, page sources and complete scenario templa
     assert.equal(await page.locator('#pages button').count(), 8)
     const download = await page.locator('#download').getAttribute('href')
     const source = await (await page.request.get(`${server.baseUrl}/${download.replace(/^\.\//, '')}`)).text()
-    assert.match(source, /^---\ntheme: zhubai/)
+    assert.match(source, /^---\ntheme: zhibai/)
     assert.ok((await page.request.get(`${server.baseUrl}/sources/research-report.md`)).ok())
     await page.setViewportSize({ width: 390, height: 844 })
     await page.getByRole('button', { name: '浅色预览', exact: true }).click()

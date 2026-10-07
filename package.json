@@ -1,16 +1,16 @@
 {
-	"name": "slidev-theme-zhubai",
-	"version": "0.5.1",
+	"name": "slidev-theme-zhibai",
+	"version": "0.6.0",
 	"type": "module",
-	"description": "A Chinese-first editorial Slidev theme: paper, ink, vermilion seals, and five presentation presets.",
+	"description": "Zhibai: a Chinese-first Slidev theme with paper, ink, generous whitespace, and five presentation presets.",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/xunz3/slidev-theme-zhubai.git"
+		"url": "git+https://github.com/xunz3/slidev-theme-zhibai.git"
 	},
-	"homepage": "https://github.com/xunz3/slidev-theme-zhubai#readme",
+	"homepage": "https://github.com/xunz3/slidev-theme-zhibai#readme",
 	"bugs": {
-		"url": "https://github.com/xunz3/slidev-theme-zhubai/issues"
+		"url": "https://github.com/xunz3/slidev-theme-zhibai/issues"
 	},
 	"keywords": [
 		"presentation",

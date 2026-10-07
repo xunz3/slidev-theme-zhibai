@@ -795,7 +795,7 @@ test('WCAG, layout, image, console, and interaction contract', {
               assert.deepEqual(
                 alternatives.map(item => item.alt),
                 [
-                  'Zhubai card connected to a presentation',
+                  'Zhibai card connected to a presentation',
                   'Caption supplies the omitted alternative.',
                   '',
                   null,

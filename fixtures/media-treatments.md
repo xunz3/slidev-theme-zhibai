@@ -1,7 +1,7 @@
 ---
 theme: ../
 layout: two-cols
-footer: Zhubai · material studies
+footer: Zhibai · material studies
 themeConfig:
   presentation:
     preset: zhubai
