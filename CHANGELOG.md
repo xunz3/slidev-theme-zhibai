@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.2 — 2026-10-10
+
+- Calibrate all five presets to 36px side margins, a 28px top inset and a 20px bottom inset. Remove unused scrollbar space so headings, content and footers share both reading edges.
+- Separate footers from content with a consistent 1px rule, 12px content gap and 8px padding below the rule. Apply the same geometry to native Slidev layouts and optional cover footers.
+- Use symmetric vertical insets for centered pages without footers, and align UCAS and ICT marks with the shared reading axes while preserving centered UCAS covers. Add browser regression coverage for these spacing and alignment contracts.
+
 ## 0.6.1 — 2026-10-07
 
 - Widen the shared content grid with 44px side margins, 32px column gaps, and aligned prose, tables, callouts and code across all five presets.

@@ -3117,7 +3117,7 @@ test('US6 closing, chrome, section branding, and bilingual text converge', {
             return { changed, initial }
           })
           for (const state of [chrome.initial, chrome.changed]) {
-            assert.equal(state.footerRuleWidth, preset === 'ucas' ? '1px' : '0px', 'only the academic footer adds a rule')
+            assert.equal(state.footerRuleWidth, '1px', 'every preset keeps a quiet footer boundary across accent changes')
             assert.equal(state.tableHeaderRule, state.tableRuleColor)
             assert.equal(state.footerCap, 'rgba(0, 0, 0, 0)', 'footer has no accent ornament')
           }

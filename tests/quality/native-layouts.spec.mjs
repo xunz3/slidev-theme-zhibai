@@ -22,6 +22,7 @@ test('unmodified Slidev layouts inherit a usable palette and retain native slots
           const state = await layout.evaluate(el => {
             const style = getComputedStyle(el)
             return { bg: style.backgroundColor, fg: style.color, padding: style.paddingLeft,
+              paddingTop: parseFloat(style.paddingTop), paddingBottom: parseFloat(style.paddingBottom),
               bodySize: Number.parseFloat(style.fontSize),
               overflowX: el.scrollWidth - el.clientWidth, overflowY: el.scrollHeight - el.clientHeight }
           })
@@ -36,6 +37,10 @@ test('unmodified Slidev layouts inherit a usable palette and retain native slots
           assert.equal(await layout.getAttribute('data-presentation-preset'), expectedPresets[slide])
           if (mode === 'light' && [1, 2, 3].includes(slide)) assert.equal(state.bg, 'rgb(244, 246, 247)')
           assert.equal(await layout.locator('.slide-frame__footer').count(), [3, 6].includes(slide) ? 0 : 1)
+          if (slide === 6) {
+            assert.equal(state.paddingTop, 28)
+            assert.equal(state.paddingBottom, state.paddingTop, 'a fact without a footer centers in symmetric vertical insets')
+          }
           const families = await layout.evaluate(el => ({
             body: getComputedStyle(el).fontFamily,
             heading: getComputedStyle(el.querySelector('h1')).fontFamily,

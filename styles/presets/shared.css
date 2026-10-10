@@ -40,21 +40,6 @@ html.dark .slidev-layout[data-presentation-preset] .slide-frame {
   z-index: 1;
 }
 
-.slidev-layout[data-presentation-preset] .slide-frame__footer {
-  border: 0;
-  color: var(--presentation-text-muted);
-  font-family: var(--presentation-font-label);
-  font-size: var(--presentation-chrome-size);
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
-.slidev-layout[data-presentation-preset] .slide-frame__footer {
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1rem;
-  padding: 0;
-}
-
 .slidev-layout[data-presentation-preset] .slide-frame__footer--page-only .slide-frame__page {
   grid-column: 2;
 }
@@ -188,7 +173,7 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
 
 /* Full-width cover bands do not remove the reading inset from optional chrome. */
 .slidev-layout.cover[data-presentation-preset] .slide-frame__footer {
-  padding-inline: var(--presentation-cover-inset-x, 4rem);
+  margin-inline: var(--presentation-cover-inset-x, 4rem);
 }
 
 .slidev-layout.cover[data-presentation-preset] .slide-frame--chrome {

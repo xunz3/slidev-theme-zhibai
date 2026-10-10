@@ -26,6 +26,14 @@ test('five presets distinguish plain blockquotes from annotated and component ci
               const frame = layout.querySelector('.slide-frame') ?? layout
               const content = frame.querySelector('.slide-frame__content') ?? layout
               const style = getComputedStyle(frame)
+              const footer = layout.querySelector('.slide-frame__footer')
+              const footerStyle = getComputedStyle(footer)
+              const canvasRect = layout.getBoundingClientRect()
+              const footerRect = footer.getBoundingClientRect()
+              const scale = canvasRect.width / layout.offsetWidth
+              const contentBottom = frame === layout
+                ? canvasRect.bottom - parseFloat(style.paddingBottom) * scale
+                : content.getBoundingClientRect().bottom
               const citations = [...layout.querySelectorAll('.presentation-callout[data-callout-family="quotation"]')].map(quote => {
                 const title = quote.querySelector('.presentation-callout__title')
                 const prose = quote.querySelector('.presentation-callout__content')
@@ -52,6 +60,19 @@ test('five presets distinguish plain blockquotes from annotated and component ci
               }))
               return { preset: layout.dataset.presentationPreset, paddingLeft: parseFloat(style.paddingLeft),
                 paddingRight: parseFloat(style.paddingRight), x: content.scrollWidth - content.clientWidth,
+                paddingTop: parseFloat(style.paddingTop),
+                readingWidth: frame === layout
+                  ? layout.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)
+                  : content.clientWidth,
+                footer: {
+                  borderWidth: footerStyle.borderTopWidth, borderStyle: footerStyle.borderTopStyle,
+                  borderColor: footerStyle.borderTopColor,
+                  gap: (footerRect.top - contentBottom) / scale,
+                  bottom: (canvasRect.bottom - footerRect.bottom) / scale,
+                  left: (footerRect.left - canvasRect.left) / scale,
+                  right: (canvasRect.right - footerRect.right) / scale,
+                  width: footerRect.width / scale,
+                },
                 y: content.scrollHeight - content.clientHeight,
                 paragraphWidth: paragraph?.getBoundingClientRect().width,
                 contentWidth: content.getBoundingClientRect().width,
@@ -60,8 +81,17 @@ test('five presets distinguish plain blockquotes from annotated and component ci
             })
             records.push({ no, width, mode, ...state })
             await layout.screenshot({ path: resolve(output, `${width}-${mode}-${no}.png`) })
-            assert.equal(state.paddingLeft, 44)
-            assert.equal(state.paddingRight, 44)
+            assert.equal(state.paddingLeft, 36)
+            assert.equal(state.paddingRight, 36)
+            assert.equal(state.paddingTop, 28, 'all presets share a balanced top inset')
+            assert.equal(state.footer.borderWidth, '1px', 'footer has a visible boundary')
+            assert.equal(state.footer.borderStyle, 'solid')
+            assert.notEqual(state.footer.borderColor, 'rgba(0, 0, 0, 0)')
+            assert.ok(Math.abs(state.footer.gap - 12) < 0.1, 'content stays clear of the footer rule')
+            assert.ok(Math.abs(state.readingWidth - state.footer.width) < 1, 'reading content and footer share both edges without an unused scrollbar gutter')
+            for (const [edge, expected] of [['bottom', 20], ['left', 36], ['right', 36]]) {
+              assert.ok(Math.abs(state.footer[edge] - expected) < 0.1, `${edge}: native and theme footer align to the reading grid`)
+            }
             assert.ok(state.x <= 1 && state.y <= 1, JSON.stringify(state))
             if (no % 3 === 1) {
               assert.ok(state.paragraphWidth >= state.contentWidth * 0.98, 'prose uses the content grid')

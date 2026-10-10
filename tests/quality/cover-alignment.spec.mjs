@@ -127,6 +127,7 @@ test('cover alignment and native imagery compose across palettes, imagery, and c
                   const authorRight = Math.max(...authors.map(author => author.right))
                   return {
                     ...measured,
+                    scale: frame.getBoundingClientRect().width / frame.offsetWidth,
                     ink,
                     authorCenterX: authors.length ? (authorLeft + authorRight) / 2 : null,
                     overflowX: content.scrollWidth - content.clientWidth,
@@ -170,9 +171,18 @@ test('cover alignment and native imagery compose across palettes, imagery, and c
                 assert.equal(await frame.locator('.slide-frame__footer').count(), expected.footer ? 1 : 0)
 
                 assert.equal(await frame.locator('.preset-artwork').count(), 0)
+                if (geometry.brand) {
+                  near((geometry.brand.top - geometry.frame.top) / geometry.scale, 28, 'institutional marks share the top reading inset')
+                  if (expected.preset === 'ict' || expected.align === 'left' || expected.closing) {
+                    near((geometry.brand.left - geometry.frame.left) / geometry.scale, 36, 'institutional marks share the left reading axis')
+                  } else {
+                    near(geometry.brand.centerX, geometry.frame.centerX, 'centered institutional covers keep their center axis')
+                  }
+                }
                 if (expected.section) {
                   assert.equal(await frame.locator('.slide-layout-section').count(), 1)
                   assert.equal(await frame.locator('.slide-cover').count(), 0)
+                  near(geometry.content.top - geometry.frame.top, geometry.frame.bottom - geometry.content.bottom, 'sections have symmetric vertical insets')
                   return
                 }
                 if (expected.closing) {

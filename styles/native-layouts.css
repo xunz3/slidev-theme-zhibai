@@ -15,6 +15,10 @@
   text-align: center;
 }
 
+.slidev-layout[data-presentation-native="fact"]:not([data-presentation-footer]) {
+  padding-block: var(--presentation-slide-inset-top);
+}
+
 .slidev-layout[data-presentation-native="fact"] h1 {
   font-family: var(--presentation-font-display);
   font-size: var(--presentation-statement-size);
@@ -37,12 +41,18 @@
 }
 
 .slidev-layout[data-presentation-native][data-presentation-footer] {
-  padding-bottom: 4rem;
+  padding-bottom: calc(
+    var(--presentation-slide-inset-bottom)
+    + var(--presentation-footer-gap)
+    + var(--presentation-footer-padding)
+    + var(--presentation-chrome-size) * var(--presentation-footer-line-height)
+    + 1px
+  );
 }
 
 .slidev-layout[data-presentation-native] > .presentation-native-footer {
   position: absolute;
-  inset: auto 4rem 1.5rem;
+  inset: auto var(--presentation-slide-inset) var(--presentation-slide-inset-bottom);
 }
 
 .slidev-layout[data-presentation-native] .presentation-native-footer [hidden] {

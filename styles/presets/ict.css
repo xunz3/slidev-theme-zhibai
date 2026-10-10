@@ -21,20 +21,15 @@ html.dark .slidev-layout[data-presentation-preset="ict"] {
   --zhubai-grid-major-opacity: 6%;
 }
 
-/* Keep the official ICT mark in its established upper-left position. */
+/* Align the official ICT mark with the shared reading axes. */
 .slidev-layout:is(.cover, .section, .closing)[data-presentation-preset="ict"] :is(.slide-frame__ict-lockup, .slide-frame__ict-lockup--section, .slide-frame__ict-lockup--closing) {
   position: absolute;
   z-index: 2;
-  top: 1.65rem;
-  left: 4rem;
+  top: var(--presentation-slide-inset-top);
+  left: var(--presentation-slide-inset);
   width: min(24rem, 42vw);
   height: auto;
   pointer-events: none;
-}
-
-.slidev-layout.section[data-presentation-preset="ict"] .slide-frame__ict-lockup--section,
-.slidev-layout.closing[data-presentation-preset="ict"] .slide-frame__ict-lockup--closing {
-  top: 1.65rem;
 }
 
 html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-lockup {

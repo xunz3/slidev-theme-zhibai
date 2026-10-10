@@ -1,6 +1,6 @@
 {
 	"name": "slidev-theme-zhibai",
-	"version": "0.6.1",
+	"version": "0.6.2",
 	"type": "module",
 	"description": "Zhibai: a Chinese-first Slidev theme with paper, ink, generous whitespace, and five presentation presets.",
 	"license": "MIT",

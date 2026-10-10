@@ -149,6 +149,7 @@ const snapshotPage = async (page, caseId) => {
         footer: style('.slide-frame__footer', [
           'border-color',
           'border-top-style',
+          'border-top-width',
           'color',
           'font-family',
           'font-size',
@@ -354,8 +355,10 @@ test('5 × 5 × 2 public preset API is visually isolated', { timeout: 240_000 },
           `${mode}: the preset paper and ink palettes remain distinct`)
         assert.ok(styles.every(style => style.callout['border-width'] === '0px 0px 0px 2px'),
           `${mode}: shared tonal callouts have only a 2px semantic family edge`)
-        assert.deepEqual(styles.map(style => style.footer['border-top-style']), presets.map(preset => preset === 'ucas' ? 'solid' : 'none'),
-          `${mode}: UCAS uses a quiet academic rule; the other footers rely on space`)
+        assert.deepEqual(styles.map(style => style.footer['border-top-style']), presets.map(() => 'solid'),
+          `${mode}: all presets separate the footer with a quiet rule`)
+        assert.deepEqual(styles.map(style => style.footer['border-top-width']), presets.map(() => '1px'),
+          `${mode}: footer boundaries keep the same weight across presets`)
       }
     })
 

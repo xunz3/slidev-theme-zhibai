@@ -19,8 +19,13 @@
 
   --presentation-reading-width: 100%;
   --presentation-block-width: 100%;
-  --presentation-slide-inset: 2.75rem;
-  --presentation-slide-padding: 2.25rem var(--presentation-slide-inset);
+  --presentation-slide-inset: 2.25rem;
+  --presentation-slide-inset-top: 1.75rem;
+  --presentation-slide-inset-bottom: 1.25rem;
+  --presentation-slide-padding: var(--presentation-slide-inset-top) var(--presentation-slide-inset) var(--presentation-slide-inset-bottom);
+  --presentation-footer-gap: 0.75rem;
+  --presentation-footer-padding: 0.5rem;
+  --presentation-footer-line-height: 1.5;
   --presentation-two-cols-gap: 2rem;
   --presentation-content-gap: 1rem;
   --presentation-body-size: var(--presentation-size-18);
