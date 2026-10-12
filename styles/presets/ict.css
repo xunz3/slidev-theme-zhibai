@@ -1,11 +1,10 @@
-/* Blueprint: signal blue, mono labels, and a 24px drafting grid. */
+/* Blueprint: signal blue, mono labels, and a sparse grid on structural pages. */
 .slidev-layout[data-presentation-preset="ict"] {
   --zhubai-paper: #f7f9fb;
   --zhubai-ink: #1d2126;
   --zhubai-accent: #0b6bcb;
   --zhubai-highlight: #d9730d;
-  --zhubai-grid-opacity: 3%;
-  --zhubai-grid-major-opacity: 5%;
+  --zhubai-grid-opacity: 2%;
   --presentation-grid-color: var(--zhubai-accent);
   --presentation-font-label: var(--presentation-font-mono);
   --presentation-brand-muted: color-mix(in srgb, var(--presentation-accent) 72%, var(--presentation-text));
@@ -18,7 +17,6 @@ html.dark .slidev-layout[data-presentation-preset="ict"] {
   --zhubai-highlight: #e9933f;
   --zhubai-surface: #1b2733;
   --zhubai-grid-opacity: 3%;
-  --zhubai-grid-major-opacity: 6%;
 }
 
 /* Align the official ICT mark with the shared reading axes. */
@@ -36,23 +34,20 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-locku
   filter: brightness(0) invert(1);
 }
 
-/* Sparse major lines retain their hierarchy over quiet subdivisions. */
+/* The drafting grid belongs to structural pages, leaving evidence on plain paper. */
 .slidev-layout[data-presentation-preset="ict"] .slide-frame {
-  --presentation-grid-minor: color-mix(in srgb, var(--presentation-grid-color) var(--zhubai-grid-opacity), transparent);
-  --presentation-grid-major: color-mix(in srgb, var(--presentation-grid-color) var(--zhubai-grid-major-opacity), transparent);
+  --presentation-grid-major: color-mix(in srgb, var(--presentation-grid-color) var(--zhubai-grid-opacity), transparent);
   --presentation-font-label: var(--presentation-font-mono);
 }
 
-.slidev-layout[data-presentation-preset="ict"] .slide-frame::before {
+.slidev-layout:is(.cover, .section, .closing)[data-presentation-preset="ict"] .slide-frame::before {
   position: absolute;
   z-index: 0;
   inset: 0;
   background-image:
     linear-gradient(to right, var(--presentation-grid-major) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--presentation-grid-major) 1px, transparent 1px),
-    linear-gradient(to right, var(--presentation-grid-minor) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--presentation-grid-minor) 1px, transparent 1px);
-  background-size: 24px 24px, 24px 24px, 8px 8px, 8px 8px;
+    linear-gradient(to bottom, var(--presentation-grid-major) 1px, transparent 1px);
+  background-size: 24px 24px;
   content: "";
   pointer-events: none;
 }
@@ -68,8 +63,7 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-locku
 }
 
 .slidev-layout.section[data-presentation-preset="ict"] .slide-layout-section__index {
-  color: transparent;
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--presentation-accent) 30%, transparent);
+  color: var(--presentation-section-index-color);
   font-family: var(--presentation-font-mono);
   font-size: var(--presentation-section-index-size);
   font-variant-numeric: tabular-nums;
@@ -77,18 +71,6 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-locku
   letter-spacing: -0.04em;
   line-height: 1;
   white-space: nowrap;
-}
-
-.slidev-layout.section[data-presentation-preset="ict"] .slide-layout-section__index::before {
-  content: "SEC.";
-  color: var(--presentation-accent);
-  -webkit-text-stroke: 0;
-  display: inline-block;
-  margin-right: 0.5em;
-  font-size: 0.28em;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  vertical-align: middle;
 }
 
 .slidev-layout.section[data-presentation-preset="ict"] .slide-layout-section h1 {
@@ -131,17 +113,9 @@ html.dark .slidev-layout[data-presentation-preset="ict"] .slide-frame__ict-locku
   --presentation-blockquote-font-style: normal;
   --presentation-media-radius: 2px;
   --presentation-media-shadow: none;
-  --presentation-callout-radius: 3px;
   --presentation-table-row-alt-bg: color-mix(in srgb, var(--zhubai-accent) 3%, transparent);
 }
 
 .slidev-layout[data-presentation-preset="ict"] :is(th, figcaption) {
   font-family: var(--presentation-font-mono);
-}
-
-.slidev-layout[data-presentation-native][data-presentation-preset="ict"] {
-  background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--presentation-accent) 4%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--presentation-accent) 4%, transparent) 1px, transparent 1px);
-  background-size: 24px 24px;
 }

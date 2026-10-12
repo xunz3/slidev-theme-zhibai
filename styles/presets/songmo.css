@@ -39,7 +39,6 @@ html.dark .slidev-layout[data-presentation-preset="songmo"] {
   --presentation-media-radius: 0;
   --presentation-media-shadow: none;
   --presentation-blockquote-font-style: normal;
-  --presentation-callout-radius: 2px;
   --presentation-table-header-bg: transparent;
   --presentation-code-border: var(--presentation-border-strong);
   --presentation-family-info: var(--presentation-text);
@@ -58,11 +57,7 @@ html.dark .slidev-layout[data-presentation-preset="songmo"] {
 }
 
 .slidev-layout.cover[data-presentation-preset="songmo"] .slide-cover__meta {
-  width: auto;
-  margin-inline: 0;
-  padding-inline: 0;
-  border-top: 1px solid var(--presentation-border-strong);
-  background: transparent;
+  border-top-color: var(--presentation-border-strong);
 }
 
 .slidev-layout[data-presentation-preset="songmo"] .presentation-callout[data-callout-family="quotation"] {

@@ -12,7 +12,6 @@
   --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 8%, transparent);
   --presentation-inline-code-border: color-mix(in srgb, var(--presentation-accent) 22%, var(--presentation-border));
   --presentation-blockquote-border: var(--presentation-border);
-  --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 6%, transparent);
   --presentation-callout-border: color-mix(in srgb, var(--presentation-accent) 54%, transparent);
   --slidev-code-font-family: var(--presentation-font-mono);
   --slidev-code-font-size: var(--presentation-code-size);
@@ -32,7 +31,6 @@ html.dark .slidev-layout[data-presentation-native],
 html.dark .slidev-layout[data-presentation-preset] .slide-frame {
   --presentation-table-header-bg: color-mix(in srgb, var(--zhubai-accent) 11%, transparent);
   --presentation-inline-code-bg: color-mix(in srgb, var(--presentation-accent) 13%, transparent);
-  --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 10%, transparent);
 }
 
 .slidev-layout[data-presentation-preset] .slide-frame > :is(.slide-frame__content, .slide-frame__footer) {
@@ -171,7 +169,7 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
   padding-bottom: 0;
 }
 
-/* Full-width cover bands do not remove the reading inset from optional chrome. */
+/* Optional cover chrome shares the inset of the headline and credits. */
 .slidev-layout.cover[data-presentation-preset] .slide-frame__footer {
   margin-inline: var(--presentation-cover-inset-x, 4rem);
 }
@@ -312,10 +310,10 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   width: auto;
-  margin: 0 calc(-1 * var(--presentation-cover-inset-x, 4rem));
-  padding: 1.2rem var(--presentation-cover-inset-x, 4rem);
+  margin: 0;
+  padding: 1.2rem 0;
   border-top: 1px solid var(--presentation-border);
-  background: var(--presentation-cover-meta-bg, color-mix(in srgb, var(--presentation-accent) 6%, var(--presentation-bg)));
+  background: var(--presentation-cover-meta-bg, transparent);
   font-family: var(--presentation-font-sans);
   font-size: 16px;
   line-height: 1.35;
@@ -858,7 +856,7 @@ html.dark .slidev-layout[data-presentation-preset] pre.shiki {
   font-variant-numeric: tabular-nums;
 }
 
-.slidev-layout.section:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"], [data-presentation-preset="qingdai"], [data-presentation-preset="songmo"]) .slide-layout-section__index {
+.slidev-layout.section:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"], [data-presentation-preset="qingdai"]) .slide-layout-section__index {
   font-family: var(--presentation-font-serif);
   font-variant-numeric: oldstyle-nums;
   font-weight: 600;

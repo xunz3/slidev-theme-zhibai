@@ -61,9 +61,9 @@
   --presentation-blockquote-size: var(--presentation-size-16);
   --presentation-blockquote-text: var(--presentation-text-muted);
   --presentation-blockquote-font-style: normal;
-  --presentation-callout-bg: color-mix(in srgb, var(--presentation-accent) 6%, transparent);
+  --presentation-callout-bg: transparent;
   --presentation-callout-border: transparent;
-  --presentation-callout-radius: 8px;
+  --presentation-callout-radius: 0;
   --presentation-callout-shadow: none;
 
   --presentation-family-neutral: color-mix(in srgb, var(--presentation-text-muted) 70%, var(--presentation-text));

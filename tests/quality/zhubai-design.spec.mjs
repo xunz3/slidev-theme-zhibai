@@ -125,8 +125,7 @@ test('Zhubai signature, five-preset colors, seal geometry, and refinement contra
             assert.equal(state.rule.width, '40px')
             assert.equal(state.rule.height, '1.5px')
             assert.equal(state.rule['background-color'], state.zhu)
-            assert.ok(parseFloat(state.marker.width) >= 5, 'diamond list marker remains visible')
-            assert.match(state.marker.transform, /^matrix\(/)
+            assert.equal(state.marker.content, 'none', 'lists use native markers without duplicate signature ornaments')
             assert.ok(state.kickerBeforeHeading, 'content kicker precedes the authored heading')
             assert.equal(state.kicker, '研究问题 · Research question')
             assert.ok(parseFloat(state.booktabs['border-top-width']) >= 1)
@@ -141,7 +140,7 @@ test('Zhubai signature, five-preset colors, seal geometry, and refinement contra
           if (slide === 9) {
             assert.equal(state.preset, 'qingdai')
             assert.equal(state.heading['text-align'], 'center')
-            assert.equal(state.heading['border-top-width'], '1px')
+            assert.equal(state.heading['border-top-width'], '0px', 'the centered folio title retains a single lower rule')
             assert.equal(state.heading['border-bottom-width'], '1px')
           }
           if (slide === 10) {

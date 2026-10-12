@@ -77,10 +77,17 @@ test('five presets distinguish plain blockquotes from annotated and component ci
                 paragraphWidth: paragraph?.getBoundingClientRect().width,
                 contentWidth: content.getBoundingClientRect().width,
                 headingFont: getComputedStyle(layout.querySelector('h1') ?? content).fontFamily,
+                frameGrid: getComputedStyle(frame, '::before').backgroundImage,
+                canvasGrid: getComputedStyle(layout).backgroundImage,
+                quoteMetaBorder: layout.querySelector('.slide-layout-quote__meta')
+                  ? getComputedStyle(layout.querySelector('.slide-layout-quote__meta')).borderTopWidth : null,
                 citations, plainQuotes, text: layout.textContent }
             })
             records.push({ no, width, mode, ...state })
             await layout.screenshot({ path: resolve(output, `${width}-${mode}-${no}.png`) })
+            assert.equal(state.frameGrid, 'none', 'reading and quotation pages keep a plain paper surface')
+            assert.equal(state.canvasGrid, 'none', 'native content layouts keep the same plain surface')
+            if (state.quoteMetaBorder !== null) assert.equal(state.quoteMetaBorder, '0px', 'quotation source hierarchy uses spacing instead of a duplicate rule')
             assert.equal(state.paddingLeft, 36)
             assert.equal(state.paddingRight, 36)
             assert.equal(state.paddingTop, 28, 'all presets share a balanced top inset')

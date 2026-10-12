@@ -117,6 +117,7 @@ test('cover alignment and native imagery compose across palettes, imagery, and c
                     title: frame.querySelector('.slide-cover__title'),
                     subtitle: frame.querySelector('.slide-cover__subtitle'),
                     authors: frame.querySelector('.slide-cover__authors'),
+                    meta: frame.querySelector('.slide-cover__meta'),
                     brand: frame.querySelector('.slide-frame__ucas-rail-brand, .slide-frame__ict-lockup'),
                     visual: frame.querySelector('.slide-cover__visual'),
                     header: frame.querySelector('.slide-frame__header'),
@@ -135,6 +136,16 @@ test('cover alignment and native imagery compose across palettes, imagery, and c
                     coverClientWidth: cover?.clientWidth,
                     contentClientWidth: content.clientWidth - parseFloat(getComputedStyle(content).paddingLeft) - parseFloat(getComputedStyle(content).paddingRight),
                     textAlign: cover ? getComputedStyle(cover).textAlign : null,
+                    metaStyle: cover && (() => {
+                      const meta = frame.querySelector('.slide-cover__meta')
+                      return meta ? { background: getComputedStyle(meta).backgroundColor, borderBottom: getComputedStyle(meta).borderBottomWidth } : null
+                    })(),
+                    grid: getComputedStyle(frame, '::before').backgroundImage,
+                    gridSize: getComputedStyle(frame, '::before').backgroundSize,
+                    indexStyle: (() => {
+                      const index = frame.querySelector('.slide-layout-section__index')
+                      return index ? { font: getComputedStyle(index).fontFamily, stroke: getComputedStyle(index).webkitTextStrokeWidth, prefix: getComputedStyle(index, '::before').content } : null
+                    })(),
                     clipped: [...frame.querySelectorAll('.slide-cover__title, .slide-cover__subtitle, .slide-cover__body, .slide-cover__author, .slide-cover__visual, .slide-layout-section > *, .presentation-closing__message, .presentation-closing__contact')]
                       .filter(element => {
                         const rect = bounds(element)
@@ -155,6 +166,21 @@ test('cover alignment and native imagery compose across palettes, imagery, and c
                   assert.equal(await element.getAttribute('data-presentation-preset'), expected.preset)
                   assert.equal(await element.getAttribute('data-presentation-cover-align'), expected.align)
                 }
+                if (geometry.meta) {
+                  assert.equal(geometry.metaStyle.background, 'rgba(0, 0, 0, 0)', 'cover credits remain on the paper surface')
+                  assert.equal(geometry.metaStyle.borderBottom, '0px', 'credits have one boundary')
+                  assert.ok(Math.abs(geometry.meta.left - geometry.cover.left) < 1 && Math.abs(geometry.meta.right - geometry.cover.right) < 1, 'credits and headline composition share both reading edges')
+                }
+                if (expected.preset === 'ict') {
+                  assert.match(geometry.grid, /linear-gradient/, 'ICT structural pages retain the drafting identity')
+                  assert.equal(geometry.gridSize, '24px 24px, 24px 24px', 'structural grids have no dense subdivisions')
+                  if (geometry.indexStyle) {
+                    assert.equal(geometry.indexStyle.prefix, 'none', 'the section number is not repeated in decorative labels')
+                    assert.equal(geometry.indexStyle.stroke, '0px')
+                    assert.match(geometry.indexStyle.font, /JetBrains Mono/)
+                  }
+                }
+                if (expected.preset === 'songmo' && geometry.indexStyle) assert.match(geometry.indexStyle.font, /JetBrains Mono/, 'monochrome section numbers keep the documented mono face')
                 assert.ok(geometry.overflowX <= 1 && geometry.overflowY <= 1, JSON.stringify(evidence))
                 assert.deepEqual(geometry.clipped, [], 'all title, author, and supporting content stays inside its available region')
                 assert.ok(geometry.composition.width > 0 && geometry.composition.height > 0, 'the main composition has a visible area')

@@ -4,13 +4,12 @@
 
 .presentation-callout {
   --presentation-callout-family: var(--presentation-family-neutral);
-  --presentation-callout-family-surface: var(--presentation-callout-bg);
   margin: 0.75rem 0;
   padding: 0.65rem 1rem;
   border: 0;
   border-inline-start: 2px solid var(--presentation-callout-family);
-  border-radius: 8px;
-  background: var(--presentation-callout-family-surface);
+  border-radius: var(--presentation-callout-radius);
+  background: var(--presentation-callout-bg);
   box-shadow: none;
 }
 
@@ -38,38 +37,28 @@
   transform: none;
 }
 
-.presentation-callout[data-callout="neutral"] {
-  --presentation-callout-family-surface: var(--presentation-family-neutral-surface);
-}
-
 .presentation-callout[data-callout-family="info"] {
   --presentation-callout-family: var(--presentation-family-info);
-  --presentation-callout-family-surface: var(--presentation-family-info-surface);
 }
 
 .presentation-callout[data-callout-family="positive"] {
   --presentation-callout-family: var(--presentation-family-positive);
-  --presentation-callout-family-surface: var(--presentation-family-positive-surface);
 }
 
 .presentation-callout[data-callout-family="caution"] {
   --presentation-callout-family: var(--presentation-family-caution);
-  --presentation-callout-family-surface: var(--presentation-family-caution-surface);
 }
 
 .presentation-callout[data-callout-family="danger"] {
   --presentation-callout-family: var(--presentation-family-danger);
-  --presentation-callout-family-surface: var(--presentation-family-danger-surface);
 }
 
 .presentation-callout[data-callout-family="question"] {
   --presentation-callout-family: var(--presentation-family-question);
-  --presentation-callout-family-surface: var(--presentation-family-question-surface);
 }
 
 .presentation-callout[data-callout-family="quotation"] {
   --presentation-callout-family: var(--presentation-family-quotation);
-  --presentation-callout-family-surface: var(--presentation-family-quotation-surface);
 }
 
 .presentation-callout[data-callout-family="positive"]

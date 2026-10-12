@@ -13,7 +13,7 @@ html.dark .slidev-layout[data-presentation-preset="qingdai"] {
 
 .slidev-layout:is(.default, .two-cols, .code, .references, .image-left, .image-right, .image-text, .figure, .toc, .center)[data-presentation-preset="qingdai"] .slide-frame h1 {
   padding-block: 0.25em;
-  border-block: 1px solid color-mix(in srgb, var(--presentation-accent) 50%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--presentation-accent) 50%, transparent);
   text-align: center;
 }
 
@@ -22,7 +22,7 @@ html.dark .slidev-layout[data-presentation-preset="qingdai"] {
 }
 
 .slidev-layout.cover[data-presentation-preset="qingdai"] .slide-cover__meta {
-  border-block: 1px solid var(--presentation-border-strong);
+  border-top-color: var(--presentation-border-strong);
 }
 
 .slidev-layout.section[data-presentation-preset="qingdai"] .slide-layout-section {
@@ -93,7 +93,7 @@ html.dark .slidev-layout[data-presentation-preset="qingdai"] {
 
 .slidev-layout[data-presentation-native="two-cols-header"][data-presentation-preset="qingdai"] .col-header h1 {
   padding-block: 0.25em;
-  border-block: 1px solid var(--presentation-border-strong);
+  border-bottom: 1px solid var(--presentation-border-strong);
   text-align: center;
 }
 

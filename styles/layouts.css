@@ -205,8 +205,7 @@
   display: grid;
   width: 100%;
   margin-top: 1.45rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid color-mix(in srgb, var(--presentation-accent) 26%, var(--presentation-border));
+  padding-top: 0;
   justify-items: start;
   gap: 0.2rem;
   color: var(--presentation-text-muted);

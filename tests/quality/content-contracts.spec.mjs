@@ -993,6 +993,7 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
                           : 'circle'
                 return {
                   backgroundColor: computed.backgroundColor,
+                  borderRadius: computed.borderRadius,
                   borderLeftColor: computed.borderLeftColor,
                   borderLeftWidth: computed.borderLeftWidth,
                   borderTopColor: computed.borderTopColor,
@@ -1022,9 +1023,10 @@ test('US2 114-case callout matrix and standalone semantic component contracts', 
                 assert.equal(style.borderLeftWidth, '0px')
                 assert.equal(style.borderTopWidth, '1px', 'citations have a distinct editorial rule')
               } else {
-                assert.notEqual(style.backgroundColor, 'rgba(0, 0, 0, 0)',
-                  'notes use a visible semantic tonal surface')
-                assert.equal(style.borderLeftWidth, '2px', 'the tonal surface carries a visible semantic family edge')
+                assert.equal(style.backgroundColor, 'rgba(0, 0, 0, 0)',
+                  'notes share the paper surface while retaining semantic cues')
+                assert.equal(style.borderRadius, '0px')
+                assert.equal(style.borderLeftWidth, '2px', 'notes retain a visible semantic family edge')
                 assert.equal(style.borderTopWidth, '0px')
               }
               assert.ok(

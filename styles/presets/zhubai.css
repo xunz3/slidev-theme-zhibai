@@ -48,28 +48,6 @@ html.dark .slidev-layout[data-presentation-preset="zhubai"] {
   margin-inline: auto;
 }
 
-/* Custom list geometry excludes task lists and component-owned author lists. */
-.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame__content ul:not([class]) > li:not(.presentation-task-item) {
-  position: relative;
-  list-style: none;
-}
-
-.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame__content ul:not([class]) > li:not(.presentation-task-item)::before {
-  position: absolute;
-  top: 0.6em;
-  left: -1.05em;
-  width: 0.32rem;
-  height: 0.32rem;
-  background: color-mix(in srgb, var(--presentation-signature) 80%, transparent);
-  transform: rotate(45deg);
-  content: "";
-}
-
-.slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-frame__content ul ul:not([class]) > li:not(.presentation-task-item)::before {
-  border: 1px solid var(--presentation-text-muted);
-  background: transparent;
-}
-
 .slidev-layout:is([data-presentation-preset="zhubai"], [data-presentation-preset="default"]) .slide-layout-toc__number {
   font-family: var(--presentation-font-serif);
   font-variant-numeric: oldstyle-nums;

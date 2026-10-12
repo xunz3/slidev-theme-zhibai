@@ -895,7 +895,8 @@ test('style hooks and layout passthroughs remain live contracts', async () => {
   assert.match(base, /background:\s*var\(--presentation-code-bg\)/)
   assert.match(base, /border:\s*1px solid var\(--presentation-inline-code-border\)/)
   assert.match(semantic, /\.presentation-callout\s*\{[^}]*border:\s*0[;\s]/)
-  assert.match(semantic, /--presentation-callout-family-surface:\s*var\(--presentation-callout-bg\)/)
+  assert.match(semantic, /background:\s*var\(--presentation-callout-bg\)/)
+  assert.match(semantic, /border-radius:\s*var\(--presentation-callout-radius\)/)
 
   for (const deadToken of [
     '--presentation-badge-bg',

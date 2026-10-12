@@ -37,6 +37,8 @@
 
 左右页边距由 `--presentation-slide-inset` 控制，默认 36px；正文页上下页边距由 `--presentation-slide-inset-top / bottom` 控制，分别为 28px / 20px。五预设的 footer 共用 `--presentation-border-strong` 细线，与正文间距为 `--presentation-footer-gap`（12px），线下内距为 `--presentation-footer-padding`（8px）；原生布局沿用相同的页边距与 footer 边界。居中布局隐藏 footer 时，上下均使用顶部页边距。正文与内容块宽度为内容区的 100%，不滚动时不预留滚动条空位；标题、正文与 footer 的左右边线一致。双栏间距为 32px。整页引用使用 `--presentation-quote-display-size`（36px），普通引用块使用 `--presentation-blockquote-size`（16px），次级文字色、侧边线与内距由 `--presentation-blockquote-text / border / padding` 控制，引用提示使用 `--presentation-citation-size`（18px，双栏 16px）。`--presentation-quote-accent` 决定引号颜色，朱白绑定朱色签名。
 
+提示块默认 `--presentation-callout-bg: transparent`、`--presentation-callout-radius: 0`，语义区别保留在侧线、标题与形状；代码块仍保留浅底。封面 `--presentation-cover-meta-bg` 默认透明，落款分界沿内容边对齐。ICT 网格只出现在封面、章节和结束页，为 24px 单层，亮色 2%、暗色 3%；正文与原生内容页不铺网格。
+
 ## 动效和层次
 
 - `--presentation-motion-duration`: 520ms

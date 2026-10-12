@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.3 — 2026-10-12
+
+- Keep cover credits on transparent paper and align their boundary with the headline content grid. Remove the extra Qingdai credit rule.
+- Reduce repeated ornaments: keep one lower rule on Qingdai content titles, use neutral native list markers in Zhubai, and separate quotation sources with spacing instead of another rule.
+- Reserve ICT's sparse 24px grid for covers, sections and closing pages. Keep reading and native content layouts on plain paper, and simplify section numbers to solid mono text without the repeated SEC. label.
+- Make callouts transparent and square while retaining semantic edges, title shapes and accessible labels. Restore Songmo's mono section numbers, and update visual documentation and browser regression coverage.
+
 ## 0.6.2 — 2026-10-10
 
 - Calibrate all five presets to 36px side margins, a 28px top inset and a 20px bottom inset. Remove unused scrollbar space so headings, content and footers share both reading edges.

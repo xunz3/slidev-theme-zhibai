@@ -47,7 +47,7 @@
   --presentation-accent: var(--slidev-theme-primary);
   --presentation-toc-number: var(--presentation-accent);
   --presentation-bg-muted: color-mix(in srgb, var(--presentation-accent) 4%, var(--presentation-bg));
-  --presentation-cover-meta-bg: color-mix(in srgb, var(--presentation-accent) 6%, var(--presentation-bg));
+  --presentation-cover-meta-bg: transparent;
   --zhubai-chart-1: var(--presentation-accent);
   --zhubai-chart-2: var(--presentation-signature);
   --zhubai-chart-3: color-mix(in srgb, var(--presentation-text) 56%, var(--presentation-bg));

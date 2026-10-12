@@ -354,7 +354,7 @@ test('5 × 5 × 2 public preset API is visually isolated', { timeout: 240_000 },
         assert.equal(new Set(styles.map(style => style.canvas['background-color'])).size, 5,
           `${mode}: the preset paper and ink palettes remain distinct`)
         assert.ok(styles.every(style => style.callout['border-width'] === '0px 0px 0px 2px'),
-          `${mode}: shared tonal callouts have only a 2px semantic family edge`)
+          `${mode}: shared paper callouts have only a 2px semantic family edge`)
         assert.deepEqual(styles.map(style => style.footer['border-top-style']), presets.map(() => 'solid'),
           `${mode}: all presets separate the footer with a quiet rule`)
         assert.deepEqual(styles.map(style => style.footer['border-top-width']), presets.map(() => '1px'),

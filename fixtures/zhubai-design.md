@@ -20,8 +20,8 @@ kicker: 研究问题 · Research question
 
 Evidence deserves <mark>one <strong>clear</strong> focus</mark>.
 
-- A vermilion diamond anchors the reading order.
-  - Nested evidence keeps a quiet ink outline.
+- A quiet list marker anchors the reading order.
+  - Nested evidence keeps its native marker.
 - Structure supports the argument.
 
 <table class="presentation-table--booktabs"><thead><tr><th>Method</th><th>Evidence</th></tr></thead><tbody><tr><td>Observation</td><td>Readable geometry</td></tr></tbody></table>
